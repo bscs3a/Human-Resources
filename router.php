@@ -1,4 +1,7 @@
 <?php
+require __DIR__ . '/vendor/autoload.php';
+
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__)->load();
 
 class Router
 {
@@ -10,7 +13,10 @@ class Router
         if($currentMethod != $method ){
             require $filename;
         }
-        $root = '/Master';
+      
+        // $root = getenv('PROXY_ADDRESS');
+        $root = "/Master";
+
         $pattern = '#^'.$root.$path.'$#sD';
         if(preg_match($pattern, $currentUri)){
             require_once $filename;
@@ -20,3 +26,4 @@ class Router
         return false;
     }
 }
+

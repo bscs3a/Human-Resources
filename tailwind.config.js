@@ -5,6 +5,11 @@ module.exports = {
     extend: {
       fontFamily: {
         'sans': ['Montserrat', 'sans-serif'],
+        'russo': ['Russo One'],
+      },
+      colors: {
+        'sidebar': '#262261', // Sidebar color
+        // 'primary': '#FFA500', // Primary color
       },
     },
   },
