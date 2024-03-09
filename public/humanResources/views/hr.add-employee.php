@@ -15,4 +15,13 @@
 ?>
 <!-- end of sidenav -->
 </body>
+  <form action="insert.php" method="post">
+    <input type="text" name="firstname" placeholder="Enter First Name">
+    <input type="text" name="lastname" placeholder="Enter Last Name">
+    <input type="text" name="email" placeholder="Enter Email">
+    <input type="text" name="contactnumber" placeholder="Enter Contact Number">
+    <textarea name="address" placeholder="Enter Address"></textarea>
+    <input type="submit" name="submit" value="SUBMIT">
+  </form>
+</body>
 </html> 
