@@ -1,5 +1,13 @@
-<!-- start: Sidebar -->
- <div class="fixed left-0 top-0 w-64 h-full bg-red-900 p-4 z-50 sidebar-menu transition-transform">
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+  <link href="./output.css" rel="stylesheet">
+</head>
+<body>
+   <div class="fixed left-0 top-0 w-64 h-full bg-red-900 p-4 z-50 sidebar-menu transition-transform">
   <a route="/" class="flex items-center pb-4 border-b border-b-white ">
     <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded object-cover">
     <span class="text-xl font-bold text-white ml-28">BSCS 3A</span>
@@ -16,7 +24,7 @@
 <!-- Calendar -->
 <li class="mb-1 group">
   <a route="/hr/schedule" class="flex items-center py-2 px-4 text-gray-50 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-    <i class="ri-line-chart-line mr-3 text-lg"></i>
+    <i class="ri-calendar-2-line mr-3 text-lg"></i>
     <span class="text-sm">Schedule</span>
     <i class="ri-arrow-right-s-line ml-auto"></i>
   </a>
@@ -24,7 +32,7 @@
 <!-- Applicants -->
 <li class="mb-1 group">
   <a route="/hr/applicants" class="flex items-center py-2 px-4 text-gray-50 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-    <i class="ri-line-chart-line mr-3 text-lg"></i>
+    <i class="ri-file-user-line mr-3 text-lg"></i>
     <span class="text-sm">Applicants</span>
     <i class="ri-arrow-right-s-line ml-auto"></i>
   </a>
@@ -32,7 +40,7 @@
 <!-- Employees -->
   <li class="mb-1 group">
     <a route="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
-      <i class="ri-shopping-cart-line mr-3 text-lg"></i>
+      <i class="ri-team-line mr-3 text-lg"></i>
       <span class="text-sm">Employees</span>
       <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
     </a>
@@ -54,7 +62,7 @@
 <!-- Leave Requests -->
 <li class="mb-1 group">
   <a route="/hr/leave-requests" class="flex items-center py-2 px-4 text-gray-50 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-    <i class="ri-survey-line mr-3 text-lg"></i>
+    <i class="ri-briefcase-line mr-3 text-lg"></i>
     <span class="text-sm">Leave Requests</span>
     <i class="ri-arrow-right-s-line ml-auto"></i>
   </a>
@@ -70,9 +78,9 @@
 <!-- Daily Time Record -->
 <li class="mb-1 group">
   <a route="/hr/dtr" class="flex items-center py-2 px-4 text-gray-50 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-    <i class="ri-line-chart-line mr-3 text-lg"></i>
+    <i class="ri-calendar-schedule-line mr-3 text-lg"></i>
     <span class="text-sm">Daily Time Record</span>
-    <i class="ri-arrow-right-s-line ml-auto"></i>
+    <i class="ri-arrow-right-s-line ml-auto"></i>   
   </a>
 </li>
 </ul>
@@ -83,19 +91,21 @@
 
 <!-- start:dropdown -->
 <script>
-document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function(item){
-    item.addEventListener('click', function(e){
-        e.preventDefault()
-        const parent = item.closest('.group')
-        if(parent.classList.contains('selected')){
-            parent.classList.remove('selected')    
-        } else {
-            document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function(i){
-                i.closest('.group').classList.remove('selected')
-            })
-            parent.classList.add('selected')   
-        }
+    document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function(item){
+        item.addEventListener('click', function(e){
+            e.preventDefault()
+            const parent = item.closest('.group')
+            if(parent.classList.contains('selected')){
+                parent.classList.remove('selected')    
+            } else {
+                document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function(i){
+                    i.closest('.group').classList.remove('selected')
+                })
+                parent.classList.add('selected')   
+            }
+        })
     })
-})
-</script>
+    </script>
 <!-- end:dropdown -->
+</body>
+</html>
