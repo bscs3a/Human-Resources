@@ -43,8 +43,10 @@ $hr = [
     },
 
     '/hr/schedule' => $basePath . "schedule.php",
-    '/hr/payroll' => $basePath . "payroll.php",
+    '/hr/payrolllist' => $basePath . "payroll.list.php",
     '/hr/dtr' => $basePath . "daily-time-record.php",
+    '/hr/payrollgenerate' => $basePath . "payroll.generate.php",
+    '/hr/payslipreport' => $basePath . "payslip.report.php",
 
     //view employee profile
     '/hr/employees/id={id}' => function($id) use ($basePath) {
