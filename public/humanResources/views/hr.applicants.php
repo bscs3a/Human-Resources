@@ -7,13 +7,13 @@
   $params = [];
 
   if (!empty($search)) {
-      $query .= " WHERE first_name = :search OR last_name = :search OR position = :search OR department = :search OR id = :search;";
+      $query .= " WHERE first_name = :search OR last_name = :search OR applyingForPosition = :search OR applyingForDepartment = :search OR id = :search;";
       $params[':search'] = $search;
   }
 
   $stmt = $conn->prepare($query);
   $stmt->execute($params);
-  $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  $applicants = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   $pdo = null;
   $stmt = null;
@@ -69,92 +69,48 @@
       <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
       <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600"><i class="ri-search-line"></i></button>
     </form>
-  </div> 
+</div> 
   
-  <?php 
-    if (empty($employees)) {
-        require_once 'inc/employees.noResult.php';
-    } 
-    else {
-        require_once 'inc/employees.table.php';
-    } 
-  ?>
-  <!-- <div class="ml-6 flex flex-col mt-8 mr-6">
-  <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
-    <table class="min-w-full">
-      <thead>
-        <tr>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Name</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            ID</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Applying For</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Action</th>
-        </tr>
-      </thead>
-        <tbody class="bg-white">
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1679743561200463872/2XNOMV6V_400x400.jpg"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Mysta Rias
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">mystarias@example.com</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">10284</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Inventory</div>
-              <div class="text-sm leading-5 text-gray-500">Inventory Manager</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1649848448689086464/rkJG00b4_400x400.jpg"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Shu Yamino
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">shuyamino@example.com</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">10472</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Accounting</div>
-              <div class="text-sm leading-5 text-gray-500">Financial Analyst</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div> -->
+<?php 
+  if (empty($applicants)) {
+      require_once 'inc/noResult.php';
+  } 
+  else {
+      require_once 'inc/applicants.table.php';
+  } 
+?>
+
+  <!-- Reject modal -->
+<div id="rejectModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
+    <form action="/master/reject/applicants" method="POST" class="bg-white p-5 rounded-lg text-center">
+        <h2 class="mb-4">Reject this applicant?</h2>
+        <input type="hidden" name="id" id="idToDelete"> <!-- This will hold the ID of the row to delete -->
+        <input type="submit" value="Yes" id="confirmReject" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
+        <input type="button" value="No" id="cancelReject" class="px-4 py-2 bg-gray-300 text-black rounded">
+    </form>
+</div>
+
 </main>
 <!-- End Main Bar -->
 <script  src="./../src/route.js"></script>
 <script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
+<script>
+  document.querySelectorAll('.rejectButton').forEach(function(button) {
+    button.addEventListener('click', function() {
+        var id = this.getAttribute('data-id');
+        document.getElementById('idToDelete').value = id;
+        document.getElementById('rejectModal').classList.remove('hidden');
+    });
+  });
+
+  document.getElementById('cancelReject').addEventListener('click', function() {
+      document.getElementById('rejectModal').classList.add('hidden');
+  });
+
+  document.getElementById('confirmReject').addEventListener('click', function() {
+    document.getElementById('rejectModal').submit();
+  });
+</script>
 </body>
 </html> 

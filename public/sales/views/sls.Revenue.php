@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction History</title>
+    <title>Revenue</title>
     <link href="./../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 
@@ -15,11 +15,11 @@
         const Swal = require('sweetalert2')
     </script>
 
-<style>
-    ::-webkit-scrollbar {
-        display: none;
-    }
-</style>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 
 </head>
 
@@ -52,10 +52,37 @@
             <!-- Start: Profile -->
 
             <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
+
+                <div class="relative inline-block text-left">
+                   <div>
+                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                            <div class="text-black font-medium mr-4 ">
+                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
+                            </div>
+                            <i class="ri-arrow-down-s-line"></i>
+                        </a>
+                    </div>
+
+                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <div class="py-1" role="none">
+                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                <i class="ri-logout-box-line"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('options-menu').addEventListener('click', function() {
+                        var dropdownMenu = document.getElementById('dropdown-menu');
+                        if (dropdownMenu.classList.contains('hidden')) {
+                            dropdownMenu.classList.remove('hidden');
+                        } else {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+                </script>
             </ul>
 
             <!-- End: Profile -->
@@ -75,172 +102,106 @@
                     </div>
                 </div>
 
-             <div class="flex justify-between gap-5">
-                <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
-                    <thead class="bg-green-800 text-white">
-                        <tr class="font-bold">
-                            <th class="px-4 py-2">Assets</th>
-                            <th class="px-4 py-2">Revenue</th>
-                            <th class="px-4 py-2">Percentage</th>
-                        </tr>
+                <div class="flex justify-between gap-5">
+                    <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
+                        <thead class="bg-green-800 text-white">
+                            <tr class="font-bold">
+                                <th class="px-4 py-2">Assets</th>
+                                <th class="px-4 py-2">Revenue</th>
+                                <th class="px-4 py-2">Percentage</th>
+                            </tr>
 
-                    </thead>
-                    <tbody>
-                    <tr class="border-b border">
-                    <td class = "p-4 font-semibold">Total Sales</td>
-                    <td class = "p-4 text-green-400">₱10000</td>
-                    <td class = "p-4 text-green-400">%10</td>
-                    </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border">
+                                <td class="p-4 font-semibold">Amount of Raw Sales</td>
+                                <td class="p-4 text-green-400">₱10000</td>
+                                <td class="p-4 text-green-400">%10</td>
+                            </tr>
 
-                    <tr class="border-b border">
-                    <td class = "p-4 font-semibold">Amount of Raw Sales</td>
-                    <td class = "p-4 text-green-400">₱10000</td>
-                    <td class = "p-4 text-green-400">%10</td>
-                    </tr>
+                            <tr class="border-b border">
+                                <td class="p-4 font-semibold">Amount of Tax Included</td>
+                                <td class="p-4 text-green-400">₱10000</td>
+                                <td class="p-4 text-green-400">%10</td>
+                            </tr>
 
-                    <tr class="border-b border">
-                    <td class = "p-4 font-semibold">Amount of Tax Included</td>
-                    <td class = "p-4 text-green-400">₱10000</td>
-                    <td class = "p-4 text-green-400">%10</td>
-                    </tr>
+                            <tr class="border-b border">
+                                <td class="p-4 font-semibold">Amount of Transactions</td>
+                                <td class="p-4 text-green-400">100</td>
+                                <td class="p-4 text-green-400">%10</td>
 
-                    <tr class="border-b border">
-                    <td class = "p-4 font-semibold">Amount of Shipping Fee</td>
-                    <td class = "p-4 text-green-400">₱10000</td>
-                    <td class = "p-4 text-green-400">%10</td>
-                    </tr>
-
-                    <tr class="border-b border">
-                    <td class = "p-4 font-semibold">Total Assets Deducted <span class="text-gray-500 font-medium">(Inventory)</span></td>
-                    <td class = "p-4 text-red-400">₱10000</td>
-                    <td class = "p-4 text-red-400">%10</td>
-                    </tr>
-
-                    <tr class="">
-                    <td class = "p-4 font-semibold">Others</td>
-                    <td class = "p-4 text-green-500">₱10000</td>
-                    <td class = "p-4 text-green-500">%10</td>
-                    </tr>
-
-                    <tr>
-                        <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                        <td class="p-4 text-green-300">₱10000</td>
-                        <td class="p-4 text-green-300">%1</td>
-                    </tr>
-
-                    <tr>
-                        <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                        <td class="p-4 text-green-300">₱10000</td>
-                        <td class="p-4 text-green-300">%1</td>
-                    </tr>
-
-                    <tr class = "border-b">
-                        <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                        <td class="p-4 text-green-300">₱10000</td>
-                        <td class="p-4 text-green-300">%1</td>
-                    </tr>
-
-                    <tr class="font-semibold text-2xl">
-                    <td class="p-4 ">Total</td>
-                        <td class="p-4 text-green-600">₱10000</td>
-                        <td class="p-4 text-green-600">%1</td>
-                    </tr>
                     
-                    </tbody>
-                </table>
+                            <tr class="font-semibold text-2xl">
+                                <td class="p-4 ">Total</td>
+                                <td class="p-4 text-green-600">₱10000</td>
+                                <td class="p-4 text-green-600">%1</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
 
 
-                <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
-                    <thead class="bg-red-700 text-white">
-                        <tr class="font-bold">
-                            <th class="px-4 py-2">Contra Revenue</th>
-                            <th class="px-4 py-2">Lost</th>
-                            <th class="px-4 py-2">Percentage</th>
-                        </tr>
+                    <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
+                        <thead class="bg-red-700 text-white">
+                            <tr class="font-bold">
+                                <th class="px-4 py-2">Contra Revenue</th>
+                                <th class="px-4 py-2">Lost</th>
+                                <th class="px-4 py-2">Percentage</th>
+                            </tr>
 
-                    </thead>
-                    <tbody>
-                    <tr class="border-b border">
-                    <td class = "p-4 font-semibold">Returns</td>
-                    <td class = "p-4 text-red-400">₱10000</td>
-                    <td class = "p-4 text-red-400">%10</td>
-                    </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border">
+                                <td class="p-4 font-semibold">Returns</td>
+                                <td class="p-4 text-red-400">₱10000</td>
+                                <td class="p-4 text-red-400">%10</td>
+                            </tr>
 
-                    <tr class="border-b border">
-                    <td class = "p-4 font-semibold">Cancellations</td>
-                    <td class = "p-4 text-red-400">₱10000</td>
-                    <td class = "p-4 text-red-400">%10</td>
-                    </tr>
+                        
 
-           
+                            <tr class="border-b border">
+                                <td class="p-4 font-semibold">Amount of Returned Items</td>
+                                <td class="p-4 text-red-400">100</td>
+                                <td class="p-4 text-red-400">%10</td>
+                            </tr>         
 
-                    <tr class="border-b border">
-                    <td class = "p-4 font-semibold">Expenses</td>
-                    <td class = "p-4 text-red-400">₱10000</td>
-                    <td class = "p-4 text-red-400">%10</td>
-                    </tr>
+                            <tr class="font-semibold text-2xl">
+                                <td class="p-4 ">Total</td>
+                                <td class="p-4 text-red-600">₱10000</td>
+                                <td class="p-4 text-red-600">%1</td>
+                            </tr>
 
-                    <tr class="">
-                    <td class = "p-4 font-semibold">Contra Revenue</td>
-                    <td class = "p-4 text-red-500">₱10000</td>
-                    <td class = "p-4 text-red-500">%10</td>
-                    </tr>
-
-                    <tr>
-                        <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                        <td class="p-4 text-red-300">₱10000</td>
-                        <td class="p-4 text-red-300">%1</td>
-                    </tr>
-
-                    <tr>
-                        <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                        <td class="p-4 text-red-300">₱10000</td>
-                        <td class="p-4 text-red-300">%1</td>
-                    </tr>
-
-                    <tr class="border-b">
-                        <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                        <td class="p-4 text-red-300">₱10000</td>
-                        <td class="p-4 text-red-300">%1</td>
-                    </tr>
-
-                    <tr class="font-semibold text-2xl">
-                    <td class="p-4 ">Total</td>
-                        <td class="p-4 text-red-600">₱10000</td>
-                        <td class="p-4 text-red-600">%1</td>
-                    </tr>
-                    
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
                 </div>
 
-            <div class="mt-10"> 
-            <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
-                    <thead class="bg-gray-200">
-                        <tr class="font-bold">
-                            <th class="px-4 py-2">Total Assets</th>
-                            <th class="px-4 py-2">Total Contra Revenue</th>
-                            <th class="px-4 py-2">Summary</th>
-                        </tr>
+                <div class="mt-10">
+                    <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
+                        <thead class="bg-gray-200">
+                            <tr class="font-bold">
+                                <th class="px-4 py-2">Total Assets</th>
+                                <th class="px-4 py-2">Total Contra Revenue</th>
+                                <th class="px-4 py-2">Summary</th>
+                            </tr>
 
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <td class="p-4 text-green-500">₱10000</td>
-                        <td class="p-4 text-red-500">₱5000</td>
-                        <td class="p-4 text-yellow-500">₱5000</td>
-                        </tr>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-4 text-green-500">₱10000</td>
+                                <td class="p-4 text-red-500">₱5000</td>
+                                <td class="p-4 text-yellow-500">₱5000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
             </div>
 
-
-            </div>
-            
-        <button class="w-44 p-4 rounded-lg shadow-lg border-gray-400 border-2 bg-gray-200 font-semibold mt-12 hover:bg-gray-300 hover:border-gray-500 hover:font-bold transition-all ease-in-out">
-        <i class="ri-import-line font-medium text-2xl"></i>
-        Print Sheet
-        </button>
+            <button class="w-44 p-4 rounded-lg shadow-lg border-gray-400 border-2 bg-gray-200 font-semibold mt-12 hover:bg-gray-300 hover:border-gray-500 hover:font-bold transition-all ease-in-out">
+                <i class="ri-import-line font-medium text-2xl"></i>
+                Print Sheet
+            </button>
         </div>
 
     </main>

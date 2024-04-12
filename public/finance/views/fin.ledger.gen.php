@@ -7,6 +7,7 @@
     <title>Ledger</title>
     <link href="./../../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+    
 </head>
 
 <body>

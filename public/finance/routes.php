@@ -1,6 +1,5 @@
 <?php
 
-session_start();
 $_SESSION['user'] = 'admin';
 $_SESSION['role'] = 'admin';
 $_SESSION['fullname'] = "Tagle, Aries";
@@ -94,7 +93,6 @@ Router::post('/test', function () {
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/fin/ledger");
 });
-
 
 
 

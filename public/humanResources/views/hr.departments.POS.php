@@ -51,7 +51,7 @@
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Departments</a>
   <!-- test -->
   <li class="text-[#151313] mr-2 font-medium">/</li>
-  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Point of Sale</a>
+  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Point of Sales</a>
   <!-- end test -->
    </ul>
    <ul class="ml-auto flex items-center">
@@ -111,7 +111,7 @@
   
 <?php 
       if (empty($employees)) {
-        require_once 'inc/employees.noResult.php';
+        require_once 'inc/noResult.php';
     } else {
         require_once 'inc/employees.table.php';
     } 

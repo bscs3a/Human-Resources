@@ -6,16 +6,11 @@ function getProductsAndCategories() {
     $database = Database::getInstance();
     $pdo = $database->connect();
 
-    // Query for products
-    $sqlProducts = "SELECT * FROM products";
+    // Query for products with category IDs and names
+    $sqlProducts = "SELECT p.*, c.Category_ID, c.Category_Name FROM Products p INNER JOIN Categories c ON p.Category_ID = c.Category_ID";
     $stmtProducts = $pdo->query($sqlProducts);
     $products = $stmtProducts->fetchAll(PDO::FETCH_ASSOC);
 
-    // Query for categories
-    $sqlCategories = "SELECT DISTINCT Category FROM products";
-    $stmtCategories = $pdo->query($sqlCategories);
-    $categories = $stmtCategories->fetchAll(PDO::FETCH_COLUMN);
-
-    return ['products' => $products, 'categories' => $categories];
+    return ['products' => $products];
 }
 ?>

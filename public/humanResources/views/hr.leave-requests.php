@@ -1,3 +1,32 @@
+<?php
+$db = Database::getInstance();
+$conn = $db->connect();
+
+$search = $_POST['search'] ?? '';
+$query = "SELECT leave_requests.*, employees.image_url, employees.first_name, employees.middle_name, employees.last_name, employees.position, employees.department FROM leave_requests";
+$query .= " LEFT JOIN employees ON leave_requests.employees_id = employees.id";
+
+$params = [];
+
+if (!empty($search)) {
+  $query .= " WHERE (employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR leave_requests.id = :search OR leave_requests.type = :search OR leave_requests.employees_id = :search) AND";
+  $params[':search'] = $search;
+} else {
+  $query .= " WHERE";
+}
+
+$query .= " leave_requests.status = 'pending'";
+
+$query .= " ORDER BY leave_requests.id DESC";
+
+$stmt = $conn->prepare($query);
+$stmt->execute($params);
+$leaveRequests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$pdo = null;
+$stmt = null;
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,126 +69,106 @@
   </div>
   <!-- End Top Bar -->
 
+<!-- requests tabs -->
+<div class="mt-4 ml-4 mb-4">
+    <div class="hidden sm:block">
+        <div class="border-b border-gray-200">
+            <nav class="-mb-px flex flex-wrap gap-6" aria-label="Tabs">
+                <a route="/hr/leave-requests"
+                    class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
+                    aria-current="page">
+                    All Requests
+                </a>
+                <a route="/hr/leave-requests/reviewed"
+                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    Reviewed Requests
+                </a>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- end requests tabs -->
+
   <!-- Leave Requests -->
   <div class="flex flex-wrap">
-    <h3 class="ml-6 mt-8 text-xl font-bold">Leave Requests</h3>
-    <form action="/search" method="get" class="mt-6 ml-auto mr-4 flex">
-      <input type="search" id="search" name="q" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    <button route="/hr/leave-requests/file-leave" class="mt-9 mr-4 flex ml-6 font-medium bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600">File a Leave</button>
+
+    <form action="/hr/leave-requests" method="POST" class="mt-6 ml-auto mr-4 flex">
+      <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
       <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600"><i class="ri-search-line"></i></button>
     </form>
   </div> 
-  <div class="ml-6 flex flex-col mt-8 mr-6">
-  <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
-    <table class="min-w-full">
-      <thead>
-        <tr>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Name</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Request Date</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Reason</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Accept</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Reject</th>
-        </tr>
-      </thead>
-        <tbody class="bg-white">
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="#"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Employee Name
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">Employee Position</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">YYYY-MM-DD</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Reason here bakit gusto mo magleave kunwari ayaw mo na di mo na kaya. Alam mo? ako rin. gusto ko na lang magdrawing talaga grabe miss ko na magdrawing bakit naggoo-goose goose duck si joshua tas ung boses nya pa squeaker HAHAHA ano yon</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">Accept Button</a>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">Reject Button</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="#"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Employee Name
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">Employee Position</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">YYYY-MM-DD</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Reason ulit dito bakit di ka crush ng crush mo siguro</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">Accept Button</a>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">Reject Button</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="#"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Employee Name
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">Employee Position</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">YYYY-MM-DD</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Reason ulit dito bakit di ka crush ng crush mo siguro Reason ulit dito bakit di ka crush ng crush mo siguro Reason ulit dito bakit di ka crush ng crush mo siguro Reason ulit dito bakit di ka crush ng crush mo siguro Reason ulit dito bakit di ka crush ng crush mo siguro Reason ulit dito bakit di ka crush ng crush mo siguro Reason ulit dito bakit di ka crush ng crush mo siguro Reason ulit dito bakit di ka crush ng crush mo siguro Reason ulit dito bakit di ka crush ng crush mo siguro Reason ulit dito bakit di ka crush ng crush mo siguro Reason ulit dito bakit di ka crush ng crush mo siguro</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">Accept Button</a>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">Reject Button</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+
+  <!-- UNCOMMENT THIS AFTER FINISHING THE BACKEND FOR LEAVE REQUESTS -->
+  <?php 
+    if (empty($leaveRequests)) {
+        require_once 'inc/noResult.php';
+    } 
+    else {
+        require_once 'inc/leave-requests.table.php';
+    } 
+  ?>
 <!-- End Leave Requests -->
+  
+<!-- Accept modal -->
+<!-- <div id="acceptModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
+    <form action="/master/approve/leave-requests" method="POST" class="bg-white p-5 rounded-lg text-center">
+        <h2 class="mb-4">Approve request of leave?</h2>
+        <input type="hidden" name="id" id="idToAccept">
+        <input type="submit" value="Yes" id="confirmAccept" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
+        <input type="button" value="No" id="cancelAccept" class="px-4 py-2 bg-gray-300 text-black rounded">
+    </form>
+</div> -->
+
+  <!-- Reject modal -->
+  <!-- <div id="rejectModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
+    <form action="/master/deny/leave-requests" method="POST" class="bg-white p-5 rounded-lg text-center">
+        <h2 class="mb-4">Deny request of leave?</h2>
+        <input type="hidden" name="id" id="idToReject"> 
+        <input type="submit" value="Yes" id="confirmReject" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
+        <input type="button" value="No" id="cancelReject" class="px-4 py-2 bg-gray-300 text-black rounded">
+    </form>
+</div> -->
   
 </main>
 <!-- End Main Bar -->
 <script  src="./../src/route.js"></script>
 <script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
+<script>
+  // REJECT MODAL
+  document.querySelectorAll('.rejectButton').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var id = this.getAttribute('data-id');
+      document.getElementById('idToReject').value = id;
+      document.getElementById('rejectModal').classList.remove('hidden');
+    });
+  });
+
+  document.getElementById('cancelReject').addEventListener('click', function() {
+    document.getElementById('rejectModal').classList.add('hidden');
+  });
+
+  document.getElementById('confirmReject').addEventListener('click', function() {
+    document.getElementById('rejectModal').submit();
+  });
+
+  // ACCEPT MODAL
+  document.querySelectorAll('.acceptButton').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var id = this.getAttribute('data-id');
+      document.getElementById('idToAccept').value = id;
+      document.getElementById('acceptModal').classList.remove('hidden');
+    });
+  });
+
+  document.getElementById('cancelAccept').addEventListener('click', function() {
+    document.getElementById('acceptModal').classList.add('hidden');
+  });
+
+  document.getElementById('confirmAccept').addEventListener('click', function() {
+    document.getElementById('acceptModal').submit();
+  });
+</script>
 </body>
 </html> 

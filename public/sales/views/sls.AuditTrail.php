@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction History</title>
+    <title>Audit Trail</title>
     <link href="./../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 </head>
@@ -38,10 +38,37 @@
             <!-- Start: Profile -->
 
             <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
+
+                <div class="relative inline-block text-left">
+                     <div>
+                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                            <div class="text-black font-medium mr-4 ">
+                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
+                            </div>
+                            <i class="ri-arrow-down-s-line"></i>
+                        </a>
+                    </div>
+
+                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <div class="py-1" role="none">
+                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                <i class="ri-logout-box-line"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('options-menu').addEventListener('click', function() {
+                        var dropdownMenu = document.getElementById('dropdown-menu');
+                        if (dropdownMenu.classList.contains('hidden')) {
+                            dropdownMenu.classList.remove('hidden');
+                        } else {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+                </script>
             </ul>
 
             <!-- End: Profile -->
@@ -50,37 +77,43 @@
 
         <!-- End: Header -->
         <div class="flex flex-col items-center min-h-screen">
+            <!-- Start: Audit Trail Table -->
             <div class="w-full max-w-6xl mt-10">
-                <div class="flex justify-between items-center">
-                    <h1 class="mb-3 text-xl font-bold text-black">Audit Trail</h1>
-                    <div class="relative mb-3">
-                        <input type="text" placeholder="Search by ID..." class="px-3 py-2 pl-5 pr-10 border rounded-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
-                </div>
+                <h1 class="mb-3 text-xl font-bold text-black">Audit Trail</h1>
                 <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
                     <thead class="bg-gray-200">
                         <tr>
-                            <th class="px-4 py-2 font-semibold">Name</th>
-                            <th class="px-4 py-2 font-semibold">Order ID</th>
-                            <th class="px-4 py-2 font-semibold">Address</th>
-                            <th class="px-4 py-2 font-semibold">Total Amount</th>
-                            <th class="px-4 py-2 font-semibold">Delivery Status</th>
+                            <th class="px-4 py-2 font-semibold">ID</th>
+                            <th class="px-4 py-2 font-semibold">Employee Name</th>
+                            <th class="px-4 py-2 font-semibold">Action</th>
+                            <th class="px-4 py-2 font-semibold">Date</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border border-gray-200 bg-white" onclick="location.href='/Master/sls/Transaction-Details'" style="cursor: pointer;">
-                            <td class="px-4 py-2">John Doe</td>
-                            <td class="px-4 py-2">123456</td>
-                            <td class="px-4 py-2">123 Main St, Anytown, USA</td>
-                            <td class="px-4 py-2">&#8369;1500.00</td>
-                            <td class="px-4 py-2">Delivered</td>
-                        </tr>
+                        <?php
+                        require_once './src/dbconn.php';
+                        $database = Database::getInstance();
+                        $pdo = $database->connect();
+
+                        // Query for the audit trail
+                        $sqlAuditTrail = "SELECT * FROM tbl_sls_audit ORDER BY log_date DESC";
+                        $stmtAuditTrail = $pdo->query($sqlAuditTrail);
+                        $auditTrails = $stmtAuditTrail->fetchAll(PDO::FETCH_ASSOC);
+
+                        // Display the audit trail in the table
+                        foreach ($auditTrails as $trail) {
+                            echo "<tr class='border border-gray-200 bg-white'>";
+                            echo "<td class='px-4 py-2'>" . $trail['id'] . "</td>";
+                            echo "<td class='px-4 py-2'>" . $trail['employee_name'] . "</td>";
+                            echo "<td class='px-4 py-2'>" . $trail['log_action'] . "</td>";
+                            echo "<td class='px-4 py-2'>" . date("F j, Y, g:i a", strtotime($trail['log_date'])) . "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
+            <!-- End: Audit Trail Table -->
         </div>
     </main>
     <script>
@@ -92,7 +125,7 @@
             document.getElementById('mainContent').classList.toggle('md:ml-64');
         });
     </script>
-    <script  src="./../src/route.js"></script>
+    <script src="./../src/route.js"></script>
 </body>
 
 </html>
