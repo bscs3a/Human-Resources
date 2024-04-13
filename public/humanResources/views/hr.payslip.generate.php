@@ -1,27 +1,20 @@
 <?php
+
+
+// Get database instance and establish connection
 $db = Database::getInstance();
 $conn = $db->connect();
 
-$search = $_POST['search'] ?? '';
-$query = "SELECT payroll.*, salary_info.*, employees.* FROM payroll";
-$query .= " 
-LEFT JOIN employees ON payroll.employees_id = employees.id
-LEFT JOIN salary_info ON salary_info.employees_id = employees.id AND payroll.salary_id = salary_info.id";
+// Prepare the SQL query
+$query = "SELECT CONCAT(e.first_name, ' ', e.last_name) AS full_name, e.department, e.position, s.total_salary
+          FROM employees e
+          JOIN salary_info s ON e.id = s.employees_id";
 
-$params = [];
+// Execute the query
+$stmt = $conn->query($query);
 
-if (!empty($search)) {
-  $query .= " WHERE (employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR payroll.id = :search OR payroll.status = :search OR payroll.month = :search) AND";
-  $params[':search'] = $search;
-}
-
-$stmt = $conn->prepare($query);
-$stmt->execute($params);
-$payroll = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$pdo = null;
-$stmt = null;
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,9 +27,7 @@ $stmt = null;
 <body class="text-gray-800 font-sans">
 
 <!-- sidenav -->
-<?php 
-    include 'inc/sidenav.php';
-?>
+<?php include 'inc/sidenav.php'; ?>
 <!-- end of sidenav -->
 
 <!-- Start Main Bar -->
@@ -64,60 +55,52 @@ $stmt = null;
   </div>
   <!-- End Top Bar -->
 
+    <!-- Generate Payslip Form -->
+    <div class="mt-4 py-2 ml-4 mr-4">
+        <div class="relative shadow-md sm:rounded-lg h-screen" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+            <h1 class="text-center w-full p-4 border-b-2 border-gray-200 text-4xl">Generate Payslip</h1>
+            
+                <!-- Payroll table -->
+                <table class="table-auto w-full mt-4">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2 text-center">Full name</th>
+                            <th class="px-4 py-2 text-center">Department</th>
+                            <th class="px-4 py-2 text-center">Position</th>
+                            <th class="px-4 py-2 text-center">Total Salary</th>
+                            <th class="px-4 py-2 text-center">Action</th>
+                        </tr>
+                    </thead>
 
-<div class="mt-4 py-2 ml-4 mr-4">
-  <div class="relative shadow-md sm:rounded-lg h-screen" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
-    <h1 class="text-left w-full p-4 border-b-2 border-gray-200">Generate Payslip</h1>
-    <div id="myDiv" class="flex flex-col justify-center items-center h-full">
-
-      <form action="process.php" method="POST" class="p-4 w-full pt-16 pb-16">
-        <div class="flex justify-center mb-4">
-          <select class="w-1/3 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" name="department" id="Department" placeholder="Department">
-            <option value="">Select Department</option>
-            <option value="Product Order">Product Order</option>
-            <option value="Inventory">Inventory</option>
-            <option value="Delivery">Delivery</option>
-            <option value="Human Resources">Human Resources</option>
-            <option value="Point of Sales">Point of Sales</option>
-            <option value="Finance">Finance/Accounting</option>
-          </select>
-          <input type="month" class="w-1/3 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" name="date" id="Date" placeholder="Select Month">
-            <button type="submit" class="w-1/4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded">Submit</button>
+                    <tbody>
+                        <?php
+                        // Check if any rows are returned
+                        if($stmt->rowCount() > 0) {
+                            // Loop through each row and populate the table
+                            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<tr>";
+                                echo "<td class='px-4 py-2 text-center'>" . $row['full_name'] . "</td>";
+                                echo "<td class='px-4 py-2 text-center'>" . $row['department'] . "</td>";
+                                echo "<td class='px-4 py-2 text-center'>" . $row['position'] . "</td>";
+                                echo "<td class='px-4 py-2 text-center'>" . $row['total_salary'] . "</td>";
+                                echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded'>Generate</button></td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='5' class='text-center'>No records found</td></tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+                <hr class="border-gray-200 my-4 mx-0">
+            </div>
         </div>
-        <hr class="border-gray-200 my-4 mx-0">
-      </form>
-
-              <table class="table-auto w-full mt-4">
-          <thead>
-            <tr>
-              <th class="px-4 py-2 text-center">PIN</th>
-              <th class="px-4 py-2 text-center">Full name</th>
-              <th class="px-4 py-2 text-center">Total Salary</th>
-              <th class="px-4 py-2 text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="border px-4 py-2 text-center">1234</td>
-              <td class="border px-4 py-2 text-center">John Doe</td>
-              <td class="border px-4 py-2 text-center">$5000</td>
-              <td class="border px-4 py-2 text-center">
-                <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Generate Salary</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
     </div>
-
-  </div>
-</div>
-  
-<!-- END of Payroll -->
+    <!-- END of Generate Payslip Form -->
 </main>
 <!-- End Main Bar -->
 <script  src="./../src/route.js"></script>
 <script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
 </body>
-</html> 
+</html>
