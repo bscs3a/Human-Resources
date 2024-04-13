@@ -582,7 +582,7 @@
                 type="password"
                 placeholder="Confirm Password"
               />
-              <div class="text-sm mt-2 ml-40">
+              <div class="text-sm mt-2 ml-32">
               <input type="checkbox" id="togglePassword"> Show Password
               </div>
             </div>

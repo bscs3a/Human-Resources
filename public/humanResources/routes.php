@@ -950,7 +950,7 @@ Router::post('/hr/leave-requests/reviewed', function () {
     include './public/humanResources/views/hr.leave-requests.reviewed.php';
 });
 
-// file leave requests [WORK IN PROGRESS]
+// file leave requests
 Router::post('/hr/leave-requests/file-leave', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
@@ -1026,4 +1026,45 @@ Router::post('/hr/payroll', function () {
     }
 
     include './public/humanResources/views/hr.payroll.php';
+});
+
+// SAVE/CREATE event - schedule/calendar
+Router::post('/create/schedule', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    $event_name = $_POST['event_name'];
+    $date = $_POST['date'];
+    $day = $_POST['day'];
+
+    $query = "INSERT INTO calendar (event_name, date, day) VALUES (:event_name, :date,:day)";
+    $stmt = $conn->prepare($query);
+
+    $stmt->execute([
+        ':event_name' => $event_name,
+        ':date' => $date,
+        ':day' => $day,
+    ]);
+
+    header("Location: $rootFolder/hr/schedule");
+});
+
+// REMOVE event
+Router::post('/remove/schedule', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $idToDelete = $_POST['event'];
+
+    $query = "DELETE FROM calendar WHERE id = :id";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([':id' => $idToDelete]);
+
+    // Execute the statement
+    $stmt->execute();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/hr/schedule");
 });

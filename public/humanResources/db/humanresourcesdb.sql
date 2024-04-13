@@ -76,6 +76,7 @@ CREATE TABLE payroll (
     FOREIGN KEY (salary_id) REFERENCES salary_info (id)
 );
 
+-- DTR
 CREATE TABLE attendance (
     id INT(10) NOT NULL AUTO_INCREMENT,
     attendance_date DATETIME NOT NULL,
@@ -84,6 +85,14 @@ CREATE TABLE attendance (
     employees_id INT(10) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (employees_id) REFERENCES employees (id)
+);
+
+CREATE TABLE calendar (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    event_name VARCHAR(50) NOT NULL,
+    date DATE NOT NULL,
+    day ENUM('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday') NOT NULL,
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE leave_requests (
@@ -187,6 +196,11 @@ INSERT INTO account_info (username, password, role, employees_id) VALUES
 ('bscs3a004', 'bscs3a4HR', 'Human Resources', 4),
 ('bscs3a005', 'bscs3a5HR', 'Human Resources', 5),
 ('bscs3a006', 'bscs3a1PO', 'Product Order', 6);
+
+INSERT INTO calendar (event_name, date, day) VALUES
+('The Day of Valor', '2024-04-09', 'Tuesday'),
+('Eidul-Fitar', '2024-04-10', 'Wednesday'),
+('Labor Day', '2024-05-01', 'Wednesday');
 
 INSERT INTO leave_requests (type, details, start_date, end_date, status, employees_id) VALUES
 ('Sick Leave', 'Enjoy this moon necklace. I got it for you. You remind me of the moon, because it\'s always there and it\'s beautiful.', '2024-08-27 08:00:00', '2024-08-28 08:00:00', 'Pending', 1);
