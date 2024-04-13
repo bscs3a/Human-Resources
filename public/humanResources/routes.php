@@ -45,7 +45,7 @@ $hr = [
     '/hr/schedule' => $basePath . "schedule.php",
     '/hr/payrolllist' => $basePath . "payroll.list.php",
     '/hr/dtr' => $basePath . "daily-time-record.php",
-    '/hr/payrollgenerate' => $basePath . "payroll.generate.php",
+    '/hr/payslipgenerate' => $basePath . "payslip.generate.php",
     '/hr/payslipreport' => $basePath . "payslip.report.php",
 
     //view employee profile
@@ -244,7 +244,7 @@ Router::post('/hr/employees/add', function () {
     // Calculate total salary
     $totalSalary = $monthlysalary - $totalDeductions;
 
-    $query = "INSERT INTO salary_info (employees_id, monthly_salary, total_salary) VALUES (:employeeId, :monthlysalary, :totalsalary);";
+    $query = "INSERT INTO salary_info (employees_id, monthly_salary, total_salary, daily_rate) VALUES (:employeeId, :monthlysalary, :totalsalary, :dailyrate);";
     $stmt = $conn->prepare($query);
 
     if (empty($monthlysalary)) {
@@ -252,10 +252,14 @@ Router::post('/hr/employees/add', function () {
         return;
     }
 
+    // Calculate daily rate based on monthly salary and assuming 22 weekdays in a month
+    $dailyRate = $monthlysalary / 22;
+
     $stmt->execute([
         ':employeeId' => $employeeId,
         ':monthlysalary' => $monthlysalary,
         ':totalsalary' => $totalSalary,
+        ':dailyrate' => $dailyRate,
     ]);
 
     // tax : FK salary_id

@@ -67,14 +67,22 @@ $stmt = null;
 
 <div class="mt-4 py-2 ml-4 mr-4">
   <div class="relative shadow-md sm:rounded-lg h-screen" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
-    <h1 class="text-left w-full p-4 border-b-2 border-gray-200">Monthly Payroll List</h1>
+    <h1 class="text-left w-full p-4 border-b-2 border-gray-200">Generate Payslip</h1>
     <div id="myDiv" class="flex flex-col justify-center items-center h-full">
 
       <form action="process.php" method="POST" class="p-4 w-full pt-16 pb-16">
         <div class="flex justify-center mb-4">
-          <input type="text" name="employee" class="border border-gray-300 rounded-md px-3 py-2 mr-16">
-          <input type="text" name="month" class="border border-gray-300 rounded-md px-3 py-2 mr-16">
-          <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Submit</button>
+          <select class="w-1/3 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" name="department" id="Department" placeholder="Department">
+            <option value="">Select Department</option>
+            <option value="Product Order">Product Order</option>
+            <option value="Inventory">Inventory</option>
+            <option value="Delivery">Delivery</option>
+            <option value="Human Resources">Human Resources</option>
+            <option value="Point of Sales">Point of Sales</option>
+            <option value="Finance">Finance/Accounting</option>
+          </select>
+          <input type="month" class="w-1/3 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" name="date" id="Date" placeholder="Select Month">
+            <button type="submit" class="w-1/4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded">Submit</button>
         </div>
         <hr class="border-gray-200 my-4 mx-0">
       </form>
