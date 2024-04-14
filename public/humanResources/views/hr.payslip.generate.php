@@ -56,47 +56,65 @@ $stmt = $conn->query($query);
   <!-- End Top Bar -->
 
     <!-- Generate Payslip Form -->
-    <div class="mt-4 py-2 ml-4 mr-4">
-        <div class="relative shadow-md sm:rounded-lg h-screen" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
-            <h1 class="text-center w-full p-4 border-b-2 border-gray-200 text-4xl">Generate Payslip</h1>
-            
-                <!-- Payroll table -->
-                <table class="table-auto w-full mt-4">
-                    <thead>
-                        <tr>
-                            <th class="px-4 py-2 text-center">Full name</th>
-                            <th class="px-4 py-2 text-center">Department</th>
-                            <th class="px-4 py-2 text-center">Position</th>
-                            <th class="px-4 py-2 text-center">Total Salary</th>
-                            <th class="px-4 py-2 text-center">Action</th>
-                        </tr>
-                    </thead>
+<div class="mt-4 py-2 ml-4 mr-4">
+    <div class="relative shadow-md sm:rounded-lg h-screen" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+        <h1 class="text-center w-full p-4 border-b-2 border-gray-200 text-4xl">Generate Payslip</h1>
+        
+<!-- Department Filter Dropdown -->
+<div class="px-4 py-2">
+    <select id="department" name="department" class="mt-1 block w-33 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        <option value="">All Departments</option>
+        <?php
+        // Fetch distinct departments from the database
+        $department_query = "SELECT DISTINCT department FROM employees";
+        $department_stmt = $conn->query($department_query);
 
-                    <tbody>
-                        <?php
-                        // Check if any rows are returned
-                        if($stmt->rowCount() > 0) {
-                            // Loop through each row and populate the table
-                            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<tr>";
-                                echo "<td class='px-4 py-2 text-center'>" . $row['full_name'] . "</td>";
-                                echo "<td class='px-4 py-2 text-center'>" . $row['department'] . "</td>";
-                                echo "<td class='px-4 py-2 text-center'>" . $row['position'] . "</td>";
-                                echo "<td class='px-4 py-2 text-center'>" . $row['total_salary'] . "</td>";
-                                echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded'>Generate</button></td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='5' class='text-center'>No records found</td></tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-                <hr class="border-gray-200 my-4 mx-0">
-            </div>
-        </div>
+        // Populate dropdown with department options
+        while($dept_row = $department_stmt->fetch(PDO::FETCH_ASSOC)) {
+            echo "<option value='" . $dept_row['department'] . "'>" . $dept_row['department'] . "</option>";
+        }
+        ?>
+    </select>
+</div>
+<!-- End Department Filter Dropdown -->
+
+        <!-- Payroll table -->
+        <table class="table-auto w-full mt-4">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2 text-center">Full name</th>
+                    <th class="px-4 py-2 text-center">Department</th>
+                    <th class="px-4 py-2 text-center">Position</th>
+                    <th class="px-4 py-2 text-center">Total Salary</th>
+                    <th class="px-4 py-2 text-center">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php
+                // Check if any rows are returned
+                if($stmt->rowCount() > 0) {
+                    // Loop through each row and populate the table
+                    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        echo "<tr>";
+                        echo "<td class='px-4 py-2 text-center'>" . $row['full_name'] . "</td>";
+                        echo "<td class='px-4 py-2 text-center'>" . $row['department'] . "</td>";
+                        echo "<td class='px-4 py-2 text-center'>" . $row['position'] . "</td>";
+                        echo "<td class='px-4 py-2 text-center'>" . $row['total_salary'] . "</td>";
+                        echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded'>Generate</button></td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='5' class='text-center'>No records found</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+        <hr class="border-gray-200 my-4 mx-0">
     </div>
-    <!-- END of Generate Payslip Form -->
+</div>
+<!-- END of Generate Payslip Form -->
+
 </main>
 <!-- End Main Bar -->
 <script  src="./../src/route.js"></script>
