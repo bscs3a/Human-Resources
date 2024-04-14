@@ -1030,6 +1030,47 @@ Router::post('/hr/payroll', function () {
     include './public/humanResources/views/hr.payroll.php';
 });
 
+// CREATE Payslip
+Router::post('/create/payslip', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    // Capture form data
+    $pay_date = $_POST['pay_date'];
+    $month = $_POST['month'];
+    $status = $_POST['status'];
+
+    // Assuming you have the employee's information available when the modal is opened
+    // If not, you'll need a way to retrieve it, such as an AJAX request
+    $full_name = "John Doe"; // Example full name
+    $position = "Manager"; // Example position
+    $total_salary = 5000.00; // Example total salary
+    $monthly_salary = 4000.00; // Example monthly salary
+    $total_deductions = 1000.00; // Example total deductions
+
+    // Insert data into payroll table
+    $query = "INSERT INTO payroll (pay_date, month, status, employees_id) VALUES (:pay_date, :month, :status, :employees_id)";
+    $stmt = $conn->prepare($query);
+
+    // For demonstration purposes, let's assume we're creating a payslip for a specific employee (e.g., employee with id = 1)
+    $employee_id = 1;
+
+    // Bind parameters
+    $stmt->bindParam(':pay_date', $pay_date);
+    $stmt->bindParam(':month', $month);
+    $stmt->bindParam(':status', $status);
+    $stmt->bindParam(':employees_id', $employee_id);
+
+    // Execute the query
+    $stmt->execute();
+
+    // Redirect to a success page or reload the current page
+    header("Location: $rootFolder/hr/payslipgenerate");
+});
+
+
 // SAVE/CREATE event - schedule/calendar
 Router::post('/create/schedule', function () {
     $db = Database::getInstance();
