@@ -67,14 +67,16 @@ CREATE TABLE payroll (
     pay_date DATE NOT NULL,
     month VARCHAR(20) NOT NULL,
     deductions DECIMAL(10,2) NOT NULL,
-    net_pay DECIMAL(10,2) NOT NULL, -- How much the employer paid the employee
+    monthly_salary DECIMAL(10,2) NOT NULL,
     status ENUM('Pending','Paid') DEFAULT 'Pending',
     salary_id INT(10) NOT NULL,
     employees_id INT(10) NOT NULL,
+    total_deductions DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (employees_id) REFERENCES employees (id),
     FOREIGN KEY (salary_id) REFERENCES salary_info (id)
 );
+
 
 -- DTR
 CREATE TABLE attendance (
