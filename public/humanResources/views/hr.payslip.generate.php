@@ -4,7 +4,7 @@ $db = Database::getInstance();
 $conn = $db->connect();
 
 // Prepare the SQL query
-$query = "SELECT CONCAT(e.first_name, ' ', e.last_name) AS full_name, e.department, e.position, s.total_salary
+$query = "SELECT CONCAT(e.first_name, ' ', e.last_name) AS full_name, e.department, e.position, s.total_salary, s.monthly_salary
           FROM employees e
           JOIN salary_info s ON e.id = s.employees_id";
 
@@ -98,7 +98,7 @@ $stmt = $conn->query($query);
               echo "<td class='px-4 py-2 text-center'>" . $row['department'] . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['position'] . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['total_salary'] . "</td>";
-              echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded' onclick='showModal(\"" . $row['full_name'] . "\", \"" . $row['department'] . "\", \"" . $row['position'] . "\", \"" . $row['total_salary'] . "\")'>Generate</button></td>";
+              echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded' onclick='showModal(\"" . $row['full_name'] . "\", \"" . $row['department'] . "\", \"" . $row['position'] . "\", \"" . $row['total_salary'] . "\", \"" . $row['monthly_salary'] . "\")'>Generate</button></td>";
               echo "</tr>";
             }
           } else {
@@ -114,20 +114,75 @@ $stmt = $conn->query($query);
 
 <!-- Modal -->
 <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-  <div class="bg-white p-8 rounded-md max-w-md shadow-lg">
-    <h2 class="text-2xl font-bold mb-4">Payslip Details</h2>
-    <p id="full_name" class="mb-2"></p>
-    <p id="department" class="mb-2"></p>
-    <p id="position" class="mb-2"></p>
-    <p id="total_salary" class="mb-4"></p>
-    <!-- Button Group -->
-    <div class="flex justify-end">
-      <!-- Close Button -->
-      <button onclick="hideModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
-      <!-- Submit Button -->
-      <button onclick="submitPayslip()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Submit</button>
+    <div class="bg-white p-8 rounded-md max-w-3xl shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Payslip Details</h2>
+        <!-- Employee -->
+        <p id="full_name" class="mb-2"></p>
+        <p id="position" class="mb-2"></p>
+        <p id="total_salary" class="mb-4"></p>
+        <p id="monthly_salary" class="mb-4"></p>
+        <!-- Input Grid -->
+        <div class="grid grid-cols-3 gap-4">
+            <!-- Month -->
+            <div class="col-span-1 flex items-center">
+                <label for="month" class="block font-medium mr-4">Month:</label>
+                <select id="month" name="month" class="block w-ful py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="January">January</option>
+                    <!-- Add more months here -->
+                </select>
+            </div>
+            <!-- Deduction -->
+            <div class="col-span-1 flex items-center">
+                <label for="deduction" class="block font-medium mr-4">Deduction:</label>
+                <input type="text" id="deduction" name="deduction" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <!-- Working Hours -->
+            <div class="col-span-1 flex items-center">
+                <label for="working_hours" class="block font-medium mr-4">Working Hours:</label>
+                <input type="text" id="working_hours" name="working_hours" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <!-- Final Salary -->
+            <div class="col-span-1 flex items-center">
+                <label for="final_salary" class="block font-medium mr-4">Final Salary:</label>
+                <input type="text" id="final_salary" name="final_salary" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <!-- Pay Date -->
+            <div class="col-span-1 flex items-center">
+                <label for="pay_date" class="block font-medium mr-4">Pay Date:</label>
+                <input type="date" id="pay_date" name="pay_date" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+        </div>
+        
+        <!-- Status -->
+        <div class="flex items-center mt-4">
+            <label class="block font-medium mr-4">Status:</label>
+            <div class="flex items-center">
+                <input type="radio" id="status_paid" name="status" value="paid" class="mr-2">
+                <label for="status_paid" class="mr-4">Paid</label>
+                <input type="radio" id="status_pending" name="status" value="pending" class="mr-2">
+                <label for="status_pending" class="mr-4">Pending</label>
+            </div>
+        </div>
+        
+        <!-- Paid Type -->
+        <div class="flex items-center mt-4">
+            <label class="block font-medium mr-4">Paid Type:</label>
+            <div class="flex items-center">
+                <input type="radio" id="paid_type_cash" name="paid_type" value="cash" class="mr-2">
+                <label for="paid_type_cash" class="mr-4">Hand Cash</label>
+                <input type="radio" id="paid_type_bank" name="paid_type" value="bank" class="mr-2">
+                <label for="paid_type_bank">Bank</label>
+            </div>
+        </div>
+        
+        <!-- Button Group -->
+        <div class="flex justify-end mt-4">
+            <!-- Close Button -->
+            <button onclick="hideModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
+            <!-- Submit Button -->
+            <button onclick="submitPayslip()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Submit</button>
+        </div>
     </div>
-  </div>
 </div>
 <!-- End Modal -->
 
@@ -135,14 +190,24 @@ $stmt = $conn->query($query);
 
 
 
-  <script>
-  function showModal(fullName, department, position, totalSalary) {
-    document.getElementById('full_name').innerText = 'Full Name: ' + fullName;
+
+
+
+
+
+
+
+
+
+<script>
+function showModal(fullName, department, position, totalSalary, monthlySalary) {
+    document.getElementById('full_name').innerText = 'Employee: ' + fullName;
     document.getElementById('department').innerText = 'Department: ' + department;
     document.getElementById('position').innerText = 'Position: ' + position;
     document.getElementById('total_salary').innerText = 'Total Salary: ' + totalSalary;
+    document.getElementById('monthly_salary').innerText = 'Monthly Salary: ' + monthlySalary;
     document.getElementById('modal').classList.remove('hidden');
-  }
+}
 
   function hideModal() {
     document.getElementById('modal').classList.add('hidden');
