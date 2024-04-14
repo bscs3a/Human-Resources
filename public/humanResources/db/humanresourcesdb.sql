@@ -216,3 +216,20 @@ ALTER TABLE salary_info ADD COLUMN total_deductions DECIMAL(10,2) NOT NULL;
 
 ALTER TABLE salary_info
 ADD COLUMN daily_rate DECIMAL(10, 2) NOT NULL;
+
+-- Insert example data into the salary_info table
+INSERT INTO salary_info (monthly_salary, total_salary, employees_id) VALUES
+(80000.00, 45507.54, 1),
+(45000.00, 30909.00, 2);
+
+-- Retrieve the id values generated for the inserted records
+SELECT id FROM salary_info;
+
+INSERT INTO payroll (pay_date, month, monthly_salary, status, salary_id, employees_id, total_deductions) VALUES
+('2024-04-01', 'April', 50000.00, 'Pending', 1, 1, 1500.00),
+('2024-04-01', 'April', 30000.00, 'Pending', 2, 2, 800.00);
+
+UPDATE salary_info SET total_deductions = monthly_salary * 0.05 WHERE id = 1;
+UPDATE salary_info SET total_deductions = monthly_salary * 0.03 WHERE id = 2;
+
+ALTER TABLE payroll DROP COLUMN total_deductions;
