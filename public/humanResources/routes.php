@@ -1050,17 +1050,23 @@ Router::post('/create/payslip', function () {
     $monthly_salary = 4000.00; // Example monthly salary
     $total_deductions = 1000.00; // Example total deductions
 
-    // Insert data into payroll table
-    $query = "INSERT INTO payroll (pay_date, month, status, employees_id) VALUES (:pay_date, :month, :status, :employees_id)";
-    $stmt = $conn->prepare($query);
+    // Retrieve salary_id from salary_info table based on employee_id
+    $employee_id = 1; // Assuming employee_id is known
+    $salary_query = "SELECT id FROM salary_info WHERE employees_id = :employees_id";
+    $salary_stmt = $conn->prepare($salary_query);
+    $salary_stmt->bindParam(':employees_id', $employee_id);
+    $salary_stmt->execute();
+    $salary_id = $salary_stmt->fetchColumn();
 
-    // For demonstration purposes, let's assume we're creating a payslip for a specific employee (e.g., employee with id = 1)
-    $employee_id = 1;
+    // Insert data into payroll table
+    $query = "INSERT INTO payroll (pay_date, month, status, salary_id, employees_id) VALUES (:pay_date, :month, :status, :salary_id, :employees_id)";
+    $stmt = $conn->prepare($query);
 
     // Bind parameters
     $stmt->bindParam(':pay_date', $pay_date);
     $stmt->bindParam(':month', $month);
     $stmt->bindParam(':status', $status);
+    $stmt->bindParam(':salary_id', $salary_id); // Bind the retrieved salary_id
     $stmt->bindParam(':employees_id', $employee_id);
 
     // Execute the query
@@ -1068,7 +1074,9 @@ Router::post('/create/payslip', function () {
 
     // Redirect to a success page or reload the current page
     header("Location: $rootFolder/hr/payslipgenerate");
+    exit(); // Ensure script termination after redirection
 });
+
 
 
 // SAVE/CREATE event - schedule/calendar
