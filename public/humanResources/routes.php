@@ -238,29 +238,31 @@ Router::post('/hr/employees/add', function () {
     $monthlysalary = $_POST['monthlysalary'];
     $totalsalary = $_POST['totalsalary'];
     
-    // Calculate total deductions
-    $totalDeductions = calculatePagibig($monthlysalary) + calculateSSS($monthlysalary) + calculatePhilhealth($monthlysalary) + calculateIncomeTax($monthlysalary) + calculateWithholdingTax($monthlysalary);
+// Calculate total deductions
+$totalDeductions = calculatePagibig($monthlysalary) + calculateSSS($monthlysalary) + calculatePhilhealth($monthlysalary) + calculateIncomeTax($monthlysalary) + calculateWithholdingTax($monthlysalary);
 
-    // Calculate total salary
-    $totalSalary = $monthlysalary - $totalDeductions;
+// Calculate total salary
+$totalSalary = $monthlysalary - $totalDeductions;
 
-    $query = "INSERT INTO salary_info (employees_id, monthly_salary, total_salary, daily_rate) VALUES (:employeeId, :monthlysalary, :totalsalary, :dailyrate);";
-    $stmt = $conn->prepare($query);
+$query = "INSERT INTO salary_info (employees_id, monthly_salary, total_salary, total_deductions, daily_rate) VALUES (:employeeId, :monthlysalary, :totalsalary, :totaldeductions, :dailyrate);";
+$stmt = $conn->prepare($query);
 
-    if (empty($monthlysalary)) {
-        header("Location: $rootFolder/hr/employees/add");
-        return;
-    }
+if (empty($monthlysalary)) {
+    header("Location: $rootFolder/hr/employees/add");
+    return;
+}
 
-    // Calculate daily rate based on monthly salary and assuming 22 weekdays in a month
-    $dailyRate = $monthlysalary / 22;
+// Calculate daily rate based on monthly salary and assuming 22 weekdays in a month
+$dailyRate = $monthlysalary / 22;
 
-    $stmt->execute([
-        ':employeeId' => $employeeId,
-        ':monthlysalary' => $monthlysalary,
-        ':totalsalary' => $totalSalary,
-        ':dailyrate' => $dailyRate,
-    ]);
+$stmt->execute([
+    ':employeeId' => $employeeId,
+    ':monthlysalary' => $monthlysalary,
+    ':totalsalary' => $totalSalary,
+    ':totaldeductions' => $totalDeductions,
+    ':dailyrate' => $dailyRate,
+]);
+
 
     // tax : FK salary_id
     $incometax = $_POST['incometax'];

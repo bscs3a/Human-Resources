@@ -208,3 +208,9 @@ INSERT INTO leave_requests (type, details, start_date, end_date, status, employe
 INSERT INTO applicants (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, applyingForDepartment, address, contact_no, email, applyingForPosition) VALUES
 ('https://pbs.twimg.com/profile_images/1776936537089089536/Ws5Ihsh7_400x400.jpg', 'Jaruu', 'Eveland', 'Rias', '2001-08-31', 'Male', 'Filipino', 'Single', 'Human Resources', 'Country Roads Take Me Home', '09123456789', 'foxwriter@example.com', 'HR Coordinator'),
 ('https://pbs.twimg.com/profile_images/1752672426381762560/lGu3Vx-C_400x400.jpg', 'Suzuran', '', 'Yamino', '2001-08-31', 'Female', 'Filipino', 'Single', 'Finance', 'Sorcerer, I Hardly Even Know Her!', '09123456789', 'sorcerer@example.com', 'Credit Analyst');
+
+ALTER TABLE payroll DROP COLUMN deductions;
+ALTER TABLE salary_info ADD COLUMN total_deductions DECIMAL(10,2) NOT NULL;
+
+ALTER TABLE salary_info
+ADD COLUMN daily_rate DECIMAL(10, 2) NOT NULL;
