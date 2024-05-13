@@ -1041,6 +1041,7 @@ Router::post('/create/payslip', function () {
     $pay_date = $_POST['pay_date'];
     $month = $_POST['month'];
     $status = $_POST['status'];
+    $employee_id = $_POST['employee_id']; // Get the employee ID from the form
 
     // Assuming you have the employee's information available when the modal is opened
     // If not, you'll need a way to retrieve it, such as an AJAX request
@@ -1051,7 +1052,6 @@ Router::post('/create/payslip', function () {
     $total_deductions = 1000.00; // Example total deductions
 
     // Retrieve salary_id from salary_info table based on employee_id
-    $employee_id = 1; // Assuming employee_id is known
     $salary_query = "SELECT id FROM salary_info WHERE employees_id = :employees_id";
     $salary_stmt = $conn->prepare($salary_query);
     $salary_stmt->bindParam(':employees_id', $employee_id);
@@ -1076,6 +1076,7 @@ Router::post('/create/payslip', function () {
     header("Location: $rootFolder/hr/payslipgenerate");
     exit(); // Ensure script termination after redirection
 });
+
 
 
 

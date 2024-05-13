@@ -3,7 +3,7 @@
 $db = Database::getInstance();
 $conn = $db->connect();
 
-$query = "SELECT CONCAT(e.first_name, ' ', e.last_name) AS full_name, e.department, e.position, s.total_salary, s.monthly_salary, s.total_deductions
+$query = "SELECT e.id, CONCAT(e.first_name, ' ', e.last_name) AS full_name, e.department, e.position, s.total_salary, s.monthly_salary, s.total_deductions
           FROM employees e
           JOIN salary_info s ON e.id = s.employees_id";
 
@@ -97,7 +97,8 @@ $stmt = $conn->query($query);
               echo "<td class='px-4 py-2 text-center'>" . $row['department'] . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['position'] . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['total_salary'] . "</td>";
-              echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded' onclick='showModal(\"" . $row['full_name'] . "\", \"" . $row['department'] . "\", \"" . $row['position'] . "\", \"" . $row['total_salary'] . "\", \"" . $row['monthly_salary'] . "\", \"" . $row['total_deductions'] . "\")'>Generate</button></td>";
+              echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded' onclick='showModal(\"" . $row['id'] . "\", \"" . $row['full_name'] . "\", \"" . $row['department'] . "\", \"" . $row['position'] . "\", \"" . $row['total_salary'] . "\", \"" . $row['monthly_salary'] . "\", \"" . $row['total_deductions'] . "\")'>Generate</button></td>";
+
 
               echo "</tr>";
             }
@@ -117,6 +118,10 @@ $stmt = $conn->query($query);
     <div class="bg-white p-8 rounded-md max-w-3xl shadow-lg">
         <h2 class="text-2xl font-bold mb-4">Payslip Details</h2>
         <form action="/create/payslip" id="createPayslip" method="POST">
+          
+          <!-- Hidden input for employee ID -->
+          <input type="hidden" id="employee_id" name="employee_id">
+
             <!-- Employee -->
             <p id="full_name" class="mb-2"></p>
             <p id="position" class="mb-2"></p>
@@ -205,7 +210,8 @@ $stmt = $conn->query($query);
 
 
 <script>
-function showModal(fullName, department, position, totalSalary, monthlySalary, totalDeductions) {
+function showModal(id, fullName, department, position, totalSalary, monthlySalary, totalDeductions) {
+    document.getElementById('employee_id').value = id; // Set the value of the hidden input field for employee ID
     document.getElementById('full_name').innerText = 'Employee: ' + fullName;
     document.getElementById('department').innerText = 'Department: ' + department;
     document.getElementById('position').innerText = 'Position: ' + position;
@@ -214,6 +220,7 @@ function showModal(fullName, department, position, totalSalary, monthlySalary, t
     document.getElementById('total_deductions').innerText = 'Total Deductions: ' + totalDeductions;
     document.getElementById('modal').classList.remove('hidden');
 }
+
 
 
   function hideModal() {
