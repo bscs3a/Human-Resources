@@ -67,14 +67,16 @@ CREATE TABLE payroll (
     pay_date DATE NOT NULL,
     month VARCHAR(20) NOT NULL,
     deductions DECIMAL(10,2) NOT NULL,
-    net_pay DECIMAL(10,2) NOT NULL, -- How much the employer paid the employee
+    monthly_salary DECIMAL(10,2) NOT NULL,
     status ENUM('Pending','Paid') DEFAULT 'Pending',
     salary_id INT(10) NOT NULL,
     employees_id INT(10) NOT NULL,
+    total_deductions DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (employees_id) REFERENCES employees (id),
     FOREIGN KEY (salary_id) REFERENCES salary_info (id)
 );
+
 
 -- DTR
 CREATE TABLE attendance (
@@ -139,8 +141,10 @@ CREATE TABLE account_info (
 
 CREATE TABLE session (
     id INT(10) NOT NULL AUTO_INCREMENT,
+    username VARCHAR(30) NOT NULL UNIQUE,
     login_time TIMESTAMP DEFAULT current_timestamp(),
     logout_time TIMESTAMP DEFAULT current_timestamp(),
+    role ENUM('Product Order','Human Resources','Point of Sales', 'Inventory','Finance','Delivery') NOT NULL,
     account_info_id INT(10) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (account_info_id) REFERENCES account_info (id)
@@ -206,3 +210,26 @@ INSERT INTO leave_requests (type, details, start_date, end_date, status, employe
 INSERT INTO applicants (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, applyingForDepartment, address, contact_no, email, applyingForPosition) VALUES
 ('https://pbs.twimg.com/profile_images/1776936537089089536/Ws5Ihsh7_400x400.jpg', 'Jaruu', 'Eveland', 'Rias', '2001-08-31', 'Male', 'Filipino', 'Single', 'Human Resources', 'Country Roads Take Me Home', '09123456789', 'foxwriter@example.com', 'HR Coordinator'),
 ('https://pbs.twimg.com/profile_images/1752672426381762560/lGu3Vx-C_400x400.jpg', 'Suzuran', '', 'Yamino', '2001-08-31', 'Female', 'Filipino', 'Single', 'Finance', 'Sorcerer, I Hardly Even Know Her!', '09123456789', 'sorcerer@example.com', 'Credit Analyst');
+
+ALTER TABLE payroll DROP COLUMN deductions;
+ALTER TABLE salary_info ADD COLUMN total_deductions DECIMAL(10,2) NOT NULL;
+
+ALTER TABLE salary_info
+ADD COLUMN daily_rate DECIMAL(10, 2) NOT NULL;
+
+-- Insert example data into the salary_info table
+INSERT INTO salary_info (monthly_salary, total_salary, employees_id) VALUES
+(80000.00, 45507.54, 1),
+(45000.00, 30909.00, 2);
+
+-- Retrieve the id values generated for the inserted records
+SELECT id FROM salary_info;
+
+INSERT INTO payroll (pay_date, month, monthly_salary, status, salary_id, employees_id, total_deductions) VALUES
+('2024-04-01', 'April', 50000.00, 'Pending', 1, 1, 1500.00),
+('2024-04-01', 'April', 30000.00, 'Pending', 2, 2, 800.00);
+
+UPDATE salary_info SET total_deductions = monthly_salary * 0.05 WHERE id = 1;
+UPDATE salary_info SET total_deductions = monthly_salary * 0.03 WHERE id = 2;
+
+ALTER TABLE payroll DROP COLUMN total_deductions;

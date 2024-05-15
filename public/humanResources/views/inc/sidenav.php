@@ -1,5 +1,5 @@
 <!-- start: Sidebar -->
- <div id="sidebar-menu" class="fixed left-0 top-0 w-64 h-full bg-sidebar p-4 z-50 sidebar-menu transition-transform">
+<div id="sidebar-menu" class="fixed left-0 top-0 w-64 h-full bg-sidebar p-4 z-50 sidebar-menu transition-transform">
   <a route="/" class="flex items-center pb-4 border-b border-b-white ">
     <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded object-cover">
     <span  class="cursor-pointer text-4xl font-russo text-white ml-3">BSCS 3A</span>
@@ -59,14 +59,26 @@
     <i class="ri-arrow-right-s-line ml-auto"></i>
   </a>
 </li>
-<!-- Payroll -->
 <li class="mb-1 group">
-  <a route="/hr/payroll" class="flex items-center py-2 px-4 text-gray-50 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-    <i class="ri-line-chart-line mr-3 text-lg"></i>
-    <span class="text-sm">Payroll</span>
-    <i class="ri-arrow-right-s-line ml-auto"></i>
-  </a>
-</li>
+    <a route="#" class="flex items-center py-2 px-4 text-gray-50 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+      <i class="ri-line-chart-line mr-3 text-lg"></i>
+      <span class="text-sm">Payroll</span>
+      <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
+    </a>
+<!-- Payroll List -->
+<ul class="pl-7 mt-2 hidden group-[.selected]:block">
+  <li class="mb-4">
+  <a route="/hr/payrolllist" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Payroll List
+        <i class="ri-arrow-right-s-line ml-auto"></i>
+    </a>
+  </li>
+  <!-- Generate Payslip -->
+  <li class="mb-4">
+    <a route="/hr/payslipgenerate" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Generate Payslip
+        <i class="ri-arrow-right-s-line ml-auto"></i>
+    </a>
+</ul>
+  </li>
 <!-- Daily Time Record -->
 <li class="mb-1 group">
   <a route="/hr/dtr" class="flex items-center py-2 px-4 text-gray-50 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
