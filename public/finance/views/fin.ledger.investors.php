@@ -168,9 +168,6 @@
                                         class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
 
                                 </div>
-
-
-
                                 <div class="flex justify-end items-start mb-2">
                                     <button id="cancelModal" type="button"
                                         class="border border-gray-700 bg-gray-200 hover:bg-gray-100 text-gray-800 text-sm font-bold py-1 px-5 rounded-md ml-4 ">Cancel</button>
@@ -348,66 +345,56 @@
 
                     <?php endforeach; ?>
                 </div>
-                <script>
-                    <?php foreach ($result as $results): ?>
-                        <?php $id = $results['ledgerno']; ?>
-                        function closeModalAndClearInputs<?= $id ?>() {
-                            document.getElementById('payModal<?= $id ?>').classList.add('hidden');
-                            document.getElementById('LoanModal<?= $id ?>').classList.add('hidden');
-                            ['name', 'contact', 'contactName'].forEach(id => document.getElementById(id + '<?= $id ?>').value = '');
-                        }
-
-                        document.getElementById('openPayModal<?= $id ?>').addEventListener('click', function () {
-                            document.getElementById('payModal<?= $id ?>').classList.remove('hidden');
-                        });
-
-                        document.getElementById('openLoanModal<?= $id ?>').addEventListener('click', function () {
-                            document.getElementById('LoanModal<?= $id ?>').classList.remove('hidden');
-                        });
-
-                        document.getElementById('cancelPayModal<?= $id ?>').addEventListener('click', function (event) {
-                            event.stopPropagation();
-                            closeModalAndClearInputs<?= $id ?>();
-                        });
-
-                        document.getElementById('cancelLoanModal<?= $id ?>').addEventListener('click', function (event) {
-                            event.stopPropagation();
-                            closeModalAndClearInputs<?= $id ?>();
-                        });
-                    <?php endforeach; ?>
-
-                    function closeModalAndClearInputs() {
-                        document.getElementById('myModal').classList.add('hidden');
-                        ['name', 'contact', 'contactName'].forEach(id => document.getElementById(id).value = '');
-                    }
-
-                    document.getElementById('openModal').addEventListener('click', function () {
-                        document.getElementById('myModal').classList.remove('hidden');
-                    });
-
-                    ['cancelModal'].forEach(id => {
-                        document.getElementById(id).addEventListener('click', function (event) {
-                            event.stopPropagation();
-                            closeModalAndClearInputs();
-                            document.getElementById('myModal').classList.add('hidden');
-                        });
-                    });
-                </script>
+                
             </div>
+        </div>
     </main>
+    <!-- script for modal -->
     <script>
-        window.addEventListener('DOMContentLoaded', (event) => {
-            const forms = document.querySelectorAll('form');
-            const pathSegments = window.location.pathname.split('/');
-            const rootFolder = pathSegments.length > 1 ? pathSegments[1] : '';
+        <?php foreach ($result as $results): ?>
+            <?php $id = $results['ledgerno']; ?>
+            function closeModalAndClearInputs<?= $id ?>() {
+                document.getElementById('payModal<?= $id ?>').classList.add('hidden');
+                document.getElementById('LoanModal<?= $id ?>').classList.add('hidden');
+                ['name', 'contact', 'contactName'].forEach(id => document.getElementById(id + '<?= $id ?>').value = '');
+            }
 
-            forms.forEach(form => {
-                const existingAction = form.getAttribute('action');
-                form.action = `/${rootFolder}${existingAction}`;
+            document.getElementById('openPayModal<?= $id ?>').addEventListener('click', function () {
+                document.getElementById('payModal<?= $id ?>').classList.remove('hidden');
+            });
+
+            document.getElementById('openLoanModal<?= $id ?>').addEventListener('click', function () {
+                document.getElementById('LoanModal<?= $id ?>').classList.remove('hidden');
+            });
+
+            document.getElementById('cancelPayModal<?= $id ?>').addEventListener('click', function (event) {
+                event.stopPropagation();
+                closeModalAndClearInputs<?= $id ?>();
+            });
+
+            document.getElementById('cancelLoanModal<?= $id ?>').addEventListener('click', function (event) {
+                event.stopPropagation();
+                closeModalAndClearInputs<?= $id ?>();
+            });
+        <?php endforeach; ?>
+
+        function closeModalAndClearInputs() {
+            document.getElementById('myModal').classList.add('hidden');
+            ['name', 'contact', 'contactName'].forEach(id => document.getElementById(id).value = '');
+        }
+
+        document.getElementById('openModal').addEventListener('click', function () {
+            document.getElementById('myModal').classList.remove('hidden');
+        });
+
+        ['cancelModal'].forEach(id => {
+            document.getElementById(id).addEventListener('click', function (event) {
+                event.stopPropagation();
+                closeModalAndClearInputs();
+                document.getElementById('myModal').classList.add('hidden');
             });
         });
     </script>
-
     <script src="./../../../src/form.js"></script>
     <script src="./../../../src/route.js"></script>
     <!-- Start: Sidebar -->

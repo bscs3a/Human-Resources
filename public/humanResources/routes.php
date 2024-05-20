@@ -37,9 +37,9 @@ $hr = [
         include $basePath . "leave-requests.details.php";
     },
     '/hr/schedule' => $basePath . "schedule.php",
-    '/hr/payrolllist' => $basePath . "payroll.list.php",
+    '/hr/payroll' => $basePath . "payroll.list.php",
     '/hr/dtr' => $basePath . "daily-time-record.php",
-    '/hr/payslipgenerate' => $basePath . "payslip.generate.php",
+    '/hr/generate-payslip' => $basePath . "payslip.generate.php",
     '/hr/payslipreport' => $basePath . "payslip.report.php",
     //view employee profile
     '/hr/employees/id={id}' => function($id) use ($basePath) {
@@ -843,7 +843,6 @@ Router::post('/create/payslip', function () {
     $total_deductions = 1000.00; // Example total deductions
 
     // Retrieve salary_id from salary_info table based on employee_id
-    $employee_id = 1; // Assuming employee_id is known
     $salary_query = "SELECT id FROM salary_info WHERE employees_id = :employees_id";
     $salary_stmt = $conn->prepare($salary_query);
     $salary_stmt->bindParam(':employees_id', $employee_id);
@@ -861,13 +860,9 @@ Router::post('/create/payslip', function () {
     // Execute the query
     $stmt->execute();
     // Redirect to a success page or reload the current page
-    header("Location: $rootFolder/hr/payslipgenerate");
+    header("Location: $rootFolder/hr/generate-payslip");
     exit(); // Ensure script termination after redirection
 });
-
-
-
-
 // SAVE/CREATE event - schedule/calendar
 Router::post('/create/schedule', function () {
     $db = Database::getInstance();

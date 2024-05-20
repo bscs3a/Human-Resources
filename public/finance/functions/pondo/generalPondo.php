@@ -1,26 +1,62 @@
 <?php 
 
-    require_once 'public\finance\functions\supportingFunctions\supportingExpense.php';
-    require_once 'public/finance/functions/generalFunctions.php';
     
+    require_once 'public/finance/functions/generalFunctions.php';
 
 
     function pondoForEveryone($department){
         if (!acceptableDepartment($department)){
             throw new Exception("Department does not exist");
         }
-        $year = date('Y', strtotime('"first day of last month"'));
-        $month = date('m', strtotime('"first day of last month"'));
+        $year = date('Y', strtotime('first day of last month'));
+        $month = date('m', strtotime('first day of last month'));
 
-        $balance = getAccountBalanceV2('Cash on hand',true, $year, $month) + getAccountBalanceV2('Cash on bank',true, $year, $month);
-        $savings = $balance * 0.2;
+        $cashOnHand = getAccountBalanceV2('Cash on hand',true, $year, $month);
+        $cashOnBank = getAccountBalanceV2('Cash on bank',true, $year, $month);
 
-        $PO = $balance * 0.2;
-        $HR = $balance * 0.2;
-        $Finance = $balance * 0.1;
-        $Sales = $balance * 0.1;
-        $Delivery = $balance * 0.1;
-        $Inventory = $balance * 0.1;
+        $balance = $cashOnHand + $cashOnBank;
+        $savings = [
+            'total' => $balance * 0.2,
+            'Cash on hand' => $cashOnHand * 0.2,
+            'Cash on bank' => $cashOnBank * 0.2
+        ];
+
+        $PO = [
+            'total' => $balance * 0.2,
+            'Cash on hand' => $cashOnHand * 0.2,
+            'Cash on bank' => $cashOnBank * 0.2
+        ];
+        
+        $HR = [
+            'total' => $balance * 0.2,
+            'Cash on hand' => $cashOnHand * 0.2,
+            'Cash on bank' => $cashOnBank * 0.2
+        ];
+        
+        $Finance = [
+            'total' => $balance * 0.1,
+            'Cash on hand' => $cashOnHand * 0.1,
+            'Cash on bank' => $cashOnBank * 0.1
+        ];
+        
+        $Sales = [
+            'total' => $balance * 0.1,
+            'Cash on hand' => $cashOnHand * 0.1,
+            'Cash on bank' => $cashOnBank * 0.1
+        ];
+        
+        $Delivery = [
+            'total' => $balance * 0.1,
+            'Cash on hand' => $cashOnHand * 0.1,
+            'Cash on bank' => $cashOnBank * 0.1
+        ];
+        
+        $Inventory = [
+            'total' => $balance * 0.1,
+            'Cash on hand' => $cashOnHand * 0.1,
+            'Cash on bank' => $cashOnBank * 0.1
+        ];
+        
 
         switch ($department) {
             case 'Product Order':
@@ -43,7 +79,7 @@
     }
 
 
-    function getExpensesPondo($department){
+    function getExpensesPondo($department, $cashAccount){
         $total = 0;
         if (!acceptableDepartment($department)){
             throw new Exception("Department does not exist");
@@ -53,20 +89,20 @@
 
         $db = Database::getInstance();
         $conn = $db->connect();
-
-        $cashOnhand = getLedgerCode('Cash on hand');
-        $cashOnbank = getLedgerCode('Cash on bank');
-
+        $cashAccount = getLedgerCode($cashAccount);
+        if (!$cashAccount){
+            throw new Exception("Cash account does not exist");
+        }
         $sql = "SELECT 
         (SUM(
             CASE 
-                WHEN lt.LedgerNo_Dr = :cashOnHand OR lt.LedgerNo_Dr = :cashInBank THEN amount 
+                WHEN lt.LedgerNo_Dr = :cashAccount THEN amount 
                 ELSE 0 
             END) 
         -
         SUM(
             CASE 
-                WHEN lt.LedgerNo = :cashOnHand OR lt.LedgerNo = :cashInBank THEN amount 
+                WHEN lt.LedgerNo = :cashAccount THEN amount 
                 ELSE 0 
             END)) 
         as balance
@@ -75,8 +111,7 @@
         JOIN employees as e ON ft.employee_id = e.id
         WHERE YEAR(datetime) = :year AND MONTH(datetime) = :month AND e.department = :department";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':cashOnHand', $cashOnhand);
-        $stmt->bindParam(':cashInBank', $cashOnbank);
+        $stmt->bindParam(':cashAccount', $cashAccount);
         $stmt->bindParam(':year', $year);
         $stmt->bindParam(':month', $month);
         $stmt->bindParam(':department', $department);
@@ -84,11 +119,11 @@
         $result = $stmt->fetch();
         $total = $result['balance'];
 
-        return $total * -1;
+        return $total == 0 ? 0 : $total * -1;
     }
 
-    function getRemainingPondo($department){
-        return pondoForEveryone($department) - getExpensesPondo($department);
+    function getRemainingPondo($department, $cashAccount){
+        return pondoForEveryone($department)[$cashAccount] - getExpensesPondo($department, $cashAccount);
     }
 
     //available are "'Product Order','Human Resources','Point of Sales', 'Inventory','Finance','Delivery', 'Savings'"

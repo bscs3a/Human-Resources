@@ -26,6 +26,7 @@ Router::post('/login', function(){
 
     $base_url = 'Master'; // Define your base URL here
     if ($user && password_verify($password, $user['password'])) {
+    // if ($user && $password == $user['password']) { // ung passwords namin from HR di naka-hash HAUSHDASDH
         $_SESSION['user'] = array();
         // Password is correct
         $_SESSION['user']['account_id'] = $user['id'];

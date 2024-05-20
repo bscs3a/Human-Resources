@@ -130,8 +130,31 @@
 </div>
 <!-- Payroll --> 
 <h4 class="ml-6 mt-4 text-xl font-bold"> Payroll </h4>
+<?php 
+  $db = Database::getInstance();
+  $conn = $db->connect();
+
+  $search = $_POST['search'] ?? '';
+  $query = "SELECT payroll.*, salary_info.*, employees.* FROM payroll";
+  $query .= " 
+  LEFT JOIN employees ON payroll.employees_id = employees.id
+  LEFT JOIN salary_info ON salary_info.employees_id = employees.id AND payroll.salary_id = salary_info.id";
+
+  $stmt = $conn->prepare($query);
+  $stmt->execute();
+  $payroll = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  $pdo = null;
+  $stmt = null;
+  if (empty($payroll)) {
+      require_once 'inc/noResult.php';
+  } 
+  else {
+      require_once 'inc/payroll-list-dashboard.table.php';
+  } 
+  ?>
 <!-- Chart -->
-<div>
+<!-- <div>
   <div class="flex items-center min-h-full max-w-full">
     <canvas id="myChart" style="height:400px;"></canvas>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -159,7 +182,7 @@
       });
     </script>  
   </div>
-</div>
+</div> -->
 <!-- End Chart -->
 </main>
 <!-- End Main Bar-->

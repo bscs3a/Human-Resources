@@ -28,6 +28,12 @@ $keywords = [
 // assign only array based on array, asd
 $routes = $keywords[$role];
 
+// if (isset($keywords[$role])) {
+//     $routes = $keywords[$role];
+// } else {
+//     $routes = $keywords['Default'];
+// }
+
 Router::setRoutes($routes);
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

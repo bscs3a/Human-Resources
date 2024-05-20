@@ -280,7 +280,6 @@ Router::post('/fin/getCashFlowReport', function(){
 
 
 Router::post("/pondo/transaction", function () {
-    // echo "nandito kaba";
     $debitLedger = $_POST['payFor'];
     $creditLedger = $_POST['payUsing'];
     $amount = $_POST['amount'];

@@ -12,7 +12,13 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $displayPerPage = 10;
 $totalPages = ceil( $totalRecords / $displayPerPage) ;
 
-$remainingPondo = getRemainingPondo($department)
+// changes here
+$totalExpenses = getExpensesPondo($department, 'Cash on hand') + getExpensesPondo($department, 'Cash on bank');
+
+$cashOnHand = getRemainingPondo($department, "Cash on hand");
+$cashOnBank = getRemainingPondo($department, "Cash on bank");
+$remainingPondo = $cashOnHand + $cashOnBank;
+// upto here
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +33,7 @@ $remainingPondo = getRemainingPondo($department)
 
 <body>
 
-    <!-- INCLUDE A SIDEBAR -->
+    <?php require_once "components/sidebar.php" ?>
 
     <!-- Start: Dashboard -->
 
@@ -63,6 +69,48 @@ $remainingPondo = getRemainingPondo($department)
 
         
         <div class="w-full p-6 bg-white">
+            <!-- department choice header -->
+            <div class="justify-between items-start mb-4">
+                <!-- Tabs -->
+                <div class="mb-4">
+
+
+                    <div class="hidden sm:block">
+                        <div class="border-b border-gray-200">
+                            <nav class="-mb-px flex gap-6" aria-label="Tabs">
+                                <a route='/fin/funds/HR'
+                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                    Human Resources
+                                </a>
+                                <a route='/fin/funds/PO'
+                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                    Product Order
+                                </a>
+                                <a route='/fin/funds/Sales'
+                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                    Sales
+                                </a>
+                                <a route='/fin/funds/Inventory'
+                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                    Inventory
+                                </a>
+                                <a route='/fin/funds/Delivery'
+                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                    Delivery
+                                </a>
+                                <a route='/fin/funds/finance'
+                                    class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
+                                    aria-current="page"
+                                    >
+                                   Finance
+                                </a>
+
+
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- for adding transaction -->
             <div class="w-full px-6 py-3 bg-white">
@@ -118,13 +166,18 @@ $remainingPondo = getRemainingPondo($department)
                                     <div class="mb-4 relative">
                                         <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
                                         </label>
+                                        <!-- changes here -->
                                         <input type="text" id="amount" name="amount" placeholder="0.00" required
                                             class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md sm:text-sm"
                                             onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46"
-                                            oninput="validateInput(this, <?php echo $remainingPondo?>)" />
+                                            oninput="validateInput(this)" />
 
                                         <script>
-                                        function validateInput(input, limit) {
+                                        var cashOnHand = <?php echo json_encode($cashOnHand); ?>;
+                                        var cashOnBank = <?php echo json_encode($cashOnBank); ?>;
+
+                                        function validateInput(input) {
+                                            var limit = document.getElementById('payUsing').value === 'Cash on hand' ? cashOnHand : cashOnBank;
                                             var value = parseFloat(input.value);
                                             if (isNaN(value) || value > limit) {
                                                 input.setCustomValidity('Please enter a number not greater than ' + limit);
@@ -132,7 +185,12 @@ $remainingPondo = getRemainingPondo($department)
                                                 input.setCustomValidity('');
                                             }
                                         }
+
+                                        document.getElementById('payUsing').addEventListener('change', function() {
+                                            validateInput(document.getElementById('amount'));
+                                        });
                                         </script>
+                                        <!-- upto here -->
                                         <span
                                             class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
                                     </div>
@@ -156,7 +214,8 @@ $remainingPondo = getRemainingPondo($department)
                                                 <?php 
                                                 $validCredit = validCredit();
                                                 foreach($validCredit as $row){
-                                                    echo "<option value='".$row['ledgerno']."'>".$row['name']."</option>";
+                                                    $value = $row['name'] == 'Cash on hand' ? $cashOnHand : $cashOnBank;
+                                                    echo "<option value='".$row['name']."'>".$row['name']. "-". $value ."</option>";
                                                 }
                                                 ?>
                                             </select>
@@ -197,18 +256,19 @@ $remainingPondo = getRemainingPondo($department)
             </div>
 
             <!-- allowance info -->
+            <!-- changes here -->
             <div class=" mb-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-6 ">
                     <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
                             <h1 class="text-2xl font-bold">Given Allowance This Month</h1>
-                            <p class="mt-5 text-4xl font-medium"><?php echo pondoForEveryone($department);?></p>
+                            <p class="mt-5 text-4xl font-medium"><?php echo pondoForEveryone($department)['total'];?></p>
                         </div>
                     </div>
                     <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
                             <h1 class="text-2xl font-bold">Total Expenses This Month</h1>
-                            <p class="mt-5 text-4xl font-medium"><?php echo getExpensesPondo($department);?></p>
+                            <p class="mt-5 text-4xl font-medium"><?php echo $totalExpenses;?></p>
                         </div>
                     </div>
                     <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
@@ -219,10 +279,8 @@ $remainingPondo = getRemainingPondo($department)
                     </div>
                 </div>
             </div>
-            <?php 
-                    $pondoTable = getAllTransactions($department,$page, $displayPerPage);
-                    echo "hello";
-                    ?>
+            <!-- upto here -->
+
             <!-- Table -->
             <div class="overflow-x-auto rounded-lg border border-gray-400">
                 <table class="min-w-full divide-y-2 divide-gray-400 bg-white text-sm">
@@ -236,10 +294,10 @@ $remainingPondo = getRemainingPondo($department)
                             <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Date</th>
                         </tr>
                     </thead>
-                    
+
                     <tbody class="divide-y divide-gray-200 text-center">
                         <?php 
-                        
+                        $pondoTable = getAllTransactions($department,$page, $displayPerPage);
                         foreach($pondoTable as $row){
                         ?>
                         <tr>
@@ -253,14 +311,18 @@ $remainingPondo = getRemainingPondo($department)
                     </tbody>
                 </table>
             </div>
-            <!-- CHANGE THE LINKS -->
+
             <!-- pages -->
+            <?php 
+            // PUT YOUR LINK HERE
+            $link = "";
+            ?>
             <ol class="flex justify-end mr-8 gap-1 text-xs font-medium mt-5">
                 <!-- Next & Previous -->
                 <?php if ($page > 1): ?>
                     <li>
                         <!-- CHANGE THE ROUTE -->
-                        <a route="/fin/funds/finance=<?= $page - 1 ?>"
+                        <a route="<?php echo $link . $page - 1 ?>"
                             class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
                             <span class="sr-only">Prev Page</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
@@ -279,7 +341,7 @@ $remainingPondo = getRemainingPondo($department)
                     for ($i = $start; $i <= $end; $i++): 
                 ?>
                     <li>
-                        <a route="/fin/funds/finance=<?= $i ?>"
+                        <a route="<?php echo $link . $i ?>"
                             class="block size-8 rounded border <?= $i == $page ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-100 bg-white text-gray-900' ?> text-center leading-8">
                             <?= $i ?>
                         </a>
@@ -288,7 +350,7 @@ $remainingPondo = getRemainingPondo($department)
 
                 <?php if ($page < $totalPages): ?>
                     <li>
-                        <a route="/fin/funds/finance=<?= $page + 1 ?>"
+                        <a route="<?php echo $link . $page + 1 ?>"
                             class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
                             <span class="sr-only">Next Page</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">

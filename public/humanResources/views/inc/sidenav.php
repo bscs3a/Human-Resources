@@ -68,13 +68,13 @@
 <!-- Payroll List -->
 <ul class="pl-7 mt-2 hidden group-[.selected]:block">
   <li class="mb-4">
-  <a route="/hr/payrolllist" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Payroll List
+  <a route="/hr/payroll" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Payroll List
         <i class="ri-arrow-right-s-line ml-auto"></i>
     </a>
   </li>
   <!-- Generate Payslip -->
   <li class="mb-4">
-    <a route="/hr/payslipgenerate" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Generate Payslip
+    <a route="/hr/generate-payslip" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Generate Payslip
         <i class="ri-arrow-right-s-line ml-auto"></i>
     </a>
 </ul>

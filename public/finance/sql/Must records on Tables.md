@@ -46,7 +46,8 @@ B account
 C account
 D account
 **Tax Payable**
-Tax Payable
+Income Tax Payable
+Withholding Tax Payable
 **Retained**
 retained earnings or loss
 

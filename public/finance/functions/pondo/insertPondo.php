@@ -35,6 +35,7 @@ function validDebit(){
     $inventoryCode = getLedgerCode('Inventory');
     $payrollCode = getLedgerCode('Payroll');
     $interestExpense = getLedgerCode('Interest Expense');
+    $incomeTax = getLedgerCode('Income Tax');
     $cashOnHand = getLedgerCode('Cash on Hand');
     $cashOnBank = getLedgerCode('Cash on Bank');
 
@@ -44,7 +45,8 @@ function validDebit(){
     JOIN grouptype as gt ON at.grouptype = gt.grouptype
     WHERE (gt.grouptype = :assetCode OR gt.grouptype = :expenseCode)
     AND l.ledgerno != :inventoryCode AND l.ledgerno != :payrollCode AND l.ledgerno != :interestExpense
-    AND l.ledgerno != :cashOnHand AND l.ledgerno != :cashOnBank";
+    AND l.ledgerno != :cashOnHand AND l.ledgerno != :cashOnBank 
+    AND l.ledgerno != :incomeTax";
     $db = Database::getInstance();
     $conn = $db->connect();
     $stmt = $conn->prepare($sql);
@@ -53,6 +55,7 @@ function validDebit(){
     $stmt->bindParam(':inventoryCode', $inventoryCode);
     $stmt->bindParam(':payrollCode', $payrollCode);
     $stmt->bindParam(':interestExpense', $interestExpense);
+    $stmt->bindParam(':incomeTax', $incomeTax);
     $stmt->bindParam(':cashOnHand', $cashOnHand);
     $stmt->bindParam(':cashOnBank', $cashOnBank);
     $stmt->execute();

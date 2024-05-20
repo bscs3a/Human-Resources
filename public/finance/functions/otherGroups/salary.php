@@ -1,24 +1,78 @@
 <?php 
 require_once "public/finance/functions/generalFunctions.php";
-function inputSalary($totalSalaryAmount, $taxAmountPartial, $paymentMethod){
+require_once "public/finance/functions\pondo\generalPondo.php";
+
+function inputSalary($monthlySalary, $withHoldingTax){
     $SALARY = getLedgerCode("Payroll");
-    $TAX_PAYABLE = getLedgerCode("Tax Payable");
-    $PAYMENT_METHOD = getLedgerCode($paymentMethod);
+    $SALARY_PAYABLE = getLedgerCode("Salary Payable");
+    $WITHHOLDING_TAX_PAYABLE = getLedgerCode("Withholding Tax Payable");
 
-    $SalaryWithoutTax = $totalSalaryAmount - $taxAmountPartial;
-
-    insertLedgerXact($SALARY, $PAYMENT_METHOD, $SalaryWithoutTax, "Salary Payment");
-    insertLedgerXact($SALARY, $TAX_PAYABLE, $taxAmountPartial, "Tax to be paid to the government");
+    $totalSalary = $monthlySalary - $withHoldingTax;
+    if($totalSalary <= 0){
+        throw new Exception("Total Salary is less than 0");
+    }
+    $hrRemainingPondo = getRemainingHRPondo();
+    if($hrRemainingPondo > $totalSalary){
+        addSalaryPondoHR($SALARY, $totalSalary);
+    }
+    else{
+        insertLedgerXact($SALARY, $SALARY_PAYABLE, $totalSalary);
+    }
+    if($withHoldingTax > 0){
+        insertLedgerXact($SALARY, $WITHHOLDING_TAX_PAYABLE, $withHoldingTax);
+    }
+    return;
 }
 
-function getAvailableCashOnHand(){
-    $CASH_ON_HAND = getLedgerCode("Cash on hand");
-    return getAccountBalanceV2($CASH_ON_HAND);
+function getRemainingHRPondo(){
+
+    $department = "Human Resources";
+
+    $cashOnHand = 'Cash on hand';
+    $cashOnBank = 'Cash on bank';
+
+    $handValue = getRemainingPondo($department, $cashOnHand);
+    $bankValue = getRemainingPondo($department, $cashOnBank);
+    return $handValue + $bankValue;
 }
 
-function getAvailableCashOnBank(){
-    $CASH_ON_BANK = getLedgerCode("Cash on bank");
-    return getAccountBalanceV2($CASH_ON_BANK);
-}
+// DO NOT TOUCH THIS FUNCTION
+function addSalaryPondoHR($account, $amount){
+    $department = "Human Resources";
 
+    $cashOnHand = 'Cash on hand';
+    $cashOnBank = 'Cash on bank';
+
+
+    $handValue = getRemainingPondo($department, $cashOnHand);
+    $bankValue = getRemainingPondo($department, $cashOnBank);
+    $total = $handValue + $bankValue;
+
+    if($amount > $total){
+        throw new Exception("Amount to be bought is greater than the remaining pondo of the department");
+    }
+
+    //get percentage
+    $handPercentage = $handValue / $total;
+    $bankPercentage = $bankValue / $total;
+
+    //gets the value to insert
+    $insertHand = $amount * $handPercentage;
+    $insertBank = $amount * $bankPercentage;
+
+    // fraction error handling
+    if($insertHand + $insertBank != $amount){
+        if($handValue > $bankValue){
+            $insertHand += $amount - ($insertHand + $insertBank);
+        }else{
+            $insertBank += $amount - ($insertHand + $insertBank);
+        }
+    }
+
+    // divide it to the 2; to avoid error
+    addTransactionPondo($account, $cashOnHand, $insertHand);
+    addTransactionPondo($account, $cashOnBank, $insertBank);
+
+    return;
+}
 ?>

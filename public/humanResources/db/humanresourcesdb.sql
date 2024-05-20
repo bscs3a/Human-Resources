@@ -36,6 +36,8 @@ CREATE TABLE employment_info (
 CREATE TABLE salary_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
     monthly_salary DECIMAL(10,2) NOT NULL,
+    daily_rate DECIMAL(10, 2) NOT NULL,
+    total_deductions DECIMAL(10,2) NOT NULL, -- Total deductions (taxes, benefits)
     total_salary DECIMAL(10,2) NOT NULL, -- Total salary after deductions (taxes, benefits)
     employees_id INT(10) NOT NULL,
     PRIMARY KEY (id),
@@ -66,17 +68,16 @@ CREATE TABLE payroll (
     id INT(10) NOT NULL AUTO_INCREMENT,
     pay_date DATE NOT NULL,
     month VARCHAR(20) NOT NULL,
-    deductions DECIMAL(10,2) NOT NULL,
+    -- deductions DECIMAL(10,2) NOT NULL,
     monthly_salary DECIMAL(10,2) NOT NULL,
     status ENUM('Pending','Paid') DEFAULT 'Pending',
     salary_id INT(10) NOT NULL,
     employees_id INT(10) NOT NULL,
-    total_deductions DECIMAL(10,2) NOT NULL,
+    -- total_deductions DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (employees_id) REFERENCES employees (id),
     FOREIGN KEY (salary_id) REFERENCES salary_info (id)
 );
-
 
 -- DTR
 CREATE TABLE attendance (
@@ -167,13 +168,13 @@ INSERT INTO employment_info (dateofhire, startdate, enddate, employees_id) VALUE
 ('2021-01-01', '2021-01-01', NULL, 5),
 ('2024-04-11', '2024-04-11', '2025-04-11', 6);
 
-INSERT INTO salary_info (monthly_salary, total_salary, employees_id) VALUES
-(80000.00, 45507.54, 1),
-(45000.00, 30909.00, 2),
-(35000.00, 26357.00, 3),
-(30000.00, 23747.67, 4),
-(25000.00, 20971.67, 5),
-(18000.00, 16093.60, 6);
+INSERT INTO salary_info (monthly_salary, total_salary, total_deductions, employees_id) VALUES
+(80000.00, 45507.54, 34492.46, 1),
+(45000.00, 30909.00, 14091.00, 2),
+(35000.00, 26357.00, 8643, 3),
+(30000.00, 23747.67, 6252.33, 4),
+(25000.00, 20971.67, 4028.33, 5),
+(18000.00, 16093.60, 1906.4, 6);
 
 INSERT INTO tax_info (income_tax, withholding_tax, salary_id) VALUES
 (14833.33, 11875.13, 1),
@@ -211,25 +212,25 @@ INSERT INTO applicants (image_url, first_name, middle_name, last_name, dateofbir
 ('https://pbs.twimg.com/profile_images/1776936537089089536/Ws5Ihsh7_400x400.jpg', 'Jaruu', 'Eveland', 'Rias', '2001-08-31', 'Male', 'Filipino', 'Single', 'Human Resources', 'Country Roads Take Me Home', '09123456789', 'foxwriter@example.com', 'HR Coordinator'),
 ('https://pbs.twimg.com/profile_images/1752672426381762560/lGu3Vx-C_400x400.jpg', 'Suzuran', '', 'Yamino', '2001-08-31', 'Female', 'Filipino', 'Single', 'Finance', 'Sorcerer, I Hardly Even Know Her!', '09123456789', 'sorcerer@example.com', 'Credit Analyst');
 
-ALTER TABLE payroll DROP COLUMN deductions;
-ALTER TABLE salary_info ADD COLUMN total_deductions DECIMAL(10,2) NOT NULL;
+-- ALTER TABLE payroll DROP COLUMN deductions;
+-- ALTER TABLE salary_info ADD COLUMN total_deductions DECIMAL(10,2) NOT NULL;
 
-ALTER TABLE salary_info
-ADD COLUMN daily_rate DECIMAL(10, 2) NOT NULL;
+-- ALTER TABLE salary_info
+-- ADD COLUMN daily_rate DECIMAL(10, 2) NOT NULL;
 
 -- Insert example data into the salary_info table
-INSERT INTO salary_info (monthly_salary, total_salary, employees_id) VALUES
-(80000.00, 45507.54, 1),
-(45000.00, 30909.00, 2);
+-- INSERT INTO salary_info (monthly_salary, total_salary, employees_id) VALUES
+-- (80000.00, 45507.54, 1),
+-- (45000.00, 30909.00, 2);
 
 -- Retrieve the id values generated for the inserted records
-SELECT id FROM salary_info;
+-- SELECT id FROM salary_info;
 
-INSERT INTO payroll (pay_date, month, monthly_salary, status, salary_id, employees_id, total_deductions) VALUES
-('2024-04-01', 'April', 50000.00, 'Pending', 1, 1, 1500.00),
-('2024-04-01', 'April', 30000.00, 'Pending', 2, 2, 800.00);
+-- INSERT INTO payroll (pay_date, month, monthly_salary, status, salary_id, employees_id, total_deductions) VALUES
+-- ('2024-04-01', 'April', 50000.00, 'Pending', 1, 1, 1500.00),
+-- ('2024-04-01', 'April', 30000.00, 'Pending', 2, 2, 800.00);
 
-UPDATE salary_info SET total_deductions = monthly_salary * 0.05 WHERE id = 1;
-UPDATE salary_info SET total_deductions = monthly_salary * 0.03 WHERE id = 2;
+-- UPDATE salary_info SET total_deductions = monthly_salary * 0.05 WHERE id = 1;
+-- UPDATE salary_info SET total_deductions = monthly_salary * 0.03 WHERE id = 2;
 
-ALTER TABLE payroll DROP COLUMN total_deductions;
+-- ALTER TABLE payroll DROP COLUMN total_deductions;

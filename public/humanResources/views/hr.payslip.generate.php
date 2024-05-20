@@ -3,7 +3,7 @@
 $db = Database::getInstance();
 $conn = $db->connect();
 
-$query = "SELECT e.id, CONCAT(e.first_name, ' ', e.last_name) AS full_name, e.department, e.position, s.total_salary, s.monthly_salary, s.total_deductions
+$query = "SELECT e.id, e.first_name, e.last_name, e.middle_name, e.department, e.position, s.total_salary, s.monthly_salary, s.total_deductions
           FROM employees e
           JOIN salary_info s ON e.id = s.employees_id";
 
@@ -78,7 +78,7 @@ $stmt = $conn->query($query);
       <table class="table-auto w-full mt-4">
         <thead>
           <tr>
-            <th class="px-4 py-2 text-center">Full name</th>
+            <th class="px-4 py-2 text-center">Name</th>
             <th class="px-4 py-2 text-center">Department</th>
             <th class="px-4 py-2 text-center">Position</th>
             <th class="px-4 py-2 text-center">Total Salary</th>
@@ -93,17 +93,29 @@ $stmt = $conn->query($query);
             // Loop through each row and populate the table
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               echo "<tr>";
-              echo "<td class='px-4 py-2 text-center'>" . $row['full_name'] . "</td>";
+              $fullName = $row['first_name'] . ' ';
+if (!empty($row['middle_name'])) {
+    $fullName .= substr($row['middle_name'], 0, 1) . '. ';
+}
+$fullName .= $row['last_name'];
+
+echo "<td class='px-4 py-2 text-center'>" . $fullName . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['department'] . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['position'] . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['total_salary'] . "</td>";
-              echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded' onclick='showModal(\"" . $row['id'] . "\", \"" . $row['full_name'] . "\", \"" . $row['department'] . "\", \"" . $row['position'] . "\", \"" . $row['total_salary'] . "\", \"" . $row['monthly_salary'] . "\", \"" . $row['total_deductions'] . "\")'>Generate</button></td>";
+              $fullName = $row['first_name'] . ' ';
+if (!empty($row['middle_name'])) {
+    $fullName .= substr($row['middle_name'], 0, 1) . '. ';
+}
+$fullName .= $row['last_name'];
+
+echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded' onclick='showModal(\"" . $row['id'] . "\", \"" . $fullName . "\", \"" . $row['department'] . "\", \"" . $row['position'] . "\", \"" . $row['total_salary'] . "\", \"" . $row['monthly_salary'] . "\", \"" . $row['total_deductions'] . "\")'>Generate</button></td>";
 
 
               echo "</tr>";
             }
           } else {
-            echo "<tr><td colspan='5' class='text-center'>No records found</td></tr>";
+            echo "<tr><td colspan='5' class='text-center'>No record/s found</td></tr>";
           }
           ?>
         </tbody>
@@ -133,7 +145,7 @@ $stmt = $conn->query($query);
             <div class="grid grid-cols-2 gap-4">
                 <!-- Month -->
                 <div class="flex items-center">
-                    <label for="month" class="block font-medium mr-4">Month:</label>
+                    <label for="month" class="block font-bold mr-4">Month:</label>
                     <select id="month" name="month" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <option value="January">January</option>
                         <option value="February">February</option>
@@ -152,7 +164,7 @@ $stmt = $conn->query($query);
                 </div>
                 <!-- Pay Date -->
                 <div class="flex items-center">
-                    <label for="pay_date" class="block font-medium mr-4">Pay Date:</label>
+                    <label for="pay_date" class="block font-bold mr-4">Pay Date:</label>
                     <input type="date" id="pay_date" name="pay_date" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 </div>
             </div>
@@ -161,7 +173,7 @@ $stmt = $conn->query($query);
             <div class="grid grid-cols-2 gap-4 mt-4">
                 <!-- Status -->
                 <div class="flex items-center">
-                    <label class="block font-medium mr-4">Status:</label>
+                    <label class="block font-bold mr-4">Status:</label>
                     <div class="flex items-center">
                         <input type="radio" id="status_paid" name="status" value="paid" class="mr-2">
                         <label for="status_paid" class="mr-4">Paid</label>
@@ -171,7 +183,7 @@ $stmt = $conn->query($query);
                 </div>
                 <!-- Paid Type -->
                 <div class="flex items-center">
-                    <label class="block font-medium mr-4">Paid Type:</label>
+                    <label class="block font-bold mr-4">Paid Type:</label>
                     <div class="flex items-center">
                         <input type="radio" id="paid_type_cash" name="paid_type" value="cash" class="mr-2">
                         <label for="paid_type_cash" class="mr-4">Hand Cash</label>
@@ -184,7 +196,7 @@ $stmt = $conn->query($query);
             <!-- Button Group -->
             <div class="flex justify-end mt-4">
                 <!-- Close Button -->
-                <button onclick="hideModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
+                <button id = "generatePayslipCloseButton" type="button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
                 <!-- Submit Button -->
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Submit</button>
             </div>
@@ -193,47 +205,38 @@ $stmt = $conn->query($query);
 </div>
 <!-- End Modal -->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
 function showModal(id, fullName, department, position, totalSalary, monthlySalary, totalDeductions) {
     document.getElementById('employee_id').value = id; // Set the value of the hidden input field for employee ID
-    document.getElementById('full_name').innerText = 'Employee: ' + fullName;
-    document.getElementById('department').innerText = 'Department: ' + department;
-    document.getElementById('position').innerText = 'Position: ' + position;
-    document.getElementById('total_salary').innerText = 'Total Salary: ' + totalSalary;
-    document.getElementById('monthly_salary').innerText = 'Monthly Salary: ' + monthlySalary;
-    document.getElementById('total_deductions').innerText = 'Total Deductions: ' + totalDeductions;
+    let labels = ['Employee: ', 'Department: ', 'Position: ', 'Total Salary: ', 'Monthly Salary: ', 'Total Deductions: '];
+    let values = [fullName, department, position, totalSalary, monthlySalary, totalDeductions];
+    let ids = ['full_name', 'department', 'position', 'total_salary', 'monthly_salary', 'total_deductions'];
+
+    for (let i = 0; i < labels.length; i++) {
+        let boldText = document.createElement('span');
+        boldText.className = 'font-bold';
+        boldText.textContent = labels[i];
+
+        let valueText = document.createTextNode(' ' + values[i]);
+
+        document.getElementById(ids[i]).innerHTML = '';
+        document.getElementById(ids[i]).appendChild(boldText);
+        document.getElementById(ids[i]).appendChild(valueText);
+    }
+
     document.getElementById('modal').classList.remove('hidden');
 }
 
-
-
-  function hideModal() {
+document.getElementById('generatePayslipCloseButton').addEventListener('click', function() {
+    // Hide the Employee Details modal
     document.getElementById('modal').classList.add('hidden');
-  }
-  </script>
-
-  <script>
-  function filterEmployees() {
-    var department = document.getElementById('department').value;
-    var url = './filter.php?department=' + department;
-    window.location.href = url;
-  }
+});
+  
+function filterEmployees() {
+  var department = document.getElementById('department').value;
+  var url = './filter.php?department=' + department;
+  window.location.href = url;
+}
   </script>
 
 </main>

@@ -1,31 +1,31 @@
 <?php
-require_once "../generalFunctions.php";
-require_once "../supportingFunctions/tax.php";
+require_once "public/finance/functions/generalFunctions.php";
 
 
-// parameters is SalesAmount(without tax and without discount)
+
+// parameters is SalesAmount(WITH TAX AND DISCOUNT)
 // taxAmount 
 // salesPaymentMethod(what is being used for salesPayment) -- options are "Cash on hand" "Cash on bank"
-// taxPaymentMethod is usually with Tax Payable, can be change to your discretion, but dont if possible
 // discount is the amount of discount given,
-function insertSalesLedger($salesAmount,$taxAmount, $salesPaymentMethod, $taxPaymentMethod = "Tax Payable", $discount = 0){
+function insertSalesLedger($salesAmount, $taxAmount, $salesPaymentMethod, $discount = 0){
     if ($salesAmount <= 0 || $taxAmount <= 0){
-        throw new Exception("Amount must be greater than 0");
+        throw new Exception("Amount(tax or sales) must be greater than 0");
     }
-    if($salesPaymentMethod === "Cash on hand" || $salesPaymentMethod === "Cash on bank" ){
-        throw new Exception("Payment method for sales is wrong");
-    }
-    if($taxPaymentMethod === "Cash on hand" || $taxPaymentMethod === "Cash on bank" || $taxPaymentMethod === "Tax Payable"){
-        throw new Exception("Payment method for tax is wrong");
+    if($salesPaymentMethod !== "Cash on hand" && $salesPaymentMethod !== "Cash on bank" ){
+        throw new Exception("Payment must be cash on hand or cash on bank");
     }
     if($discount < 0){
         throw new Exception("Discount cannot be negative");
     }
-    $SALES =  "Sales";
-    $salesDetails = "made a sale";
-    $taxDetails = "VAT";
-    insertLedgerXact($salesPaymentMethod, $SALES, $salesAmount, $salesDetails);
-    insertTax($taxPaymentMethod, $taxAmount, $taxDetails);
+
+    $SALES =  getLedgerCode("Sales");
+    $salesDetails = "made a sale with tax";
+    $VALUE_ADDED_TAX = getLedgerCode("Value Added Tax Payable");
+
+    $remainingSalesAmount = $salesAmount - $taxAmount;
+
+    insertLedgerXact($salesPaymentMethod, $SALES, $remainingSalesAmount, $salesDetails);
+    insertLedgerXact($salesPaymentMethod, $VALUE_ADDED_TAX, $taxAmount, $salesDetails);
 
     //for discount
     if ($discount > 0){
@@ -42,10 +42,14 @@ function insertSalesReturn($amount, $paymentMethod){
     if ($amount <= 0){
         throw new Exception("Amount must be greater than 0");
     }
-    if($paymentMethod === "Cash on hand" || $paymentMethod === "Cash on bank"){
-        throw new Exception("Payment method cannot be null");
+    if($paymentMethod !== "Cash on hand" && $paymentMethod !== "Cash on bank" ){
+        throw new Exception("Payment must be cash on hand or cash on bank");
     }
-    $SALES_RETURN = "Returns";
+    if($amount > getBalanceCashAccount($paymentMethod)){
+        throw new Exception("Amount to be returned is greater than the remaining balance of the account");
+    }
+
+    $SALES_RETURN = getLedgerCode("Returns");
     $details = "Sales return";
     insertLedgerXact($SALES_RETURN, $paymentMethod, $amount, $details);
 }
@@ -57,11 +61,18 @@ function insertSalesAllowance($amount, $paymentMethod){
     if ($amount <= 0){
         throw new Exception("Amount must be greater than 0");
     }
-    if($paymentMethod === "Cash on hand" || $paymentMethod === "Cash on bank"){
-        throw new Exception("Payment method cannot be null");
+    if($paymentMethod !== "Cash on hand" && $paymentMethod !== "Cash on bank" ){
+        throw new Exception("Payment must be cash on hand or cash on bank");
     }
-    $SALES_ALLOWANCE = "Allowance";
+    if($amount > getBalanceCashAccount($paymentMethod)){
+        throw new Exception("Amount to be returned is greater than the remaining balance of the account");
+    }
+    $SALES_ALLOWANCE = getLedgerCode("Allowance");
     $details = "Sales allowance";
     insertLedgerXact($SALES_ALLOWANCE, $paymentMethod, $amount, $details);
+}
+
+function getBalanceCashAccount($paymentMethod){
+    return getAccountBalanceV2($paymentMethod);
 }
 ?>

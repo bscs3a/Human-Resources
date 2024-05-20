@@ -12,7 +12,13 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $displayPerPage = 10;
 $totalPages = ceil( $totalRecords / $displayPerPage) ;
 
-$remainingPondo = getRemainingPondo($department)
+// changes here
+$totalExpenses = getExpensesPondo($department, 'Cash on hand') + getExpensesPondo($department, 'Cash on bank');
+
+$cashOnHand = getRemainingPondo($department, "Cash on hand");
+$cashOnBank = getRemainingPondo($department, "Cash on bank");
+$remainingPondo = $cashOnHand + $cashOnBank;
+// upto here
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -162,13 +168,18 @@ $remainingPondo = getRemainingPondo($department)
                                     <div class="mb-4 relative">
                                         <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
                                         </label>
-                                        <input type="text" id="amount" name="amount" placeholder="0.00" required
+                                         <!-- changes here -->
+                                         <input type="text" id="amount" name="amount" placeholder="0.00" required
                                             class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md sm:text-sm"
                                             onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46"
-                                            oninput="validateInput(this, <?php echo $remainingPondo?>)" />
+                                            oninput="validateInput(this)" />
 
                                         <script>
-                                        function validateInput(input, limit) {
+                                        var cashOnHand = <?php echo json_encode($cashOnHand); ?>;
+                                        var cashOnBank = <?php echo json_encode($cashOnBank); ?>;
+
+                                        function validateInput(input) {
+                                            var limit = document.getElementById('payUsing').value === 'Cash on hand' ? cashOnHand : cashOnBank;
                                             var value = parseFloat(input.value);
                                             if (isNaN(value) || value > limit) {
                                                 input.setCustomValidity('Please enter a number not greater than ' + limit);
@@ -176,7 +187,12 @@ $remainingPondo = getRemainingPondo($department)
                                                 input.setCustomValidity('');
                                             }
                                         }
+
+                                        document.getElementById('payUsing').addEventListener('change', function() {
+                                            validateInput(document.getElementById('amount'));
+                                        });
                                         </script>
+                                        <!-- upto here -->
                                         <span
                                             class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
                                     </div>
@@ -200,7 +216,8 @@ $remainingPondo = getRemainingPondo($department)
                                                 <?php 
                                                 $validCredit = validCredit();
                                                 foreach($validCredit as $row){
-                                                    echo "<option value='".$row['ledgerno']."'>".$row['name']."</option>";
+                                                    $value = $row['name'] == 'Cash on hand' ? $cashOnHand : $cashOnBank;
+                                                    echo "<option value='".$row['name']."'>".$row['name']. "-". $value ."</option>";
                                                 }
                                                 ?>
                                             </select>
@@ -241,18 +258,19 @@ $remainingPondo = getRemainingPondo($department)
             </div>
 
             <!-- allowance info -->
+            <!-- changes here -->
             <div class=" mb-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-6 ">
                     <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
                             <h1 class="text-2xl font-bold">Given Allowance This Month</h1>
-                            <p class="mt-5 text-4xl font-medium"><?php echo pondoForEveryone($department);?></p>
+                            <p class="mt-5 text-4xl font-medium"><?php echo pondoForEveryone($department)['total'];?></p>
                         </div>
                     </div>
                     <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
                             <h1 class="text-2xl font-bold">Total Expenses This Month</h1>
-                            <p class="mt-5 text-4xl font-medium"><?php echo getExpensesPondo($department);?></p>
+                            <p class="mt-5 text-4xl font-medium"><?php echo $totalExpenses;?></p>
                         </div>
                     </div>
                     <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
@@ -263,6 +281,7 @@ $remainingPondo = getRemainingPondo($department)
                     </div>
                 </div>
             </div>
+            <!-- upto here -->
 
             <!-- Table -->
             <div class="overflow-x-auto rounded-lg border border-gray-400">

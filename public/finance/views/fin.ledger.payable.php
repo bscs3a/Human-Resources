@@ -216,6 +216,7 @@
                                 </button>
                             </div>
                         </div>
+                        <!-- paymodal -->
                         <div id="payModal<?= $id ?>"
                             class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                             <div class="bg-white rounded shadow-lg w-1/3">
@@ -279,7 +280,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- loan modal -->
                         <div id="LoanModal<?= $id ?>"
                             class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                             <div class="bg-white rounded shadow-lg w-1/3">
