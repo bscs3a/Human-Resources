@@ -1,177 +1,12 @@
 <!-- Start: Request Section -->
 <div class="mt-10  grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- Start: Request -->
-    <div class="px-5 border-2 border-solid border-gray-300 shadow-lg">
+    <!-- Start: general ledger -->
+    <div class="px-5 border-2 border-solid border-gray-300 shadow-lg flex flex-col rounded-md">
         <!-- Start: Header -->
         <div class="flex justify-between mt-5 ">
             <div>
                 <h1 class="font-sans text-xl font-bold">
-                    Request
-                    <span class="text-white bg-[#F8B721] inline-flex items-center rounded-full px-2 py-1">99+</span>
-                </h1>
-
-            </div>
-            <div>
-                <a href="#" class="text-sm font-sans font-semibold">
-                    <i class="ri-more-line text-3xl text-[#F8B721]"></i>
-                </a>
-            </div>
-        </div>
-        <!-- End: Header -->
-        <!-- Start: Tab -->
-        <div class="flex justify-stretch overflow-x-auto hide-scrollbar">
-            <button
-                class="btn btn_dept btn_active flex-grow px-10 py-2 font-xl font-semibold text-[#F8B721] border-b-2 border-[#F8B721] focus:outline-none" id="btn1">All</button>
-            <button
-                class="btn btn_dept flex-grow px-10 py-2 font-xl font-semibold text-black border-b-2 border-slate-300  hover:text-[#F8B721] hover:border-[#F8B721] focus:outline-none" id="btn2">HR</button>
-            <button
-                class="flex-grow px-10 py-2 font-xl font-semibold text-black border-b-2 border-slate-300  hover:text-[#F8B721] hover:border-[#F8B721] focus:outline-none">Sales</button>
-            <button
-                class="flex-grow px-10 py-2 font-xl font-semibold text-black border-b-2 border-slate-300  hover:text-[#F8B721] hover:border-[#F8B721] focus:outline-none">PO</button>
-            <button
-                class="flex-grow px-10 py-2 font-xl font-semibold text-black border-b-2 border-slate-300  hover:text-[#F8B721] hover:border-[#F8B721] focus:outline-none">Delivery</button>
-            <button
-                class="flex-grow px-10 py-2 font-xl font-semibold text-black border-b-2 border-slate-300  hover:text-[#F8B721] hover:border-[#F8B721] focus:outline-none">Inventory</button>
-        </div>
-        <!-- End: Tab -->
-
-        <script>
-            var buttons = document.getElementsByClassName('btn_dept');
-
-            for (var i = 0; i < buttons.length; i++) {
-                // console.log(i);
-                buttons[i].addEventListener('click', function () {
-                    var current_btn_dept = document.getElementsByClassName('btn_active');
-
-                    // If there's an active button, remove its active class
-                    if (current_btn_dept.length > 0) {
-                        current_btn_dept[0].classList.remove('btn_active');
-                        // this.classList.remove(' text-[#F8B721] border-[#F8B721]');
-                        // this.classList.add('text-black border-slate-300');
-                    }
-                    
-                    // Add the active class to the current/clicked button
-                    this.classname += ' btn_active text-[#F8B721] border-[#F8B721]';
-
-                    // for (var j = 0; j < buttons.length; j++) {
-                    //     if (buttons[j].classList.contains('btn_active')) {
-                    //         buttons[j].classList.remove('btn_active');
-                    //     }
-                    // }
-                    // this.classList.add('btn_active');
-                });
-            }
-        </script>
-
-        <!-- Start: Table -->
-        <div class="table" id="table1">
-            <table class="table-fixed my-5 w-full" id="table_request">
-                <tr class="flex justify-between py-5 font-medium text-xl">
-                    <td class="mr-4 text-xl">
-                        <p class="font-semibold">Sample User</p>
-                        <p>HR Dept</p>
-                    </td>
-
-                    <td class="mr-4 line-clamp-2">
-                        <p>Salary Request</p>
-                    </td>
-
-                    <td class="mr-4 line-clamp-2">
-                        <p>March 4, 2024</p>
-                    </td>
-                    <td class="mr-4">
-                        <button class="bg-[#F8B721] rounded-lg px-8 py-3 shadow-md shadow-black-300">
-                            <p class="text-white text-lg font-bold ">View</p>
-                        </button>
-                    </td>
-                </tr>
-
-            </table>
-
-        </div>
-
-        <!-- <div class="table " id="table2">
-            <table class="table-fixed my-5 w-full" id="table_request">
-                <tr class="flex justify-between py-5 font-medium text-xl">
-                    <td class="mr-4 text-xl">
-                        <p class="font-semibold">HAHAH User</p>
-                        <p>HR Dept</p>
-                    </td>
-
-                    <td class="mr-4 line-clamp-2">
-                        <p>Salary Request</p>
-                    </td>
-
-                    <td class="mr-4 line-clamp-2">
-                        <p>March 4, 2024</p>
-                    </td>
-                    <td class="mr-4">
-                        <button class="bg-[#F8B721] rounded-lg px-8 py-3 shadow-md shadow-black-300">
-                            <p class="text-white text-lg font-bold ">View</p>
-                        </button>
-                    </td>
-                </tr>
-
-            </table>
-
-        </div> -->
-        <script>
-
-            var buttons = document.getElementsByClassName('.btn');
-            var tables = document.getElementsByClassName('.table');
-
-
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].addEventListener('click', function () {
-                    var tableId = this.id.replace('btn', 'table');
-                    for (var j = 0; j < tables.length; j++) {
-                        if (tables[j].id === tableId) {
-                            tables[j].style.display = 'block';
-                        } else {
-                            tables[j].style.display = 'none';
-                        }
-                    }
-                });
-            }
-
-            let table_request = document.getElementById('table_request');
-
-            for (let index = 0; index < 2; index++) {
-                table_request.innerHTML += `
-                                <tr class="flex justify-between py-5 font-medium text-xl">
-                                <td class="mr-4 text-xl">
-                                    <p class="font-semibold">Sample User</p>
-                                    <p>HR Dept</p>
-                                </td>
-
-                                <td class="mr-4 line-clamp-2">
-                                    <p>Salary Request</p>
-                                </td>
-
-                                <td class="mr-4 line-clamp-2">
-                                    <p>March 4, 2024</p>
-                                </td>
-                                <td class="mr-4">
-                                    <button class="bg-[#F8B721] rounded-lg px-8 py-3 shadow-md shadow-black-300">
-                                        <p class="text-white text-lg font-bold ">View</p>
-                                    </button>
-                                </td>
-                            </tr>
-                                `;
-
-            }
-        </script>
-        <!-- End: Table -->
-    </div>
-    <!-- End: Request -->
-
-    <!-- Start: Salary Request -->
-    <div class="px-5 border-2 border-solid border-gray-300 shadow-lg flex flex-col">
-        <!-- Start: Header -->
-        <div class="flex justify-between mt-5 ">
-            <div>
-                <h1 class="font-sans text-xl font-bold">
-                    General Ledger
+                    <a route="/fin/ledger/page=1">General Ledger</a>
                 </h1>
             </div>
         </div>
@@ -186,14 +21,18 @@
                 </thead>
                 <tbody>                
                 <?php $transaction = getLedgerTransactions(10); ?>                
-                <?php foreach ($transaction as $trans){ ?>
+                <?php
+                $counter = 0;
+                foreach ($transaction as $trans){
+                    if ($counter == 3) break; ?>
                     <tr class="text-md font-medium">
                         <td><?php echo $trans['DateTime']?></td>
                         <td><?php echo $trans['amount']?></td>
                         <td><?php echo $trans['dr_name']?></td>
                         <td><?php echo $trans['cr_name']?></td>
                     </tr>
-                <?php } ?>
+                <?php $counter++;
+                } ?>
                 </tbody>
             </table>
         </div>
@@ -205,8 +44,101 @@
             </button>
         </div>
     </div>
-    <!-- End: Salary Request -->
+    <!-- End: general ledger  -->
+    
+    <!-- Start: Account Ledger -->
+    <div class="px-5 border-2 border-solid shadow-lg flex flex-col rounded-md bg-gradient-to-b from-[#F8B721] to-[#FBCF68]">
+        <!-- Start: Header -->
+        <div class="flex justify-between mt-5 ">
+            <div>
+                <h1 class="font-sans text-xl font-semibold text-white">
+                    <a route="/fin/ledger/accounts/investors">Account Ledger</a>
+                </h1>
+            </div>
+        </div>
+        <!-- End: Header -->
 
+        <!-- Start: Tab -->
+        <div class="flex justify-stretch overflow-x-auto hide-scrollbar">
+            <button
+                class="btn btn_dept btn_active flex-grow px-10 py-2 font-xl text-white font-extrabold" id="btn1">Investor</button>
+            <button
+                class="btn btn_dept flex-grow px-10 py-2 font-xl font-semibold text-white opacity-75" id="btn2">Payable</button>
+                <button
+                class="btn btn_dept flex-grow px-10 py-2 font-xl font-semibold text-white opacity-75" id="btn3">Tax</button>
+        </div>
+        <!-- End: Tab -->
+
+        <!-- body of account ledger -->
+        <!-- investor -->
+        <div class="h-full text-white" id="investorAccounts">
+            <table class="table-fixed my-5 w-full text-center border-spacing-y-4" id="general_ledger">
+                <thead class="text-xl font-bold">
+                    <td>Account Name</td>
+                    <td>Amount Remaining</td>
+                </thead>
+                <tbody>                
+                <?php $transaction = getAllInvestors(); ?>                
+                <?php
+                $counter = 0;
+                foreach ($transaction as $trans){
+                    if ($counter == 6) break; ?>
+                    <tr class="text-md text-white font-medium">
+                        <td class = "font-semibold"><?php echo $trans['name']?></td>
+                        <td>₱<?php echo $trans['total_amount']?></td>
+                    </tr>
+                <?php $counter++;
+                } ?>
+                </tbody>
+            </table>
+        </div>
+        <!-- payable -->
+        <div class="h-full hidden text-white" id="payableAccounts">
+            <table class="table-fixed my-5 w-full text-center border-spacing-y-4" id="general_ledger">
+                <thead class="text-xl font-bold">
+                    <td>Account Name</td>
+                    <td>Amount Remaining</td>
+                </thead>
+                <tbody>                
+                <?php $transaction = getAllPayable(); ?>                
+                <?php
+                $counter = 0;
+                foreach ($transaction as $trans){
+                    if ($counter == 6) break; ?>
+                    <tr class="text-md text-white font-medium">
+                        <td class = "font-semibold"><?php echo $trans['name']?></td>
+                        <td>₱<?php echo $trans['total_amount']?></td>
+                    </tr>
+                <?php $counter++;
+                } ?>
+                </tbody>
+            </table>
+        </div>
+        <!-- tax -->
+        <div class="h-full hidden text-white" id="taxAccounts">
+            <table class="table-fixed my-5 w-full text-center border-spacing-y-4" id="general_ledger">
+                <thead class="text-xl font-bold">
+                    <td>Account Name</td>
+                    <td>Amount Remaining</td>
+                </thead>
+                <tbody>                
+                <?php $transaction = getAllTaxPayable(); ?>                
+                <?php
+                $counter = 0;
+                foreach ($transaction as $trans){
+                    if ($counter == 6) break; ?>
+                    <tr class="text-md text-white font-medium">
+                        <td class = "font-semibold"><?php echo $trans['name']?></td>
+                        <td>₱<?php echo $trans['total_amount']?></td>
+                    </tr>
+                <?php $counter++;
+                } ?>
+                </tbody>
+            </table>
+        </div>
+        <!-- end body -->
+    </div>
+    <!-- End: Account Ledger -->
 </div>
 <!-- End: Request Section -->
 <div id="myModal"
@@ -302,6 +234,43 @@
     </div>
 </div>
 <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('btn1').addEventListener('click', function() {
+        document.getElementById('investorAccounts').style.display = 'block';
+        document.getElementById('payableAccounts').style.display = 'none';
+        document.getElementById('taxAccounts').style.display = 'none';
+    });
+
+    document.getElementById('btn2').addEventListener('click', function() {
+        document.getElementById('investorAccounts').style.display = 'none';
+        document.getElementById('payableAccounts').style.display = 'block';
+        document.getElementById('taxAccounts').style.display = 'none';
+    });
+    document.getElementById('btn3').addEventListener('click', function() {
+        document.getElementById('investorAccounts').style.display = 'none';
+        document.getElementById('payableAccounts').style.display = 'none';
+        document.getElementById('taxAccounts').style.display = 'block';
+    });
+    var buttons = document.getElementsByClassName('btn_dept');
+
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function() {
+            var activeButton = document.querySelector('.btn_active');
+            if (activeButton) {
+                swapClasses(this, activeButton);
+            }
+        });
+    }
+    });
+
+    function swapClasses(btn1, btn2) {
+        var btn1Classes = btn1.className;
+        var btn2Classes = btn2.className;
+
+        btn1.className = btn2Classes;
+        btn2.className = btn1Classes;
+    }
     function closeModalAndClearInputs() {
         document.getElementById('myModal').classList.add('hidden');
         ['description', 'credit', 'debit', 'amount'].forEach(id => document.getElementById(id).value = '');

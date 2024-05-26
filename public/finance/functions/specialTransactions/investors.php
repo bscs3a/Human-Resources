@@ -1,25 +1,36 @@
 <?php
+// require_once "../generalFunctions.php";
 require_once "public/finance/functions/generalFunctions.php";
 
 function getAllInvestors(){
     $db = Database::getInstance();
     $conn = $db->connect();  
 
-    $CAPITAL = getLedgerCode("Capital Accounts");
+    $CAPITAL = getAccountCode("Capital Accounts");
     $sql = "SELECT * FROM Ledger WHERE accounttype = :capital";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':capital', $CAPITAL);
     $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $ledgers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    return $result;
+    $results = [];
+    foreach ($ledgers as $ledger) {
+        $ledgerNo = $ledger['ledgerno'];
+        $name = $ledger['name'];
+        $results[] = [
+            'ledgerno' => $ledgerNo,
+            'name' => $name,
+            'contact_name' => $ledger['contactName'],
+            'contact' => $ledger['contactIfLE'],
+            'total_amount' => getValueOfInvestor($ledgerNo)
+        ];
+    }
+    return $results;
 }
-
 function getValueOfInvestor($accountNumber){
     return abs(getAccountBalanceV2($accountNumber));
 }
-
 
 // add investment
 function investAsset($accountNumber, $assetCode, $amount){
@@ -36,7 +47,7 @@ function investAsset($accountNumber, $assetCode, $amount){
         throw new Exception("Asset code not found");
     }
 
-    insertLedgerXact($assetCode,$accountNumber,$amount,"Investment of $accountNumber in $assetCode");
+    insertLedgerXact($assetCode,$accountNumber,$amount,"Investment of $accountNumber in $assetCode with $amount");
     return;
 }
 

@@ -1,5 +1,5 @@
 <?php 
-require_once 'public/finance/functions/supportingFunctions/supportingExpense.php';
+// require_once 'public/finance/functions/supportingFunctions/supportingExpense.php';
 function displayRequestTable($department = null){
     if(!is_null($department)){
         if (!checkDepartment($department)) {

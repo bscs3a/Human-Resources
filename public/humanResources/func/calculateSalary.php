@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// TAX CALCULATION
 // Function to calculate tax amount based on monthly salary | INCOME TAX
 function calculateIncomeTax($monthlysalary) {
     if ($monthlysalary <= 20833.33) {
@@ -21,7 +23,6 @@ function calculateIncomeTax($monthlysalary) {
         return 200833.33 + ($monthlysalary - 666666.67) * 0.35;
     }
 }
-
 // Function to calculate tax amount based on monthly salary | WITHHOLDING TAX
 function calculateWithholdingTax($monthlysalary) {
     if ($monthlysalary <= 20833.33) {
@@ -44,13 +45,11 @@ function calculateWithholdingTax($monthlysalary) {
         return 183541.80 + ($monthlysalary - 666666.67) * 0.35;
     }
 }
-
 // Function to calculate SSS contribution
 function calculateSSS($monthlysalary) {
     // SSS contribution is 14% of the monthly salary
     return ($monthlysalary * 0.14) * 0.32;
 }
-
 // Function to calculate Philhealth contribution
 function calculatePhilhealth($monthlysalary) {
     if ($monthlysalary <= 10000.00) {
@@ -61,7 +60,6 @@ function calculatePhilhealth($monthlysalary) {
         return 5000.00;
     }
 }
-
 // Function to calculate Pag-IBIG fund contribution
 function calculatePagibig($monthlysalary) {
     // Pag-IBIG fund contribution is fixed at P200

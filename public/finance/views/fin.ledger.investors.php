@@ -39,12 +39,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
-            </ul>
+            <?php require_once "components/logout/logout.php"?>
 
             <!-- End: Profile -->
 
@@ -71,8 +66,10 @@
                                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                                     Accounts Payable
                                 </a>
-
-
+                                <a route='/fin/ledger/accounts/taxPayable'
+                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                    Tax Payable
+                                </a>
                             </nav>
                         </div>
                     </div>
@@ -113,7 +110,7 @@
                         <button id="openModal"
                             class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm py-1 px-3 rounded-lg border border-gray-500">
                             <i class="ri-add-box-line"></i>
-                            Add Invesment
+                            Add Capital Account
                         </button>
                     </div>
                 </div>
@@ -123,7 +120,7 @@
                     class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                     <div class="bg-white rounded shadow-lg w-1/3">
                         <div class="border-b pl-3 pr-3 pt-3 flex">
-                            <h5 class="font-bold uppercase text-gray-600">New Transactions</h5>
+                            <h5 class="font-bold uppercase text-gray-600">New Account</h5>
                             <!-- <button id="closeModal" class="ml-auto text-gray-600 hover:text-gray-800 cursor-pointer">
                                 <i class="ri-close-line"></i>
                             </button> -->
@@ -132,15 +129,14 @@
                         <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                         <div class="p-5">
                             <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-                            <form action="/addPayable" method="POST">
+                            <form action="/addInvestor" method="POST">
                                 <div class="mb-4 relative">
                                     <label for="acctype" class="block text-xs font-medium text-gray-900">
-                                        Capital
+                                        Account Type
                                     </label>
-                                    <input type="text" id="description" name="acctype" required value="Capital"
+                                    <input type="text" id="description" name="acctype" required value="Capital Accounts"
                                         readonly
                                         class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
-
                                 </div>
 
 
@@ -154,7 +150,7 @@
                                 </div>
                                 <div class="mb-4 relative">
                                     <label for="contact" class="block text-xs font-medium text-gray-900">
-                                        Contact
+                                        Contact Info
                                     </label>
                                     <input type="text" id="contact" name="contact" required
                                         class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
@@ -196,9 +192,10 @@
                             class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
                             <div class="text-center p-5 ">
                                 <br><br><br>
-                                <h1 class="text-5xl">Credit</h1>
-                                <p><?= $results['name'] ?></p>
-                                <p>Total: <?= $results['total_amount'] ?></p>
+                                <h1 class="text-5xl"><?= $results['name'] ?></h1>
+                                <p>Contact Name: <?= $results['contact_name']?>  </p>
+                                <p>Contact info: <?= $results['contact']?>  </p>
+                                <p>Total: <?= number_format($results['total_amount'],2) ?></p>
                             </div>
                             <div class="p-10">
                             <button id="openLoanModal<?= $id ?>"
@@ -225,7 +222,7 @@
                                 <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                                 <div class="p-5">
                                     <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-                                    <form action="/addToLoan" method="POST">
+                                    <form action="/withdrawAsset" method="POST">
                                         <div class="mb-4 relative">
 
                                             Total: <?= $results['total_amount'] ?>
@@ -290,8 +287,8 @@
                                 <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                                 <div class="p-5">
                                     <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-                                    <form action="/inveees" method="POST">
-                                        <input type="text" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" />
+                                    <form action="/investAsset" method="POST">
+                                        <input type="text" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" readonly/>
                                         <div class="mb-4 relative">
                                             <label for="description" class="block text-xs font-medium text-gray-900">
                                                 Description

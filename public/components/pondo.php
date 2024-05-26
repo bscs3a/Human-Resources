@@ -186,8 +186,10 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                                             }
                                         }
 
-                                        document.getElementById('payUsing').addEventListener('change', function() {
+                                        window.addEventListener('DOMContentLoaded', function() {
+                                            document.getElementById('payUsing').addEventListener('change', function() {
                                             validateInput(document.getElementById('amount'));
+                                            });
                                         });
                                         </script>
                                         <!-- upto here -->

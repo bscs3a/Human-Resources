@@ -294,6 +294,7 @@ function getAccountBalanceV2($ledger, $considerDate = false, $year = null, $mont
 }
 
 //get account type balance upto a date
+// debit is negative, credit is positive
 function getTotalOfAccountTypeV2($accountType, $year = null, $month = null) {
     $db = Database::getInstance();
     $conn = $db->connect();

@@ -1,7 +1,8 @@
 <!-- start: Sidebar -->
 <div id="sidebar-menu" class="fixed left-0 top-0 w-64 h-full bg-sidebar p-4 z-50 sidebar-menu transition-transform">
   <a route="/" class="flex items-center pb-4 border-b border-b-white ">
-    <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded object-cover">
+  <div class="w-12 h-12 rounded bg-cover bg-[url('../public/finance/img/logo_reports.png')]">
+        </div>
     <span  class="cursor-pointer text-4xl font-russo text-white ml-3">BSCS 3A</span>
   </a>
   <!-- Dashboard -->
@@ -39,13 +40,13 @@
 <!-- All Employees -->
 <ul class="pl-7 mt-2 hidden group-[.selected]:block">
   <li class="mb-4">
-  <a route="/hr/employees" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All Employees
+  <a route="/hr/employees/page=1" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">All Employees
         <i class="ri-arrow-right-s-line ml-auto"></i>
     </a>
   </li>
   <!-- Departments -->
   <li class="mb-4">
-    <a route="/hr/employees/departments/product-order" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Departments
+    <a route="/hr/departments/product-order" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Departments
         <i class="ri-arrow-right-s-line ml-auto"></i>
     </a>
   </li>
@@ -56,6 +57,14 @@
   <a route="/hr/leave-requests" class="flex items-center py-2 px-4 text-gray-50 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
     <i class="ri-briefcase-line mr-3 text-lg"></i>
     <span class="text-sm">Leave Requests</span>
+    <i class="ri-arrow-right-s-line ml-auto"></i>
+  </a>
+</li>
+<!-- Funds -->
+<li class="mb-1 group">
+  <a route="/hr/funds/page=1" class="flex items-center py-2 px-4 text-gray-50 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+    <i class="ri-money-dollar-circle-line mr-3 text-lg"></i>
+    <span class="text-sm">Funds</span>
     <i class="ri-arrow-right-s-line ml-auto"></i>
   </a>
 </li>

@@ -1,4 +1,5 @@
 <?php
+require_once 'public\finance\functions\otherGroups\salary.php';
 $path = './public/humanResources/views';
 $basePath = "$path/hr.";
 $hr = [
@@ -10,12 +11,12 @@ $hr = [
     '/hr/employees/add' => $basePath . "employees.add.php",
     // departments
     '/hr/employees/departments' => $basePath . "departments.php", // hr.departments.php
-    '/hr/employees/departments/product-order' => $basePath . "departments.PO.php", // hr.departments.PO.php
-    '/hr/employees/departments/inventory' => $basePath . "departments.inv.php", // hr.departments.inv.php
-    '/hr/employees/departments/sales' => $basePath . "departments.POS.php", // hr.departments.POS.php
-    '/hr/employees/departments/finance' => $basePath . "departments.fin.php", // hr.departments.fin.php
-    '/hr/employees/departments/delivery' => $basePath . "departments.dlv.php", // hr.departments.dlv.php
-    '/hr/employees/departments/human-resources' => $basePath . "departments.HR.php", // hr.departments.HR.php
+    '/hr/departments/product-order' => $basePath . "departments.PO.php", // hr.departments.PO.php
+    '/hr/departments/inventory' => $basePath . "departments.inv.php", // hr.departments.inv.php
+    '/hr/departments/sales' => $basePath . "departments.POS.php", // hr.departments.POS.php
+    '/hr/departments/finance' => $basePath . "departments.fin.php", // hr.departments.fin.php
+    '/hr/departments/delivery' => $basePath . "departments.dlv.php", // hr.departments.dlv.php
+    '/hr/departments/human-resources' => $basePath . "departments.HR.php", // hr.departments.HR.php
     // applicants
     '/hr/applicants' => $basePath . "applicants.php",
     '/hr/applicants/accept={id}' => function($id) use ($basePath) {
@@ -37,10 +38,14 @@ $hr = [
         include $basePath . "leave-requests.details.php";
     },
     '/hr/schedule' => $basePath . "schedule.php",
-    '/hr/payroll' => $basePath . "payroll.list.php",
-    '/hr/dtr' => $basePath . "daily-time-record.php",
+    '/hr/payroll' => $basePath . "payroll.php",
+    //view payslip
+    '/hr/payroll/id={id}' => function($id) use ($basePath) {
+        $_SESSION['id'] = $id;
+        include $basePath . "payslip.view.php";
+    },
     '/hr/generate-payslip' => $basePath . "payslip.generate.php",
-    '/hr/payslipreport' => $basePath . "payslip.report.php",
+    '/hr/dtr' => $basePath . "daily-time-record.php",
     //view employee profile
     '/hr/employees/id={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
@@ -51,7 +56,6 @@ $hr = [
         $_SESSION['id'] = $id;
         include $basePath . "employees.update.php";
     },
-    
     //view applicant profile
     '/hr/applicants/id={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
@@ -62,72 +66,19 @@ $hr = [
         $_GET['page'] = $pageNumber;
         include $basePath . "employees.php";
     },
+    '/hr/departments/product-order/page={pageNumber}' => function($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "departments.PO.php";
+    },
+    '/hr/departments/human-resources/page={pageNumber}' => function($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "departments.HR.php";
+    },
+    '/hr/funds/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.php";
+    },
 ];
-// TAX CALCULATION
-// Function to calculate tax amount based on monthly salary | INCOME TAX
-function calculateIncomeTax($monthlysalary) {
-    if ($monthlysalary <= 20833.33) {
-        // Over 0 but not over 20,833.33 (250,000 annual salary)
-        return 0;
-    } elseif ($monthlysalary <= 33333.33) {
-        // Over 20,833.33 but not over 33,333.33 (400,000 annual salary)
-        return ($monthlysalary - 20833.33) * 0.20;
-    } elseif ($monthlysalary <= 66666.67) {
-        // Over 33,333.33 but not over 66,666 (800,000 annual salary)
-        return 2500 + ($monthlysalary - 33333.33) * 0.25;
-    } elseif ($monthlysalary <= 166666.67) {
-        // Over 66,666 but not over 166,666 (2,000,000 annual salary)
-        return 10833.33 + ($monthlysalary - 66666.67) * 0.30;
-    } elseif ($monthlysalary <= 666666.67) {
-        // Over 166,666 but not over 666,666 (8,000,000 annual salary)
-        return 40833.33 + ($monthlysalary - 166666.67) * 0.32;
-    } else {
-        // Over 666,666 (8,000,000 annual salary)
-        return 200833.33 + ($monthlysalary - 666666.67) * 0.35;
-    }
-}
-// Function to calculate tax amount based on monthly salary | WITHHOLDING TAX
-function calculateWithholdingTax($monthlysalary) {
-    if ($monthlysalary <= 20833.33) {
-        // 20,833.33 and below
-        return 0;
-    } elseif ($monthlysalary <= 33333.33) {
-        // 20,833.34 to 33,333.33
-        return 0 + ($monthlysalary - 20833.33) * 0.15;
-    } elseif ($monthlysalary <= 66666.67) {
-        // 33,333.34 to 66,666.67
-        return 1875 + ($monthlysalary - 33333.33) * 0.20;
-    } elseif ($monthlysalary <= 166666.67) {
-        // 66,666.68 to 166,666.67
-        return 8541.80 + ($monthlysalary - 66666.67) * 0.25;
-    } elseif ($monthlysalary <= 666666.67) {
-        // 166,666.68 to 666,666.67
-        return 33541.80 + ($monthlysalary - 166666.67) * 0.30;
-    } else {
-        // 666,666.68 and above
-        return 183541.80 + ($monthlysalary - 666666.67) * 0.35;
-    }
-}
-// Function to calculate SSS contribution
-function calculateSSS($monthlysalary) {
-    // SSS contribution is 14% of the monthly salary
-    return ($monthlysalary * 0.14) * 0.32;
-}
-// Function to calculate Philhealth contribution
-function calculatePhilhealth($monthlysalary) {
-    if ($monthlysalary <= 10000.00) {
-        return 500.00;
-    } elseif ($monthlysalary <= 99999.99) {
-        return 500.00 + ($monthlysalary - 10000.00) * 0.05;
-    } else {
-        return 5000.00;
-    }
-}
-// Function to calculate Pag-IBIG fund contribution
-function calculatePagibig($monthlysalary) {
-    // Pag-IBIG fund contribution is fixed at P200
-    return 200.00;
-}
 // ADD employees
 Router::post('/hr/employees/add', function () {
     $db = Database::getInstance();
@@ -460,83 +411,83 @@ Router::post('/delete/employees', function () {
     header("Location: $rootFolder/hr/employees");
 });
 // SEARCH employees
-Router::post('/hr/employees', function () {
+Router::post('/hr/employees/page=1', function () {
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees");
+        header("Location: $rootFolder/hr/employees/page=1");
         return;
     }
     include './public/humanResources/views/hr.employees.php';
 });
 // search employees in DEPARTMENTS : Product Order
-Router::post('/hr/employees/departments/product-order', function () {
+Router::post('/hr/departments/product-order', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/product-order");
+        header("Location: $rootFolder/hr/departments/product-order");
         return;
     }
     include './public/humanResources/views/hr.departments.PO.php';
 });
 // search employees in DEPARTMENTS : Inventory
-Router::post('/hr/employees/departments/inventory', function () {
+Router::post('/hr/departments/inventory', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/inventory");
+        header("Location: $rootFolder/hr/departments/inventory");
         return;
     }
     include './public/humanResources/views/hr.departments.inv.php';
 });
 // search employees in DEPARTMENTS : Point of Sales
-Router::post('/hr/employees/departments/sales', function () {
+Router::post('/hr/departments/sales', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/sales");
+        header("Location: $rootFolder/hr/departments/sales");
         return;
     }
     include './public/humanResources/views/hr.departments.POS.php';
 });
 // search employees in DEPARTMENTS : Finance
-Router::post('/hr/employees/departments/finance', function () {
+Router::post('/hr/departments/finance', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/finance");
+        header("Location: $rootFolder/hr/departments/finance");
         return;
     }
     include './public/humanResources/views/hr.departments.fin.php';
 });
 // search employees in DEPARTMENTS : Delivery
-Router::post('/hr/employees/departments/delivery', function () {
+Router::post('/hr/departments/delivery', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/delivery");
+        header("Location: $rootFolder/hr/departments/delivery");
         return;
     }
     include './public/humanResources/views/hr.departments.dlv.php';
 });
 // search employees in DEPARTMENTS : Human Resources
-Router::post('/hr/employees/departments/human-resources', function () {
+Router::post('/hr/departments/human-resources', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/human-resources");
+        header("Location: $rootFolder/hr/departments/human-resources");
         return;
     }
     include './public/humanResources/views/hr.departments.HR.php';
@@ -834,20 +785,29 @@ Router::post('/create/payslip', function () {
     $status = $_POST['status'];
     $employee_id = $_POST['employee_id']; // Get the employee ID from the form
 
-    // Assuming you have the employee's information available when the modal is opened
-    // If not, you'll need a way to retrieve it, such as an AJAX request
-    $full_name = "John Doe"; // Example full name
-    $position = "Manager"; // Example position
-    $total_salary = 5000.00; // Example total salary
-    $monthly_salary = 4000.00; // Example monthly salary
-    $total_deductions = 1000.00; // Example total deductions
-
     // Retrieve salary_id from salary_info table based on employee_id
-    $salary_query = "SELECT id FROM salary_info WHERE employees_id = :employees_id";
+    $salary_query = "SELECT id, monthly_salary FROM salary_info WHERE employees_id = :employees_id";
     $salary_stmt = $conn->prepare($salary_query);
     $salary_stmt->bindParam(':employees_id', $employee_id);
     $salary_stmt->execute();
-    $salary_id = $salary_stmt->fetchColumn();
+    $row = $salary_stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row) {
+        $salary_id = $row['id'];
+        $monthly_salary = $row['monthly_salary'];
+    }
+    
+    // Retrieve tax_id from tax_info table based on employee_id
+    $tax_query = "SELECT id, withholding_tax FROM tax_info WHERE salary_id = :salary_id";
+    $tax_stmt = $conn->prepare($tax_query);
+    $tax_stmt->bindParam(':salary_id', $salary_id);
+    $tax_stmt->execute();
+    $row = $tax_stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($row) {
+        $withholding_tax = $row['withholding_tax'];
+    }
+
     // Insert data into payroll table
     $query = "INSERT INTO payroll (pay_date, month, status, salary_id, employees_id) VALUES (:pay_date, :month, :status, :salary_id, :employees_id)";
     $stmt = $conn->prepare($query);
@@ -859,10 +819,14 @@ Router::post('/create/payslip', function () {
     $stmt->bindParam(':employees_id', $employee_id);
     // Execute the query
     $stmt->execute();
+
+    inputSalary($monthly_salary, $withholding_tax);
+    
     // Redirect to a success page or reload the current page
     header("Location: $rootFolder/hr/generate-payslip");
     exit(); // Ensure script termination after redirection
 });
+
 // SAVE/CREATE event - schedule/calendar
 Router::post('/create/schedule', function () {
     $db = Database::getInstance();
@@ -888,8 +852,68 @@ Router::post('/remove/schedule', function () {
     $query = "DELETE FROM calendar WHERE id = :id";
     $stmt = $conn->prepare($query);
     $stmt->execute([':id' => $idToDelete]);
-    // Execute the statement
+
     $stmt->execute();
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/hr/schedule");
+});
+
+Router::post('/clock-in', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    $username = $_SESSION['user']['username'];
+
+    // Fetch the employees_id based on the username
+    $stmt = $conn->prepare("SELECT employees_id FROM account_info WHERE username = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $employees_id = $user['employees_id'];
+
+    // Use the current date and time for attendance_date and clock_in
+    date_default_timezone_set('Asia/Manila');
+    $attendance_date = date('Y-m-d');
+    $clock_in = date('H:i:s');
+
+    // Include employees_id in the INSERT query
+    $query = "INSERT INTO attendance (employees_id, attendance_date, clock_in) VALUES (:employees_id, :attendance_date, :clock_in)";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([
+        ':employees_id' => $employees_id,
+        ':attendance_date' => $attendance_date,
+        ':clock_in' => $clock_in,
+    ]);
+    header("Location: $rootFolder/hr/dashboard");
+});
+
+Router::post('/clock-out', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    $username = $_SESSION['user']['username'];
+
+    // Fetch the employees_id based on the username
+    $stmt = $conn->prepare("SELECT employees_id FROM account_info WHERE username = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $employees_id = $user['employees_id'];
+
+    // Use the current date and time for attendance_date and clock_out
+    date_default_timezone_set('Asia/Manila');
+    $attendance_date = date('Y-m-d');
+    $clock_out = date('H:i:s');
+
+    $stmt = $conn->prepare("UPDATE attendance SET clock_out = :clock_out WHERE attendance_date = :attendance_date AND employees_id = :employees_id");
+
+    $stmt->execute([
+        ':employees_id' => $employees_id,
+        ':attendance_date' => $attendance_date,
+        ':clock_out' => $clock_out,
+    ]);
+
+    header("Location: $rootFolder/hr/dashboard");
 });

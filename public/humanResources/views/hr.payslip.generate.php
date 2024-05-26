@@ -40,14 +40,29 @@ $stmt = $conn->query($query);
       <li class="text-[#151313] mr-2 font-medium">/</li>
       <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Payroll</a>
     </ul>
+    <!-- require_once 'inc/logout.php' ?> -->
     <ul class="ml-auto flex items-center">
       <li class="mr-1">
-        <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium">Sample User</a>
-      </li>
-      <li class="mr-1">
-        <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300"><i class="ri-arrow-down-s-line"></i></button> 
-      </li>
+  <?php
+  $username = $_SESSION['user']['username'];
+  ?>
+    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium"><?php echo $username; ?></a>
+  </li>
+  <li class="mr-1 relative">
+    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300 dropdown-btn"><i class="ri-arrow-down-s-line"></i></button>
+    <div class="dropdown-content hidden absolute right-0 mt-2 w-48 bg-white border border-gray-300 divide-y divide-gray-100 rounded-md shadow-lg">
+      <form method="post" action="/logout">
+          <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
+      </form>
+    </div>
+</li>
+  <script>
+      document.querySelector('.dropdown-btn').addEventListener('click', function() {
+          document.querySelector('.dropdown-content').classList.toggle('hidden');
+      });
+  </script>
     </ul>
+    <!--  -->
   </div>
   <!-- End Top Bar -->
 
@@ -94,23 +109,22 @@ $stmt = $conn->query($query);
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               echo "<tr>";
               $fullName = $row['first_name'] . ' ';
-if (!empty($row['middle_name'])) {
-    $fullName .= substr($row['middle_name'], 0, 1) . '. ';
-}
-$fullName .= $row['last_name'];
+              if (!empty($row['middle_name'])) {
+                  $fullName .= substr($row['middle_name'], 0, 1) . '. ';
+              }
+              $fullName .= $row['last_name'];
 
-echo "<td class='px-4 py-2 text-center'>" . $fullName . "</td>";
+              echo "<td class='px-4 py-2 text-center'>" . $fullName . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['department'] . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['position'] . "</td>";
-              echo "<td class='px-4 py-2 text-center'>" . $row['total_salary'] . "</td>";
+              echo "<td class='px-4 py-2 text-center'> ₱" . $row['total_salary'] . "</td>";
               $fullName = $row['first_name'] . ' ';
-if (!empty($row['middle_name'])) {
-    $fullName .= substr($row['middle_name'], 0, 1) . '. ';
-}
-$fullName .= $row['last_name'];
+              if (!empty($row['middle_name'])) {
+                  $fullName .= substr($row['middle_name'], 0, 1) . '. ';
+              }
+              $fullName .= $row['last_name'];
 
-echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded' onclick='showModal(\"" . $row['id'] . "\", \"" . $fullName . "\", \"" . $row['department'] . "\", \"" . $row['position'] . "\", \"" . $row['total_salary'] . "\", \"" . $row['monthly_salary'] . "\", \"" . $row['total_deductions'] . "\")'>Generate</button></td>";
-
+              echo "<td class='px-4 py-2 text-center'><button class='bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded' onclick='showModal(\"" . $row['id'] . "\", \"" . $fullName . "\", \"" . $row['department'] . "\", \"" . $row['position'] . "\", \"" . $row['total_salary'] . "\", \"" . $row['monthly_salary'] . "\", \"" . $row['total_deductions'] . "\")'>Generate</button></td>";
 
               echo "</tr>";
             }
@@ -171,18 +185,16 @@ echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-6
 
             <!-- Status and Paid Type -->
             <div class="grid grid-cols-2 gap-4 mt-4">
-                <!-- Status -->
                 <div class="flex items-center">
                     <label class="block font-bold mr-4">Status:</label>
                     <div class="flex items-center">
                         <input type="radio" id="status_paid" name="status" value="paid" class="mr-2">
                         <label for="status_paid" class="mr-4">Paid</label>
-                        <input type="radio" id="status_pending" name="status" value="pending" class="mr-2">
-                        <label for="status_pending" class="mr-4">Pending</label>
+                        <!-- <input type="radio" id="status_pending" name="status" value="pending" class="mr-2">
+                        <label for="status_pending" class="mr-4">Pending</label> -->
                     </div>
                 </div>
-                <!-- Paid Type -->
-                <div class="flex items-center">
+                <!-- <div class="flex items-center">
                     <label class="block font-bold mr-4">Paid Type:</label>
                     <div class="flex items-center">
                         <input type="radio" id="paid_type_cash" name="paid_type" value="cash" class="mr-2">
@@ -190,15 +202,13 @@ echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-6
                         <input type="radio" id="paid_type_bank" name="paid_type" value="bank" class="mr-2">
                         <label for="paid_type_bank">Bank</label>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <!-- Button Group -->
             <div class="flex justify-end mt-4">
-                <!-- Close Button -->
-                <button id = "generatePayslipCloseButton" type="button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
-                <!-- Submit Button -->
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Submit</button>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">Pay</button>
+                <button id = "generatePayslipCloseButton" type="button" class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </form>
     </div>
@@ -237,6 +247,20 @@ function filterEmployees() {
   var url = './filter.php?department=' + department;
   window.location.href = url;
 }
+document.getElementById('createPayslip').addEventListener('submit', function(event) {
+    var statusPaid = document.getElementById('status_paid').checked;
+    var payDate = document.getElementById('pay_date').value;
+
+    if (!statusPaid) {
+        alert('Please select "Paid" status before submitting.');
+        event.preventDefault();
+    }
+
+    if (!payDate) {
+        alert('Please fill out the pay date before submitting.');
+        event.preventDefault();
+    }
+});
   </script>
 
 </main>

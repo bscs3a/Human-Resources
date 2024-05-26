@@ -56,22 +56,22 @@
       <?php echo $pay['month']; ?>
     </td>
     <td class="px-6 py-4">
-      <?php echo $pay['monthly_salary']; ?>
+      ₱<?php echo $pay['monthly_salary']; ?>
     </td>
     <td class="px-6 py-4">
-      <?php echo $pay['total_deductions']; ?>
+      ₱<?php echo $pay['total_deductions']; ?>
     </td>
     <td class="px-6 py-4">
-      <?php echo $pay['total_salary']; ?>
+      ₱<?php echo $pay['total_salary']; ?>
     </td>
     <td class="px-6 py-4">
-      <?php echo $pay['pay_date']; ?>
+      <?php echo date('F d, Y', strtotime($pay['pay_date'])); ?>
     </td>
     <td class="px-6 py-4">
       <?php echo $pay['status']; ?>
     </td>
     <td class="px-6 py-4 text-right">
-      <button type="button" class="text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 rounded-lg text-sm px-4 py-2"><i class="ri-bank-card-line"></i></button>
+      <a route="/hr/payroll/id=<?php echo htmlspecialchars($pay['id']); ?>" class="text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 rounded-lg text-sm px-4 py-2">Print</a>
     </td>
   </tr>
 </tbody>

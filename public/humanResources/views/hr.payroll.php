@@ -7,16 +7,9 @@ $query = "SELECT payroll.*, salary_info.*, employees.* FROM payroll";
 $query .= " 
 LEFT JOIN employees ON payroll.employees_id = employees.id
 LEFT JOIN salary_info ON salary_info.employees_id = employees.id AND payroll.salary_id = salary_info.id";
-
-$params = [];
-
-if (!empty($search)) {
-  $query .= " WHERE (employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR payroll.id = :search OR payroll.status = :search OR payroll.month = :search) AND";
-  $params[':search'] = $search;
-}
-
+$query .= " ORDER BY payroll.id DESC";
 $stmt = $conn->prepare($query);
-$stmt->execute($params);
+$stmt->execute();
 $payroll = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $pdo = null;
@@ -53,14 +46,9 @@ $stmt = null;
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Payroll</a>
    </ul>
-   <ul class="ml-auto flex items-center">
-  <li class="mr-1">
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium">Sample User</a>
-  </li>
-  <li class="mr-1">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300"><i class="ri-arrow-down-s-line"></i></button> 
-  </li>
-   </ul>
+   <?php 
+    require_once 'inc/logout.php';
+  ?>
   </div>
   <!-- End Top Bar -->
 
@@ -69,10 +57,6 @@ $stmt = null;
   <h1><i class="ri-hourglass-line"></i>Payroll List </h1>
 </div>
 <hr class="mt-4">
-    <div class="mt-4 ml-6 mr-4">
-        <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 mt-4 dark:focus:ring-yellow-900">Print</button> 
-        <input type="search" id="search" name="search" placeholder="Search..." class="mt-[16px] mr-3 w-50 float-right px-2 py-2 border text-sm font-medium border-gray-300 rounded-md focus:outline-none focus:ring-2  focus:ring-blue-500 focus:border-transparent"> 
-    </div>
 
     <?php 
     if (empty($payroll)) {

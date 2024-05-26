@@ -1,7 +1,7 @@
 <?php
 
 require_once "public/finance/functions/reportGeneration/TrialBalance.php";
-require_once "public/finance/functions/pondo/requestExpense.php";
+require_once "public/finance/functions/specialTransactions/investors.php";
 require_once "public/finance/functions/specialTransactions/payable.php";
 require_once "public/finance/functions/generalFunctions.php";
 
@@ -28,20 +28,33 @@ $fin = [
     },
     '/fin/ledger/accounts/investors' => $basePath . "ledger.investors.php",
     '/fin/ledger/accounts/payable' => $basePath . "ledger.payable.php",
-
-
-    //request
-    '/fin/expense' => $basePath . "requestExpense.php",
-    '/fin/request' => $basePath . "requestInventory.php",
-    '/fin/salary' => $basePath . "requestSalary.php",
+    '/fin/ledger/accounts/taxPayable' => $basePath . "ledger.taxPayable.php",
 
     //funds
-    '/fin/funds/HR' => $basePath . "funds.HR.php",
-    '/fin/funds/PO' => $basePath . "funds.PO.php",
-    '/fin/funds/Sales' => $basePath . "funds.sales.php",
-    '/fin/funds/Inventory' => $basePath . "funds.inventory.php",
-    '/fin/funds/Delivery' => $basePath . "funds.delivery.php",
-    '/fin/funds/finance' => $basePath . "funds.finance.php",
+    '/fin/funds/HR/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.HR.php";
+    },
+    '/fin/funds/PO/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.PO.php";
+    },
+    '/fin/funds/Sales/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.sales.php";
+    },
+    '/fin/funds/Inventory/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.inventory.php";
+    },
+    '/fin/funds/Delivery/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.delivery.php";
+    },
+    '/fin/funds/finance/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.finance.php";
+    },
 
     '/fin/test' => $basePath . "test.php",
 
@@ -110,109 +123,74 @@ Router::post('/test', function () {
 Router::post('/reportGeneration', function () {
     $_SESSION['postdata'] = $_POST;
     list ($_SESSION['postdata']['year'], $_SESSION['postdata']['month']) = explode("-", $_SESSION['postdata']['monthYear']);
-    header('Location: Master/fin/report');
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/report");
     exit;
 });
 
+// for accounts payable
 Router::post('/addPayable', function () {
-    addPayable($_POST['name'], $_POST['contact'], $_POST['contactName']);
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/fin/ledger/accounts/payable");
+    addPayable($_POST['name'], $_POST['contact'], $_POST['contactName'], $_POST['acctype']);
+    header("Location: " . $_SERVER['HTTP_REFERER']);
 });
 
+
+Router::post('/payPayable', function () {
+    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
+    $amount = intval($_POST['amount']);
+    $account = ($_POST['ledgerNo']);
+    $item = ($_POST['ledgerName']);
+    
+    payPayable($account, $item, $amount);
+    
+    header("Location: " . $_SERVER['HTTP_REFERER']);
+});
+
+Router::post('/borrowPayable', function () {
+    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
+    $amount = intval($_POST['amount']);
+    
+    $account = ($_POST['ledgerNo']);
+    $item = ($_POST['ledgerName']);
+    
+    borrowPayable($account, $item, $amount);
+    
+    header("Location: " . $_SERVER['HTTP_REFERER']);
+});
+
+// for investors
 Router::post('/addInvestor', function () {
     addInvestor($_POST['name'], $_POST['contact'], $_POST['contactName']);
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/fin/ledger/accounts/investors");
 });
 
-//does not seem to work or execute at all idk why
+Router::post('/investAsset', function () {
+    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
+     $amount = intval($_POST['amount']);
+ 
+     $investingAccount = ($_POST['ledgerNo']);
+     $item = ($_POST['ledgerName']);
+     
+    investAsset($investingAccount, $item, $amount);
+ 
+     $rootFolder = dirname($_SERVER['PHP_SELF']);
+     header("Location: $rootFolder/fin/ledger/accounts/investors");
+ });
 
-Router::post('/addToLoan', function () {
-   
-    
-    // $datetime = DateTime::createFromFormat('F d, Y', $_POST['date']);
-    $details = isset($_POST['description']) ? $_POST['description'] : null;
-    $amount = intval($_POST['amount']);
-    $ledgerNo = ($_POST['ledgerNo']);
-    $ledgerNo_Dr = ($_POST['ledgerName']);
-    // $datetime = $datetime->format('Y-m-d H:i:s');
-
-    // borrowAsset($ledgerNo, $ledgerNo_Dr, $amount);
-  
-  
-    $db = Database::getInstance();
-    $conn = $db->connect();
-
-    
-    $sql = "SELECT ledgerno FROM ledger WHERE ledgerno = ? OR name = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$ledgerNo_Dr, $ledgerNo_Dr]);
-    $ledgerName = $stmt->fetchColumn();
-
-    $sql = "INSERT INTO ledgertransaction (LedgerNo, details, amount, LedgerNo_Dr) VALUES (:modalId, :details, :amount, :ledgerNo_Dr)";
-    $stmt = $conn->prepare($sql);
-
-    $stmt->bindParam(':modalId', $ledgerNo);
-    $stmt->bindParam(':details', $details);
-    $stmt->bindParam(':amount', $amount);
-    $stmt->bindParam(':ledgerNo_Dr', $ledgerName);
-    // $stmt->bindParam(':DateTime', $datetime);
-
-    try {
-        $stmt->execute();
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-        return;
-    }
-
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/fin/ledger/accounts/payable");
-});
-
-Router::post('/inveees', function () {
-   
-    
-    // $datetime = DateTime::createFromFormat('F d, Y', $_POST['date']);
-    $details = isset($_POST['description']) ? $_POST['description'] : null;
-    $amount = intval($_POST['amount']);
-    $ledgerNo = ($_POST['ledgerNo']);
-    $ledgerNo_Dr = ($_POST['ledgerName']);
-    // $datetime = $datetime->format('Y-m-d H:i:s');
-
-    // borrowAsset($ledgerNo, $ledgerNo_Dr, $amount);
-  
-  
-    $db = Database::getInstance();
-    $conn = $db->connect();
-
-    
-    $sql = "SELECT ledgerno FROM ledger WHERE ledgerno = ? OR name = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$ledgerNo_Dr, $ledgerNo_Dr]);
-    $ledgerName = $stmt->fetchColumn();
-
-    $sql = "INSERT INTO ledgertransaction (LedgerNo, details, amount, LedgerNo_Dr) VALUES (:modalId, :details, :amount, :ledgerNo_Dr)";
-    $stmt = $conn->prepare($sql);
-
-    $stmt->bindParam(':modalId', $ledgerNo);
-    $stmt->bindParam(':details', $details);
-    $stmt->bindParam(':amount', $amount);
-    $stmt->bindParam(':ledgerNo_Dr', $ledgerName);
-    // $stmt->bindParam(':DateTime', $datetime);
-
-    try {
-        $stmt->execute();
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-        return;
-    }
-
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/fin/ledger/accounts/investors");
-});
-
-
+ Router::post('/withdrawAsset', function () {
+    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
+     $amount = intval($_POST['amount']);
+ 
+     $investingAccount = ($_POST['ledgerNo']);
+     $item = ($_POST['ledgerName']);
+     
+    withdrawAsset($investingAccount, $item, $amount);
+ 
+     $rootFolder = dirname($_SERVER['PHP_SELF']);
+     header("Location: $rootFolder/fin/ledger/accounts/investors");
+ });
+// end
 
 Router::post('/fin/getEquityReport', function (){
     $year = date('Y');
@@ -286,4 +264,19 @@ Router::post("/pondo/transaction", function () {
     addTransactionPondo($debitLedger, $creditLedger, $amount);
 
     header("Location: " . $_SERVER['HTTP_REFERER']);
+});
+
+
+Router::post("/chartGenerator", function () {
+    // Get the image data from the request
+    $data = json_decode(file_get_contents('php://input'), true);
+    $imageData = $data['imageData'];
+
+    // Remove the data URL prefix
+    $imageData = str_replace('data:image/png;base64,', '', $imageData);
+    // Decode the image data
+    $imageData = base64_decode($imageData);
+
+    $filePath = __DIR__ . '/img/charts/chart.png';
+    file_put_contents($filePath, $imageData);
 });

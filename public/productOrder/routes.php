@@ -540,3 +540,69 @@ Router::post('/search/requestHistory', function () {
     include 'views/po.requestHistory.php';
 });
 
+Router::post('/po/clock-in', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    $username = $_SESSION['user']['username'];
+
+    // Fetch the employees_id based on the username
+    $stmt = $conn->prepare("SELECT employees_id FROM account_info WHERE username = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $employees_id = $user['employees_id'];
+
+    // Use the current date and time for attendance_date and clock_in
+    date_default_timezone_set('Asia/Manila');
+    $attendance_date = date('Y-m-d');
+    $clock_in = date('H:i:s');
+
+    // Include employees_id in the INSERT query
+    $query = "INSERT INTO attendance (employees_id, attendance_date, clock_in) VALUES (:employees_id, :attendance_date, :clock_in)";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([
+        ':employees_id' => $employees_id,
+        ':attendance_date' => $attendance_date,
+        ':clock_in' => $clock_in,
+    ]);
+    header("Location: $rootFolder/po/dashboard");
+});
+
+Router::post('/logout', function(){
+    session_destroy();
+    $base_url = 'master'; // Define your base URL here
+    header("Location: /$base_url/");
+    exit();
+});
+
+Router::post('/po/clock-out', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    $username = $_SESSION['user']['username'];
+
+    // Fetch the employees_id based on the username
+    $stmt = $conn->prepare("SELECT employees_id FROM account_info WHERE username = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $employees_id = $user['employees_id'];
+
+    // Use the current date and time for attendance_date and clock_out
+    date_default_timezone_set('Asia/Manila');
+    $attendance_date = date('Y-m-d');
+    $clock_out = date('H:i:s');
+
+    $stmt = $conn->prepare("UPDATE attendance SET clock_out = :clock_out WHERE attendance_date = :attendance_date AND employees_id = :employees_id");
+
+    $stmt->execute([
+        ':employees_id' => $employees_id,
+        ':attendance_date' => $attendance_date,
+        ':clock_out' => $clock_out,
+    ]);
+
+    header("Location: $rootFolder/po/dashboard");
+});

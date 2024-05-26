@@ -24,9 +24,9 @@ Router::post('/login', function(){
     $stmt->execute();
     $user = $stmt->fetch();
 
-    $base_url = 'Master'; // Define your base URL here
-    if ($user && password_verify($password, $user['password'])) {
-    // if ($user && $password == $user['password']) { // ung passwords namin from HR di naka-hash HAUSHDASDH
+    $base_url = 'master'; // Define your base URL here
+    // if ($user && password_verify($password, $user['password'])) {
+    if ($user && $password == $user['password']) { // ung passwords namin from HR di naka-hash HAUSHDASDH
         $_SESSION['user'] = array();
         // Password is correct
         $_SESSION['user']['account_id'] = $user['id'];
@@ -67,12 +67,12 @@ Router::post('/login', function(){
 
 Router::post('/logout', function(){
     session_destroy();
-    $base_url = 'Master'; // Define your base URL here
+    $base_url = 'master'; // Define your base URL here
     header("Location: /$base_url/");
     exit();
 });
 
-// header("Location: /Master/");
+// header("Location: /Finance/");
 
 
 

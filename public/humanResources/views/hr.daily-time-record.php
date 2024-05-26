@@ -3,7 +3,7 @@ $db = Database::getInstance();
 $conn = $db->connect();
 
 $search = $_POST['search'] ?? '';
-$query = "SELECT attendance.*, employees.image_url, employees.first_name, employees.middle_name, employees.last_name, employees.position, employees.department FROM attendance";
+$query = "SELECT attendance.*, employees.image_url, employees.first_name, employees.middle_name, employees.last_name, employees.email, employees.position, employees.department FROM attendance";
 $query .= " LEFT JOIN employees ON attendance.employees_id = employees.id";
 
 $params = [];
@@ -15,7 +15,7 @@ if (!empty($search)) {
 
 $stmt = $conn->prepare($query);
 $stmt->execute($params);
-$attendance = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$dailyTimeRecord = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $pdo = null;
 $stmt = null;
@@ -52,14 +52,7 @@ $stmt = null;
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Daily Time Record</a>
    </ul>
-   <ul class="ml-auto flex items-center">
-  <li class="mr-1">
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium">Sample User</a>
-  </li>
-  <li class="mr-1">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300"><i class="ri-arrow-down-s-line"></i></button> 
-  </li>
-   </ul>
+   <?php require_once 'inc/logout.php' ?>
   </div>
   <!-- End Top Bar -->
 
@@ -75,16 +68,16 @@ $stmt = null;
 
   <!-- UNCOMMENT THIS AFTER FINISHING THE BACKEND FOR DTR -->
   <?php 
-    // if (empty($attendance)) {
-    //     require_once 'inc/noResult.php';
-    // } 
-    // else {
-    //     require_once 'inc/dtr.table.php';
-    // } 
+    if (empty($dailyTimeRecord)) {
+        require_once 'inc/noResult.php';
+    } 
+    else {
+        require_once 'inc/dtr.table.php';
+    } 
   ?>
 
   <!-- Sample: DELETE THIS WHEN BACKEND IS DONE -->
-  <div class="ml-6 flex flex-col mt-8 mr-6">
+  <!-- <div class="ml-6 flex flex-col mt-8 mr-6">
   <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
     <table class="min-w-full">
       <thead>
@@ -134,7 +127,7 @@ $stmt = null;
         </tbody>
       </table>
     </div>
-  </div>
+  </div> -->
 <!-- END Daily Time Record -->
 
 </main>

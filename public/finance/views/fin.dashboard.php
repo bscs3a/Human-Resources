@@ -3,6 +3,7 @@ define('YEAR', date('Y'));
 define('MONTH', date('m'));
 
 require_once "public/finance/functions/reportGeneration/TrialBalance.php";
+require_once "components/dashboard/dashboard.performFunctions.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -158,14 +159,9 @@ require_once "public/finance/functions/reportGeneration/TrialBalance.php";
                         </div>
                         <!-- End: Mini-Dashboard Analytics -->
                     </div>
-
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
-                        <div class="mx-5 my-5 py-3 px-3 text-white">
-                            <h1 class="text-3xl font-bold">Total Balance</h1>
-                            <p class="mt-5 text-3xl font-medium"><?php echo '₱' . number_format($incomeAmount-$expenseAmount, 2);?></p>
-                            <p class="mt-5 text-md font-bold">Summary</p>
-                        </div>
-                    </div>
+                    <!-- start funds -->
+                    <?php include_once "components/dashboard/dashboard.funds.php"?>
+                    <!-- end funds -->
                 </div>
                 <!-- End: Top Left-Side Section -->
             </div>
@@ -175,11 +171,11 @@ require_once "public/finance/functions/reportGeneration/TrialBalance.php";
             <?php include "components/dashboard/dashboard.request.php" ?>
             <!-- End: Request Section -->
 
-
-            
             <!-- Start: Report Section -->
             <?php include "components/dashboard/dashboard.reports.php" ?>
             <!-- End: Report Section -->
+
+            
         </div>
         <!-- End: Inner Dashboard Analytics-->
     </main>

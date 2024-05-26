@@ -101,13 +101,28 @@ tfoot{
     color: #262261;
     font-weight: bold;
 }
+body {
+    position: relative;
+    height: 100%;
+    margin: 0;
+}
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.center img {
+    width: 100%;
+    height: 100%;
+}
 </style>
 
 <body>
     <header>
         <table>
             <tr>
-                <td class="header2">Cash Flow</td>
+                <td class="header2">Income Report</td>
                 <td rowspan="2" class="text-right width-auto-wrap">
                     <?php 
                         $image = file_get_contents('public/finance/img/logo_reports.png');
@@ -123,9 +138,15 @@ tfoot{
             </tr>
         </table>
     </header>
-    <?php
-        echo generateCashFlowReport($year, $month);
-    ?> 
+    <main>
+        <div class="center">
+            <?php 
+                $image = file_get_contents('public/finance/img/charts/chart.png');
+                $image = base64_encode($image);
+            ?>
+            <img src="data:image;base64,<?= $image?>"/>
+        </div>           
+    </main>
 </body>
 
 </html>

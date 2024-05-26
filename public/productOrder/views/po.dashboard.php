@@ -30,7 +30,8 @@
             </div>
 
             <!-- dropdown -->
-            <div x-data="{ dropdownOpen: false }" class="relative my-32">
+            <?php require_once 'components/logout.php' ?>
+            <!-- <div x-data="{ dropdownOpen: false }" class="relative my-32">
               <button @click="dropdownOpen = !dropdownOpen" class="relative z-10 border border-gray-50 rounded-md bg-white p-2 focus:outline-none">
                 <div class="flex items-center gap-4">
                   <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
@@ -43,7 +44,7 @@
                 <div x-show="dropdownOpen" class="absolute right-0 mt-2 py-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-20">
                   <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
                 </div>
-            </div>
+            </div> -->
           </div>
 
           <script>

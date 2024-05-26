@@ -23,6 +23,9 @@ module.exports = {
         'profit': "url('../public/finance/img/Profit.png')",
         'radial-gradient': 'radial-gradient(circle, var(--tw-gradient-stops))',
       },
+      backgroundImage: theme => ({
+        'radial-gradient': 'radial-gradient(50% 50% at 50% 50%, #FFEB95 0%, #FECE01 100%)',
+      })
     },
   },
   plugins: [

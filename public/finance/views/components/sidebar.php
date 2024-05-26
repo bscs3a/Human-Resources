@@ -44,10 +44,9 @@
         </li>
 
         <li class="mb-1">
-            <a route="/fin/funds/finannce" class="flex items-center py-2 px-4 text-white hover:text-black">
+            <a route="/fin/funds/finance/page=1" class="flex items-center py-2 px-4 text-white hover:text-black">
                 <i class="ri-speed-up-line mr-3 text-lg"></i>
                 <span class="text-sm font-medium">Funds per Department</span>
-                <i class="ri-arrow-down-s-line ml-auto"></i>
             </a>
         </li>
 
@@ -61,13 +60,7 @@
 
         document.querySelector('.toggle-ledger').addEventListener('click', function () {
             document.getElementById('ledger').classList.toggle('hidden');
-            document.getElementById('funds').classList.add('hidden');
             // document.getElementById('reports-button').classList.toggle('bg-slate-400');
-        });
-
-        document.querySelector('.toggle-funds').addEventListener('click', function () {
-            document.getElementById('ledger').classList.add('hidden');
-            document.getElementById('funds').classList.toggle('hidden');
         });
     });
 </script>

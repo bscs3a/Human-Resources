@@ -3,11 +3,15 @@ require_once 'public/finance/functions/generalFunctions.php';
 
 
 
-function addTransactionPondo($debitLedger, $creditLedger, $amount){
-    $e_id = $_SESSION['user']['employee_id'];
-    $department = $_SESSION['user']['role'];
-    
-    
+function addTransactionPondo($debitLedger, $creditLedger, $amount, $department = null){
+
+    if ($department === null){
+        $e_id = $_SESSION['user']['employee_id'];
+        $department = $_SESSION['user']['role'];
+    } else {
+        $e_id = getRandomEmployee($department);
+    }
+
     $db = Database::getInstance();
     $conn = $db->connect();
     
@@ -76,3 +80,14 @@ function validCredit(){
     return $filteredLedgerAccounts;
 }
 
+function getRandomEmployee($department){
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    $sql = "SELECT id FROM employees WHERE department = :department";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':department', $department);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    $randomEmployee = $result[array_rand($result)];
+    return $randomEmployee['id'];
+}

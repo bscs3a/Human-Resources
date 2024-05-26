@@ -37,21 +37,16 @@ $prevNetSales = calculateNetSalesOrLoss($curr_year, $prev_month);
 
     <div class="flex justify-between">
         <h2 class="font-sans font-bold text-xl">Income Statement</h2>
-        <!-- <a href="#" class="text-sm font-sans font-semibold">
-                    <i class="ri-more-line text-3xl text-[#F8B721]"></i>
-                </a> -->
-        <div class="font-bold  border-none ">
-            <input type="text" class = "yearpicker" name="" id="">
-        <script>
-            $(".yearpicker").yearpicker()
-        </script>
+        <!-- elipsis -->
+        <div class = "flex gap-1 items-center elipsis-report-button cursor-pointer" id="income_report_button">
+            <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+            </div>
+            <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+            </div>
+            <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+            </div>
         </div>
-
     </div>
-    <?php 
-        // echo date('Y');
-        // echo count($monthlyData);
-    ?>
     
 
     <p class="text-gray-600 my-3 text-lg ">Current Net Sales: <?= number_format($netSales,2)?></p>
