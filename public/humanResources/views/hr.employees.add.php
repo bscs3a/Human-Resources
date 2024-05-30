@@ -27,12 +27,47 @@
     <a route="/hr/dashboard" class="text-[#151313] hover:text-gray-600 font-medium">Human Resources</a>
   </li>
   <li class="text-[#151313] mr-2 font-medium">/</li>
-  <a route="/hr/employees" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Employees</a>
+  <a route="/hr/employees/page=1" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Employees</a>
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Add New</a>
    </ul>
+   <ul class="ml-auto flex items-center">
+    
+   <div class="relative inline-block text-left ml-4">
+                <div>
+                <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                    <div class="text-black font-medium mr-4 ">
+                    <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['user']['username']; ?>
+                    </div>
+                    <i class="ri-arrow-down-s-line"></i>
+                </a>
+            </div>
+
+            <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <div class="py-1" role="none">
+                <form action="/logout" method="post">
+                    <button type="submit" class="w-full block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                        <i class="ri-logout-box-line"></i>
+                        Logout
+                    </button>
+                </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('options-menu').addEventListener('click', function() {
+                var dropdownMenu = document.getElementById('dropdown-menu');
+                if (dropdownMenu.classList.contains('hidden')) {
+                    dropdownMenu.classList.remove('hidden');
+                } else {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+        </script>
+    </ul>
    <?php 
-    require_once 'inc/logout.php';
+    // require_once 'inc/logout.php';
   ?>
   </div>
   <!-- End Top Bar -->
@@ -44,7 +79,7 @@
   
 <!-- Profile -->
 <div class="py-2 px-6 mt-4">
-<form action= "/hr/employees/add" method="POST" enctype="multipart/form-data">
+<form action= "/add-employees" method="POST" enctype="multipart/form-data">
   <div class="flex">
     
     <!-- IMAGE -->
@@ -250,7 +285,7 @@
             </label>
             <select
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        name="department" id="Department" placeholder="Department">
+                        name="department" id="department" placeholder="Department">
                         
                         <option value="">Select Department</option>
                         <option value="Product Order">Product Order</option>
@@ -316,6 +351,16 @@
             />
           </div>
         </div>
+      </div>
+      <!-- START DATE / HIRE DATE ERROR -->
+      <div class="flex flex-col">
+      <div class="mb-4">
+        <div class="flex">
+          <div class="mr-2">
+            <span id="dateError" class="text-red-500 text-xs"></span>
+          </div>
+        </div>
+      </div>
       </div>
       
       <!-- Taxpayer Information -->
@@ -620,7 +665,7 @@
   });
 
   // DEPARTMENT AND POSITION DROPDOWN
-  document.getElementById('Department').addEventListener('change', function() {
+  document.getElementById('department').addEventListener('change', function() {
   var positionSelect = document.getElementById('Position');
   var department = this.value;
 
@@ -753,16 +798,18 @@
   });
 
   // DATE OF HIRE AND START OF EMPLOYMENT VALIDATION
-  document.getElementById('dateofhire').addEventListener('change', validateDates);
-  document.getElementById('startdate').addEventListener('change', validateDates);
+  document.getElementById('startdate').addEventListener('input', checkDates);
 
-  function validateDates() {
-      var dateOfHire = new Date(document.getElementById('dateofhire').value);
-      var startDate = new Date(document.getElementById('startdate').value);
+  function checkDates() {
+    var dateofhire = document.getElementById('dateofhire').value;
+    var startdate = document.getElementById('startdate').value;
+    var dateError = document.getElementById('dateError');
 
-      if (startDate < dateOfHire) {
-          alert('Start of employment should be on or after the date of hire.');
-      }
+    if (startdate < dateofhire) {
+      dateError.textContent = 'Start date cannot be before date of hire';
+    } else {
+      dateError.textContent = '';
+    }
   }
 
   // Show/Hide Password
@@ -802,6 +849,8 @@
   document.getElementById('saveButton').addEventListener('click', function (event) {
     var password = document.getElementById('password').value;
     var confirmPassword = document.getElementById('confirmPassword').value;
+    var dateofhire = document.getElementById('dateofhire').value;
+    var startdate = document.getElementById('startdate').value;
 
     // Check if passwords match
     if (password !== confirmPassword) {
@@ -817,10 +866,19 @@
     if (!regex.test(password)) {
       document.getElementById('passwordError').textContent = 'Password must contain at least 1 uppercase letter, 1 number, 1 special character, and be at least 8 characters long';
       event.preventDefault();
+      return;
     } else {
       document.getElementById('passwordError').textContent = '';
     }
-  });
+
+    // Check if start date is on or after date of hire
+    if (startdate < dateofhire) {
+      document.getElementById('dateError').textContent = 'Start date cannot be before date of hire';
+      event.preventDefault();
+    } else {
+      document.getElementById('dateError').textContent = '';
+    }
+});
 
   // Image Upload
   document.getElementById('uploadButton').addEventListener('click', function() {

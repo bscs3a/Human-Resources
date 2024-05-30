@@ -1136,10 +1136,6 @@ video {
   margin-top: 2.25rem;
 }
 
-.mt-\[16px\]{
-  margin-top: 16px;
-}
-
 .box-border{
   box-sizing: border-box;
 }
@@ -1393,6 +1389,11 @@ video {
 
 .h-full{
   height: 100%;
+}
+
+.h-min{
+  height: -moz-min-content;
+  height: min-content;
 }
 
 .h-screen{

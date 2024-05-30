@@ -73,7 +73,7 @@
   
 <!-- Profile -->
 <div class="py-2 px-6 mt-4">
-<form action= "/hr/employees/update" method="POST" enctype="multipart/form-data">
+<form action= "/update-employees" method="POST" enctype="multipart/form-data">
   <div class="flex">
     <div class="mr-4">
       <img src="<?php echo $employees['image_url']; ?>" alt="Profile Picture" name="image_url" id="image_url" class="w-48 h-48 object-cover">
@@ -260,14 +260,13 @@
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="Position">
               Position
             </label>
-            <input  
+            <select
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              name="position"
-              id="Position"
-              type="text"
-              value="<?php echo $employees['position']; ?>"
-              placeholder="Position"
-            />  
+                        name="position" id="Position" placeholder="Position">
+                        
+                        <!-- <option value="">Select Position</option> -->
+                        <option value="<?php echo $employees['position'] ?>"><?php echo $employees['position'] ?></option>
+              </select>
           </div>
         </div>
       </div>
@@ -317,6 +316,17 @@
           </div>
         </div>
       </div>
+      
+      <!-- START DATE / HIRE DATE ERROR -->
+      <div class="flex flex-col">
+      <div class="mb-4">
+        <div class="flex">
+          <div class="mr-2">
+            <span id="dateError" class="text-red-500 text-xs"></span>
+          </div>
+        </div>
+      </div>
+      </div>
 
                   <!-- Salary Information and Tax Information -->
             <div>
@@ -329,14 +339,14 @@
                           Monthly Salary
                         </label>
                         <input
-                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                        class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                           name="monthlysalary"
                           id="monthlysalary"
                           type="text"
                           placeholder="0.00"
                           value="<?php echo $employees['monthly_salary']; ?>"
                           oninput="calculateTax()"
-                          
+                        readonly
                         />
                     </div>
                     <!-- TAX INFO -->
@@ -345,7 +355,7 @@
                           Income Tax
                         </label>
                         <input
-                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                        class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                           name="incometax"
                           id="incometax"
                           type="text"
@@ -359,7 +369,7 @@
                           Withholding tax
                         </label>
                         <input  
-                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                        class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                           name="withholdingtax"
                           id="withholdingtax"
                           type="number"
@@ -380,7 +390,7 @@
                               SSS
                             </label>
                             <input
-                              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                            class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                               name="sss"
                               id="sss"
                               type="text"
@@ -394,7 +404,7 @@
                               Pag-IBIG Fund
                             </label>
                             <input
-                              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                            class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                               name="pagibig"
                               id="pagibig"
                               type="text"
@@ -408,7 +418,7 @@
                               Philhealth
                             </label>
                             <input  
-                              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                            class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                               name="philhealth"
                               id="philhealth"
                               type="text"
@@ -427,7 +437,7 @@
                                 13th Month Pay
                               </label>
                               <input
-                                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                                 name="thirteenthmonth"
                                 id="thirteenthmonth"
                                 type="number"
@@ -441,7 +451,7 @@
                                 Total Salary (with Tax reductions)
                               </label>
                               <input
-                                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                                 name="totalsalary"
                                 id="totalsalary"
                                 type="number"
@@ -480,6 +490,7 @@
                 name="password"
                 id="password"
                 type="password"
+                value="<?php echo $employees['password']; ?>"
                 placeholder="Password"
               />
             </div>
@@ -492,6 +503,7 @@
                 name="confirmPassword"
                 id="confirmPassword"
                 type="password"
+                value="<?php echo $employees['password']; ?>"
                 placeholder="Confirm Password"
               />
               <div class="text-sm mt-2 ml-32">
@@ -499,12 +511,21 @@
               </div>
                   </div>
                 </div>
+            <!-- PASSWORD ERRORS -->
+          <div class="flex">
+            <div id="passwordError" class="text-xs text-red-500">
+            </div>
+          </div>
+          <div class="flex">
+            <div id="confirmPasswordError" class="text-xs text-red-500">
+            </div>
+          </div>
               </div>
                       <div>
                       </div>
                       <div class="flex flex-row mt-8 justify-center">
-                        <button type="submit" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Update</button>
-                        <button route="/hr/employees" type="button" class="focus:outline-none text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Cancel</button>
+                        <button id="updateButton" type="submit" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Update</button>
+                        <button route="/hr/employees/id=<?php echo $employees['id']; ?>" type="button" class="focus:outline-none text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Cancel</button>
                       </div>
                       </form>
     </div>
@@ -517,6 +538,7 @@
 
 <!-- Sidebar active/inactive -->
 <script>
+  // Sidebar Toggle
   document.querySelector('.sidebar-toggle').addEventListener('click', function() {
     document.getElementById('sidebar-menu').classList.toggle('hidden');
     document.getElementById('sidebar-menu').classList.toggle('transform');
@@ -525,124 +547,351 @@
     document.getElementById('mainContent').classList.toggle('md:ml-64');
   });
 
-  document.getElementById('togglePassword').addEventListener('change', function () {
-    const passwordInput = document.getElementById('password');
-    if (this.checked) {
-        passwordInput.type = 'text';
-    } else {
-        passwordInput.type = 'password';
-    }
+  // DEPARTMENT AND POSITION DROPDOWN
+  document.getElementById('Department').addEventListener('change', function() {
+  var positionSelect = document.getElementById('Position');
+  var department = this.value;
+
+  // Clear the position select
+  positionSelect.innerHTML = '<option value="">Select Position</option>';
+
+  // Define the positions for each department
+  var positions = {
+
+      'Product Order': [
+        'Order Processor',
+        'Order Entry Clerk',
+        'Quality Control Inspector',
+        'Logistics Coordinator',
+        'Procurement Specialist'
+      ],
+
+      'Inventory': [
+        'Inventory Manager/Controller',
+        'Inventory Planner',
+        'Stock Controller',
+        'Purchasing Manager',
+        'Warehouse Manager',
+        'Materials Manager'
+      ],
+
+      'Delivery': [
+        'Delivery Driver',
+        'Courier',
+        'Warehouse Associate',
+        'Customer Service Representative',
+        'Parcel Sorter'
+      ],
+
+      'Human Resources': [
+        'Recruiter',
+        'HR Manager/Director',
+        'Compensation and Benefits Specialist',
+        'HR Coordinator',
+        'HR Legal Compliance Specialist'
+      ],
+
+      'Point of Sales': [
+        'Retail Associate/Cashier',
+        'Inventory Control Specialist',
+        'Sales Associate',
+        'Customer Service Representative',
+        'Business Analyst',
+        'E-commerce Coordinator'
+      ],
+
+      'Finance': [
+        'Accountant',
+        'Bookkeeper',
+        'Financial Analyst',
+        'Tax Accountant',
+        'Cost Accountant',
+        'Credit Analyst',
+        'Payroll Specialist'
+      ]
+  };
+      
+    // Define the salaries for each position
+    var salaries = {
+      'Order Processor': 18000,
+      'Order Entry Clerk': 15000,
+      'Quality Control Inspector': 20000,
+      'Logistics Coordinator': 30000,
+      'Procurement Specialist': 40000,
+      'Inventory Manager/Controller': 60000,
+      'Inventory Planner': 35000,
+      'Stock Controller': 25000,
+      'Purchasing Manager': 70000,
+      'Warehouse Manager': 55000,
+      'Materials Manager': 55000,
+      'Delivery Driver': 15000,
+      'Courier': 18000,
+      'Warehouse Associate': 18000,
+      'Customer Service Representative': 20000,
+      'Parcel Sorter': 15000,
+      'Recruiter': 30000,
+      'HR Manager/Director': 80000,
+      'Compensation and Benefits Specialist': 45000,
+      'HR Coordinator': 25000,
+      'HR Legal Compliance Specialist': 35000,
+      'Retail Associate/Cashier': 12000,
+      'Inventory Control Specialist': 25000,
+      'Sales Associate': 18000,
+      'Business Analyst': 45000,
+      'E-commerce Coordinator': 35000,
+      'Accountant': 35000,
+      'Bookkeeper': 20000,
+      'Financial Analyst': 45000,
+      'Tax Accountant': 45000,
+      'Cost Accountant': 45000,
+      'Credit Analyst': 35000,
+      'Payroll Specialist': 30000
+    };
+
+  // Add an event listener to the position select field
+  document.getElementById('Position').addEventListener('change', function() {
+  var salaryInput = document.getElementById('monthlysalary');
+  var position = this.value;
+
+  // Get the salary for the selected position
+  var salary = salaries[position];
+
+  // Update the salary input field
+  if (salary) {
+    salaryInput.value = salary.toFixed(2);
+  } else {
+    salaryInput.value = '';
+  }
+
+  // Manually trigger the calculateTax function
+  calculateTax();
+});
+      // Get the positions for the selected department
+      var departmentPositions = positions[department];
+
+      // Add the positions to the position select
+      if (departmentPositions) {
+          departmentPositions.forEach(function(position) {
+              var option = document.createElement('option');
+              option.value = position;
+              option.text = position;
+              positionSelect.add(option);
+          });
+      }
   });
 
-// Image Upload
-document.getElementById('uploadButton').addEventListener('click', function() {
-    document.getElementById('fileInput').click();
-});
+  // DATE OF HIRE AND START OF EMPLOYMENT VALIDATION
+  document.getElementById('startdate').addEventListener('input', checkDates);
 
-document.getElementById('fileInput').addEventListener('change', function() {
-    var file = this.files[0];
-    var reader = new FileReader();
-    reader.onloadend = function() {
-        document.getElementById('image_url').src = reader.result;
-    }
-    if (file) {
-        reader.readAsDataURL(file);
+  function checkDates() {
+    var dateofhire = document.getElementById('dateofhire').value;
+    var startdate = document.getElementById('startdate').value;
+    var dateError = document.getElementById('dateError');
+
+    if (startdate < dateofhire) {
+      dateError.textContent = 'Start date cannot be before date of hire';
     } else {
-        document.getElementById('image_url').src = "";
+      dateError.textContent = '';
+    }
+  }
+
+  // Show/Hide Password
+  document.getElementById('togglePassword').addEventListener('change', function () {
+    document.getElementById('password').type = this.checked ? 'text' : 'password';
+    document.getElementById('confirmPassword').type = this.checked ? 'text' : 'password';
+  });
+
+  // CHECKING IF PASSWORDS MATCH AND THE PASSWORD IS STRONG
+  var passwordField = document.getElementById('password');
+  var confirmPasswordField = document.getElementById('confirmPassword');
+
+  passwordField.addEventListener('input', validatePassword);
+  confirmPasswordField.addEventListener('input', validatePassword);
+
+  function validatePassword() {
+    var password = passwordField.value;
+    var confirmPassword = confirmPasswordField.value;
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
+      return;
+    } else {
+      document.getElementById('confirmPasswordError').textContent = '';
+    }
+
+    // Check if password meets requirements
+    var regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!regex.test(password)) {
+      document.getElementById('passwordError').textContent = 'Password must contain at least 1 uppercase letter, 1 number, 1 special character, and be at least 8 characters long';
+    } else {
+      document.getElementById('passwordError').textContent = '';
+    }
+  }
+
+  document.getElementById('saveButton').addEventListener('click', function (event) {
+    var password = document.getElementById('password').value;
+    var confirmPassword = document.getElementById('confirmPassword').value;
+    var dateofhire = document.getElementById('dateofhire').value;
+    var startdate = document.getElementById('startdate').value;
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
+      event.preventDefault();
+      return;
+    } else {
+      document.getElementById('confirmPasswordError').textContent = '';
+    }
+
+    // Check if password meets requirements
+    var regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!regex.test(password)) {
+      document.getElementById('passwordError').textContent = 'Password must contain at least 1 uppercase letter, 1 number, 1 special character, and be at least 8 characters long';
+      event.preventDefault();
+      return;
+    } else {
+      document.getElementById('passwordError').textContent = '';
+    }
+
+    // Check if start date is on or after date of hire
+    if (startdate < dateofhire) {
+      document.getElementById('dateError').textContent = 'Start date cannot be before date of hire';
+      event.preventDefault();
+    } else {
+      document.getElementById('dateError').textContent = '';
     }
 });
 
-document.getElementById('removeButton').addEventListener('click', function() {
-    document.getElementById('image_url').src = 'https://e1.nmcdn.io/iwmf/wp-content/uploads/2018/08/no-image-available-01.jpg/v:1-width:800-height:800-fit:cover/no-image-available-01.jpg?signature=f29d577c';
-    document.getElementById('fileInput').value = ""; // Clear the file input
-});
+  // Image Upload
+  document.getElementById('uploadButton').addEventListener('click', function() {
+      document.getElementById('fileInput').click();
+  });
 
-// Form submission
-document.getElementById('form').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    var formData = new FormData(this);
-    var xhr = new XMLHttpRequest();
-
-    xhr.open('POST', 'hr/employees/add', true);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            alert('File uploaded successfully.');
-        } else {
-            alert('An error occurred while uploading the file.');
-        }
-    };
-    xhr.send(formData);
-});
-
-  // Automatic Tax Calculation for UI
-  function calculateTax() {
-      const monthlySalary = document.getElementById('monthlysalary').value;
-
-      // TAX DEDUCTIONS
-      // FIX INCOME TAX. THIS IS JUST A TEST
-      let incomeTax;
-      if (monthlySalary <= 20833.33) {
-        incomeTax = 0;
-      } else if (monthlySalary <= 33333.33) {
-          incomeTax = (monthlySalary - 20833.33) * 0.20;
-      } else if (monthlySalary <= 66666.67) {
-          incomeTax = 2500 + (monthlySalary - 33333.33) * 0.25;
-      } else if (monthlySalary <= 166666.67) {
-          incomeTax = 10833.33 + (monthlySalary - 66666.67) * 0.30;
-      } else if (monthlySalary <= 666666.67) {
-          incomeTax = 40833.33 + (monthlySalary - 166666.67) * 0.32;
-      } else {
-          incomeTax = 200833.33 + (monthlySalary - 666666.67) * 0.35;
+  document.getElementById('fileInput').addEventListener('change', function() {
+      var file = this.files[0];
+      var reader = new FileReader();
+      reader.onloadend = function() {
+          document.getElementById('image_url').src = reader.result;
       }
-      document.getElementById('incometax').value = incomeTax.toFixed(2);
-
-      let withholdingTax;
-      if (monthlySalary <= 20833.33) {
-        // 20,833.33 and below
-        withholdingTax = 0;
-      } else if (monthlySalary <= 33333.33) {
-          // 20,833.34 to 33,333.33
-          withholdingTax = 0 + (monthlySalary - 20833.33) * 0.15;
-      } else if (monthlySalary <= 66666.67) {
-          // 33,333.34 to 66,666.67
-          withholdingTax = 1875 + (monthlySalary - 33333.33) * 0.20;
-      } else if (monthlySalary <= 166666.67) {
-          // 66,666.68 to 166,666.67
-          withholdingTax = 8541.80 + (monthlySalary - 66666.67) * 0.25;
-      } else if (monthlySalary <= 666666.67) {
-          // 166,666.68 to 666,666.67
-          withholdingTax = 33541.80 + (monthlySalary - 166666.67) * 0.30;
+      if (file) {
+          reader.readAsDataURL(file);
       } else {
-          // 666,666.68 and above
-          withholdingTax = 183541.80 + (monthlySalary - 666666.67) * 0.35;
+          document.getElementById('image_url').src = "";
       }
-      document.getElementById('withholdingtax').value = withholdingTax.toFixed(2);
-      
-      // BENEFIT DEDUCTIONS
-      const pagibig = 200.00;
-      document.getElementById('pagibig').value = pagibig;
+  });
 
-      const sss = (monthlySalary * 0.14) * 0.32;
-      document.getElementById('sss').value = sss.toFixed(2);
-      
-      let philhealth;
-      if (monthlySalary <= 10000.00) {
-          philhealth = 500.00;
-      } else if (monthlySalary <= 99999.99) {
-          philhealth = 500.00 + (monthlySalary - 10000.00) * 0.05;
-      } else {
-          philhealth = 5000.00;
-      }
-      document.getElementById('philhealth').value = philhealth.toFixed(2);
+  document.getElementById('removeButton').addEventListener('click', function() {
+      document.getElementById('image_url').src = '/master/public/humanResources/img/noPhotoAvailable.png';
+      document.getElementById('fileInput').value = ""; // Clear the file input
+  });
 
-      const thirteenthmonth = monthlySalary;
-      document.getElementById('thirteenthmonth').value = thirteenthmonth;
+  // Form submission
+  document.getElementById('form').addEventListener('submit', function(event) {
+      event.preventDefault();
 
-      // TOTAL SALARY
-      const totalsalary = monthlySalary - (incomeTax + withholdingTax + pagibig + sss + philhealth);
-      document.getElementById('totalsalary').value = totalsalary.toFixed(2);
+      var formData = new FormData(this);
+      var xhr = new XMLHttpRequest();
+
+      xhr.open('POST', 'hr/employees/add', true);
+      xhr.onload = function() {
+          if (xhr.status === 200) {
+              alert('File uploaded successfully.');
+          } else {
+              alert('An error occurred while uploading the file.');
+          }
+      };
+      xhr.send(formData);
+  });
+
+// Automatic Tax Calculation for UI
+function calculateTax() {
+  const monthlySalary = parseFloat(document.getElementById('monthlysalary').value.replace(/[^\d.-]/g, '')); // Retrieve and parse the monthly salary value
+  
+  if (!isNaN(monthlySalary)) { // Check if the parsed value is a valid number
+    // TAX DEDUCTIONS
+    // FIX INCOME TAX. THIS IS JUST A TEST
+    let incomeTax;
+    if (monthlySalary <= 20833.33) {
+      incomeTax = 0;
+    } else if (monthlySalary <= 33333.33) {
+        incomeTax = (monthlySalary - 20833.33) * 0.20;
+    } else if (monthlySalary <= 66666.67) {
+        incomeTax = 2500 + (monthlySalary - 33333.33) * 0.25;
+    } else if (monthlySalary <= 166666.67) {
+        incomeTax = 10833.33 + (monthlySalary - 66666.67) * 0.30;
+    } else if (monthlySalary <= 666666.67) {
+        incomeTax = 40833.33 + (monthlySalary - 166666.67) * 0.32;
+    } else {
+        incomeTax = 200833.33 + (monthlySalary - 666666.67) * 0.35;
+    }
+    document.getElementById('incometax').value = incomeTax.toFixed(2);
+
+    let withholdingTax;
+    if (monthlySalary <= 20833.33) {
+      withholdingTax = 0;
+    } else if (monthlySalary <= 33333.33) {
+        withholdingTax = 0 + (monthlySalary - 20833.33) * 0.15;
+    } else if (monthlySalary <= 66666.67) {
+        withholdingTax = 1875 + (monthlySalary - 33333.33) * 0.20;
+    } else if (monthlySalary <= 166666.67) {
+        withholdingTax = 8541.80 + (monthlySalary - 66666.67) * 0.25;
+    } else if (monthlySalary <= 666666.67) {
+        withholdingTax = 33541.80 + (monthlySalary - 166666.67) * 0.30;
+    } else {
+        withholdingTax = 183541.80 + (monthlySalary - 666666.67) * 0.35;
+    }
+    document.getElementById('withholdingtax').value = withholdingTax.toFixed(2);
+    
+    // BENEFIT DEDUCTIONS
+    const pagibig = 200.00;
+    document.getElementById('pagibig').value = pagibig;
+
+    const sss = (monthlySalary * 0.14) * 0.32;
+    document.getElementById('sss').value = sss.toFixed(2);
+    
+    let philhealth;
+    if (monthlySalary <= 10000.00) {
+        philhealth = 500.00;
+    } else if (monthlySalary <= 99999.99) {
+        philhealth = 500.00 + (monthlySalary - 10000.00) * 0.05;
+    } else {
+        philhealth = 5000.00;
+    }
+    document.getElementById('philhealth').value = philhealth.toFixed(2);
+
+    const thirteenthmonth = monthlySalary;
+    document.getElementById('thirteenthmonth').value = thirteenthmonth;
+
+    // TOTAL SALARY
+    const totalsalary = monthlySalary - (incomeTax + withholdingTax + pagibig + sss + philhealth);
+    document.getElementById('totalsalary').value = totalsalary.toFixed(2);
+  } else {
+    // If the parsed value is NaN (Not a Number), clear the tax input fields
+    document.getElementById('incometax').value = '';
+    document.getElementById('withholdingtax').value = '';
+    document.getElementById('pagibig').value = '';
+    document.getElementById('sss').value = '';
+    document.getElementById('philhealth').value = '';
+    document.getElementById('thirteenthmonth').value = '';
+    document.getElementById('totalsalary').value = '';
   }
+}
+// Function to update the monthly salary based on the selected position and calculate tax
+function updateSalary() {
+  var selectedPosition = document.getElementById('Position').value;
+  var monthlySalaryInput = document.getElementById('monthlysalary');
+
+  if (salaries[selectedPosition] !== undefined) {
+    var salary = salaries[selectedPosition];
+    monthlySalaryInput.value = salary.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
+    console.log("Monthly salary updated:", salary); // Debugging statement
+    calculateTax(); // Call the calculateTax function after updating the salary
+  } else {
+    monthlySalaryInput.value = ''; // If position not found, clear the input
+  }
+}
+
 </script>
 </body>
 </html> 

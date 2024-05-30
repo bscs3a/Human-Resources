@@ -66,28 +66,25 @@ $stmt = $conn->query($query);
   </div>
   <!-- End Top Bar -->
 
-  <!-- Generate Payslip Form -->
   <div class="mt-4 py-2 ml-4 mr-4">
     <div class="relative shadow-md sm:rounded-lg h-screen" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
       <h1 class="text-center w-full p-4 border-b-2 border-gray-200 text-4xl">Generate Payslip</h1>
+      
+      <form id="filterForm" method="POST" action="/hr/generate-payslip">
+        <div class="px-4 py-2">
+          <select id="department" onchange="filterEmployees()" name="department" class="hidden mt-1 block w-33 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option value="">All Departments</option>
+            <?php
+            $department_query = "SELECT DISTINCT department FROM employees";
+            $department_stmt = $conn->query($department_query);
 
-      <!-- Department Filter Dropdown -->
-      <div class="px-4 py-2">
-        <select id="department" name="department" class="mt-1 block w-33 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-          <option value="">All Departments</option>
-          <?php
-          // Fetch distinct departments from the database
-          $department_query = "SELECT DISTINCT department FROM employees";
-          $department_stmt = $conn->query($department_query);
-
-          // Populate dropdown with department options
-          while($dept_row = $department_stmt->fetch(PDO::FETCH_ASSOC)) {
-              echo "<option value='" . $dept_row['department'] . "'>" . $dept_row['department'] . "</option>";
-          }
-          ?>
-        </select>
-      </div>
-      <!-- End Department Filter Dropdown -->
+            while($dept_row = $department_stmt->fetch(PDO::FETCH_ASSOC)) {
+                echo "<option value='" . $dept_row['department'] . "'>" . $dept_row['department'] . "</option>";
+            }
+            ?>
+          </select>
+        </div>
+      </form>
 
       <!-- Payroll table -->
       <table class="table-auto w-full mt-4">
@@ -140,7 +137,7 @@ $stmt = $conn->query($query);
   <!-- END of Generate Payslip Form -->
 
 <!-- Modal -->
-<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+<div id="modal" class="fixed z-50 inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white p-8 rounded-md max-w-3xl shadow-lg">
         <h2 class="text-2xl font-bold mb-4">Payslip Details</h2>
         <form action="/create/payslip" id="createPayslip" method="POST">
@@ -173,7 +170,6 @@ $stmt = $conn->query($query);
                         <option value="October">October</option>
                         <option value="November">November</option>
                         <option value="December">December</option>
-                        <!-- Add more months here -->
                     </select>
                 </div>
                 <!-- Pay Date -->
@@ -190,11 +186,11 @@ $stmt = $conn->query($query);
                     <div class="flex items-center">
                         <input type="radio" id="status_paid" name="status" value="paid" class="mr-2">
                         <label for="status_paid" class="mr-4">Paid</label>
-                        <!-- <input type="radio" id="status_pending" name="status" value="pending" class="mr-2">
-                        <label for="status_pending" class="mr-4">Pending</label> -->
+                        <input type="radio" id="status_pending" name="status" value="pending" class="mr-2">
+                        <label for="status_pending" class="mr-4">Pending</label>
                     </div>
                 </div>
-                <!-- <div class="flex items-center">
+                <div class="flex items-center">
                     <label class="block font-bold mr-4">Paid Type:</label>
                     <div class="flex items-center">
                         <input type="radio" id="paid_type_cash" name="paid_type" value="cash" class="mr-2">
@@ -202,7 +198,7 @@ $stmt = $conn->query($query);
                         <input type="radio" id="paid_type_bank" name="paid_type" value="bank" class="mr-2">
                         <label for="paid_type_bank">Bank</label>
                     </div>
-                </div> -->
+                </div>
             </div>
 
             <!-- Button Group -->
@@ -242,19 +238,21 @@ document.getElementById('generatePayslipCloseButton').addEventListener('click', 
     document.getElementById('modal').classList.add('hidden');
 });
   
-function filterEmployees() {
-  var department = document.getElementById('department').value;
-  var url = './filter.php?department=' + department;
-  window.location.href = url;
-}
 document.getElementById('createPayslip').addEventListener('submit', function(event) {
-    var statusPaid = document.getElementById('status_paid').checked;
-    var payDate = document.getElementById('pay_date').value;
+  var statusPaid = document.getElementById('status_paid').checked;
+    var statusPending = document.getElementById('status_pending').checked;
+    var paidTypeCash = document.getElementById('paid_type_cash').checked;
+    var paidTypeBank = document.getElementById('paid_type_bank').checked;
 
-    if (!statusPaid) {
-        alert('Please select "Paid" status before submitting.');
+    if (!statusPaid && !statusPending) {
+        alert('Please select a status.');
+        event.preventDefault();
+    } else if (!paidTypeCash && !paidTypeBank) {
+        alert('Please select a paid type.');
         event.preventDefault();
     }
+    
+    var payDate = document.getElementById('pay_date').value;
 
     if (!payDate) {
         alert('Please fill out the pay date before submitting.');

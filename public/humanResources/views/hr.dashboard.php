@@ -155,20 +155,23 @@
 <?php 
   $db = Database::getInstance();
   $conn = $db->connect();
-  
+
   $search = $_POST['search'] ?? '';
   $query = "SELECT payroll.*, salary_info.*, employees.* FROM payroll";
   $query .= " 
   LEFT JOIN employees ON payroll.employees_id = employees.id
   LEFT JOIN salary_info ON salary_info.employees_id = employees.id AND payroll.salary_id = salary_info.id";
-  
+
+  // Add an ORDER BY clause to sort the results in descending order by payroll.id
+  $query .= " ORDER BY payroll.id DESC";
+
   // Add a LIMIT clause to limit the results to 3
   $query .= " LIMIT 3";
-  
+
   $stmt = $conn->prepare($query);
   $stmt->execute();
   $payroll = $stmt->fetchAll(PDO::FETCH_ASSOC);
-  
+
   $pdo = null;
   $stmt = null;
   if (empty($payroll)) {
@@ -177,7 +180,7 @@
   else {
       require_once 'inc/payroll-list-dashboard.table.php';
   } 
-  ?>
+?>
 <!-- Chart -->
 <!-- <div>
   <div class="flex items-center min-h-full max-w-full">

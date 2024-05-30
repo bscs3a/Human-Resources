@@ -3,13 +3,23 @@ $db = Database::getInstance();
 $conn = $db->connect();
 
 $search = $_POST['search'] ?? '';
-$query = "SELECT payroll.*, salary_info.*, employees.* FROM payroll";
+$query = "SELECT payroll.*, salary_info.total_deductions, salary_info.total_salary, employees.first_name, employees.last_name, employees.middle_name, employees.position FROM payroll";
 $query .= " 
 LEFT JOIN employees ON payroll.employees_id = employees.id
-LEFT JOIN salary_info ON salary_info.employees_id = employees.id AND payroll.salary_id = salary_info.id";
+LEFT JOIN salary_info ON payroll.salary_id = salary_info.id AND salary_info.employees_id = employees.id";
+
+$params = [];
+
+if (!empty($search)) {
+    $query .= " WHERE (employees.first_name LIKE :search OR employees.last_name LIKE :search OR employees.middle_name LIKE :search OR employees.position LIKE :search OR payroll.month LIKE :month)";
+    $params[':search'] = '%' . $search . '%';
+    $params[':month'] = $search;
+}
+
 $query .= " ORDER BY payroll.id DESC";
 $stmt = $conn->prepare($query);
-$stmt->execute();
+$stmt->execute($params);
+
 $payroll = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $pdo = null;
@@ -53,9 +63,13 @@ $stmt = null;
   <!-- End Top Bar -->
 
   <!-- Payroll-->
-<div class="mt-4 ml-6 font-bold text-lg">
-  <h1><i class="ri-hourglass-line"></i>Payroll List </h1>
-</div>
+<div class="flex flex-wrap">
+  <h1 class="mt-4 ml-6 font-bold text-lg "><i class="ri-hourglass-line"></i>Payroll List </h1>
+    <form action="/hr/payroll" method="POST" class="mt-6 ml-auto mr-4 flex">
+      <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600"><i class="ri-search-line"></i></button>
+    </form>
+</div> 
 <hr class="mt-4">
 
     <?php 

@@ -60,7 +60,7 @@ $stmt = null;
   <!-- Daily Time Record -->
 <div class="flex flex-wrap">
     <h3 class="ml-6 mt-8 text-xl font-bold">Daily Time Record</h3>
-    <form action="/hr/dtr" method="get" class="mt-6 ml-auto mr-4 flex">
+    <form action="/hr/dtr" method="post" class="mt-6 ml-auto mr-4 flex">
       <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
       <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600"><i class="ri-search-line"></i></button>
     </form>

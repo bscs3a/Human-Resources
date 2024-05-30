@@ -55,7 +55,13 @@
               <span class="text-sm leading-5 text-gray-900"><?php echo date('h:i a', strtotime($dtr['clock_in'])); ?></span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900"><?php echo date('h:i a', strtotime($dtr['clock_out'])); ?></span>
+            <span class="text-sm leading-5 text-gray-900">
+                <?php 
+                if (!is_null($dtr['clock_out'])) {
+                    echo date('h:i a', strtotime($dtr['clock_out'])); 
+                }
+                ?>
+            </span>
             </td>
           </tr>
           <?php endforeach; ?> 
