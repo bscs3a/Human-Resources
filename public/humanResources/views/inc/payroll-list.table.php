@@ -70,9 +70,12 @@
     <td class="px-6 py-4 hidden" id="paid_type">
       <?php echo $pay['paid_type']; ?>
     </td>
+    <td class="px-6 py-4 hidden" id="withholding_tax">
+      <?php echo $pay['withholding_tax']; ?>
+    </td>
     <td class="px-6 py-4">
   <?php if ($pay['status'] == 'Pending') { ?>
-    <button id="pendingButton" data-id="<?php echo $pay['id']; ?>" class="pendingButton bg-yellow-200 text-yellow-800 rounded-full px-2 py-1 text-xs" onclick="showPayModal('<?php echo $pay['monthly_salary']; ?>', '<?php echo $pay['paid_type']; ?>', this)">Pending</button>
+    <button id="pendingButton" data-id="<?php echo $pay['id']; ?>" class="pendingButton bg-yellow-200 text-yellow-800 rounded-full px-2 py-1 text-xs" onclick="showPayModal('<?php echo $pay['monthly_salary']; ?>', '<?php echo $pay['withholding_tax']; ?>', '<?php echo $pay['paid_type']; ?>', this)">Pending</button>
   <?php } else { ?>
     <span class="bg-green-200 text-green-800 rounded-full px-2 py-1 text-xs">Paid</span>
   <?php }; ?>

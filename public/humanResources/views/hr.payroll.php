@@ -3,10 +3,11 @@ $db = Database::getInstance();
 $conn = $db->connect();
 
 $search = $_POST['search'] ?? '';
-$query = "SELECT payroll.*, salary_info.total_deductions, salary_info.monthly_salary, salary_info.total_salary, employees.first_name, employees.last_name, employees.middle_name, employees.position FROM payroll";
+$query = "SELECT payroll.*, salary_info.total_deductions, salary_info.monthly_salary, salary_info.total_salary, tax_info.withholding_tax, employees.first_name, employees.last_name, employees.middle_name, employees.position FROM payroll";
 $query .= " 
 LEFT JOIN employees ON payroll.employees_id = employees.id
-LEFT JOIN salary_info ON payroll.salary_id = salary_info.id AND salary_info.employees_id = employees.id";
+LEFT JOIN salary_info ON payroll.salary_id = salary_info.id AND salary_info.employees_id = employees.id
+LEFT JOIN tax_info ON tax_info.salary_id = salary_info.id";
 
 $params = [];
 
@@ -92,6 +93,7 @@ $stmt = null;
         <h2 class="mb-4">Give salary?</h2>
         <input type="hidden" name="id" id="idToPay">
         <input type="hidden" name="monthly_salary" id="monthlySalaryInput">
+        <input type="hidden" name="withholding_tax" id="withholdingTaxInput">
         <input type="hidden" name="paid_type" id="paidTypeInput">
         <input type="submit" value="Yes" id="confirmPay" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
         <input type="button" value="No" id="cancelPay" class="px-4 py-2 bg-gray-300 text-black rounded">
@@ -139,13 +141,14 @@ $stmt = null;
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
 
 <script>
-  function showPayModal(monthlySalary, paidType, element) {
+  function showPayModal(monthlySalary, withholdingTax, paidType, element) {
     var id = element.getAttribute('data-id');
     document.getElementById('idToPay').value = id;
     
-    let values = [monthlySalary, paidType];
-    let ids = ['monthly_salary', 'paid_type'];
+    let values = [monthlySalary, withholdingTax, paidType];
+    let ids = ['monthly_salary', 'withholding_tax', 'paid_type'];
     document.getElementById('monthlySalaryInput').value = monthlySalary;
+    document.getElementById('withholdingTaxInput').value = withholdingTax;
     document.getElementById('paidTypeInput').value = paidType;
 
     document.getElementById('payEmployeeModal').classList.remove('hidden');

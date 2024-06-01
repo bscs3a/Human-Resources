@@ -983,11 +983,15 @@ Router::post('/pay-salary', function () {
     $conn = $db->connect();
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     $idToPay = $_POST['id'];
+    $paymentMethod = $_POST['paid_type'];
+    $monthlySalary = $_POST['monthly_salary'];
+    $withHoldingTax = $_POST['withholding_tax'];
     $query = "UPDATE payroll SET status = 'Paid' WHERE id = :id";
     $stmt = $conn->prepare($query);
     $stmt->execute([
         ':id' => $idToPay,
     ]);
+    paySalaryPayable($monthlySalary, $withHoldingTax, $paymentMethod);
     header("Location: $rootFolder/hr/payroll");
 });
 // SAVE/CREATE event - schedule/calendar
