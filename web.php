@@ -12,11 +12,35 @@ $default = [
     '/404' => "./src/error.php",
 ];
 
-$routes = array_merge($sls, $fin, $inv, $dlv, $hr, $po, $default);
+$role = isset($_SESSION['user']) ? $_SESSION['user']['role'] : 'Default';
+
+
+$keywords = [
+    'Product Order' => $po,
+    'Human Resources' => $hr,
+    'Point of Sales' => $sls,
+    'Inventory' => $inv,
+    'Finance' => $fin,
+    'Delivery' => $dlv,
+    'Default' => $default
+];
+
+// assign only array based on array, asd
+$routes = $keywords[$role];
+
+// if (isset($keywords[$role])) {
+//     $routes = $keywords[$role];
+// } else {
+//     $routes = $keywords['Default'];
+// }
 
 Router::setRoutes($routes);
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+$basePath = '/Master'; // change me according to your root folder name
+$path = str_replace($basePath, '', $path);
+
 
 foreach ($routes as $route => $action) {
     if (strpos($route, '{') !== false) {

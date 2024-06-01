@@ -62,14 +62,9 @@
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">View Details</a>
    </ul>
-   <ul class="ml-auto flex items-center">
-  <li class="mr-1">
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium">Sample User</a>
-  </li>
-  <li class="mr-1">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300"><i class="ri-arrow-down-s-line"></i></button> 
-  </li>
-   </ul>
+   <?php 
+    require_once 'inc/logout.php';
+  ?>
   </div>
   <!-- End Top Bar -->
 
@@ -179,10 +174,10 @@
 
   <!-- BUTTONS -->
   <span class="mt-4 flex">
-    <form action="/master/approve/leave-requests" method="POST">
+    <form action="/approve/leave-requests" method="POST">
     <button route="/hr/leave-requests/reviewed" type="submit" class="focus:outline-none text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Approve</button>
     </form>
-    <form action="/master/deny/leave-requests" method="POST">
+    <form action="/deny/leave-requests" method="POST">
     <button route="/hr/leave-requests/reviewed" type="submit" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Deny</button>
     </form>
   </span>

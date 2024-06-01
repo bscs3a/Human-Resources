@@ -1,0 +1,57 @@
+DROP TABLE IncomeStatement;
+
+    CREATE TABLE IncomeStatement (
+        ID INT PRIMARY KEY AUTO_INCREMENT,
+        Revenue DECIMAL(10, 2),
+        CostOfGoodsSold DECIMAL(10, 2),
+        GrossProfit DECIMAL(10, 2) GENERATED ALWAYS AS (Revenue - CostOfGoodsSold) VIRTUAL,
+        OperatingExpenses DECIMAL(10, 2),
+        OperatingIncome DECIMAL(10, 2) GENERATED ALWAYS AS (GrossProfit - OperatingExpenses) VIRTUAL,
+        InterestExpense DECIMAL(10, 2),
+        EarningsBeforeTax DECIMAL(10, 2) GENERATED ALWAYS AS (OperatingIncome - InterestExpense) VIRTUAL,
+        TaxExpense DECIMAL(10, 2),
+        NetIncome DECIMAL(10, 2) GENERATED ALWAYS AS (EarningsBeforeTax - TaxExpense) VIRTUAL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    -- Insert data into the IncomeStatement table for each month over the span of 2 years
+    INSERT INTO IncomeStatement (Revenue, CostOfGoodsSold, OperatingExpenses, InterestExpense, TaxExpense, created_at)
+    VALUES 
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 200.00), ABS(RAND() * 5000.00), ABS(RAND() * 1000.00), '2023-01-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 2000.00), ABS(RAND() * 500.00), ABS(RAND() * 1000.00), '2023-02-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 2000.00), ABS(RAND() * 500.00), ABS(RAND() * 1000.00), '2023-03-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 200.00), ABS(RAND() * 500.00), ABS(RAND() * 1000.00), '2023-04-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 2000.00), ABS(RAND() * 500.00), ABS(RAND() * 10000.00), '2023-05-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 2000.00), ABS(RAND() * 500.00), ABS(RAND() * 1000.00), '2023-06-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 2000.00), ABS(RAND() * 50.00), ABS(RAND() * 1000.00), '2023-07-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 2000.00), ABS(RAND() * 500.00), ABS(RAND() * 1000.00), '2023-08-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 2000.00), ABS(RAND() * 500.00), ABS(RAND() * 10000.00), '2023-09-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 50000.00), ABS(RAND() * 2000.00), ABS(RAND() * 500.00), ABS(RAND() * 1000.00), '2023-10-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 2000.00), ABS(RAND() * 500.00), ABS(RAND() * 1000.00), '2023-11-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 20000.00), ABS(RAND() * 500.00), ABS(RAND() * 1000.00), '2023-12-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 2000.00), ABS(RAND() * 5000.00), ABS(RAND() * 10000.00), '2024-01-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 200.00), ABS(RAND() * 500.00), ABS(RAND() * 1000.00), '2024-02-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 20000.00), ABS(RAND() * 500.00), ABS(RAND() * 1000.00), '2024-03-01'),
+    (ABS(RAND() * 100000.00), ABS(RAND() * 5000.00), ABS(RAND() * 2000.00), ABS(RAND() * 500.00), ABS(RAND() * 10000.00), '2024-04-01');
+
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 200.00, RAND() * 5000.00, RAND() * 1000.00, '2023-01-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 2000.00, RAND() * 500.00, RAND() * 1000.00, '2023-02-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 2000.00, RAND() * 500.00, RAND() * 1000.00, '2023-03-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 200.00, RAND() * 500.00, RAND() * 1000.00, '2023-04-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 2000.00, RAND() * 500.00, RAND() * 10000.00, '2023-05-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 2000.00, RAND() * 500.00, RAND() * 1000.00, '2023-06-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 2000.00, RAND() * 50.00, RAND() * 1000.00, '2023-07-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 2000.00, RAND() * 500.00, RAND() * 1000.00, '2023-08-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 2000.00, RAND() * 500.00, RAND() * 10000.00, '2023-09-01'),
+    -- (RAND() * 100000.00, RAND() * 50000.00, RAND() * 2000.00, RAND() * 500.00, RAND() * 1000.00, '2023-10-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 2000.00, RAND() * 500.00, RAND() * 1000.00, '2023-11-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 20000.00, RAND() * 500.00, RAND() * 1000.00, '2023-12-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 2000.00, RAND() * 5000.00, RAND() * 10000.00, '2024-01-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 200.00, RAND() * 500.00, RAND() * 1000.00, '2024-02-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 20000.00, RAND() * 500.00, RAND() * 1000.00, '2024-03-01'),
+    -- (RAND() * 100000.00, RAND() * 5000.00, RAND() * 2000.00, RAND() * 500.00, RAND() * 10000.00, '2024-04-01');
+
+
+    SELECT * FROM IncomeStatement WHERE created_at BETWEEN '2024-01-01' AND '2024-12-31' ORDER BY created_at;
+
+    SELECT SUM(NetIncome) FROM incomestatement WHERE created_at BETWEEN '2023-01-01' AND '2023-12-31' ORDER BY created_at; 
+    SELECT SUM(NetIncome) AS NetSales FROM incomestatement WHERE created_at BETWEEN '2023-01-01' AND '2023-12-31' ORDER BY created_at; 

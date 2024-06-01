@@ -4,17 +4,36 @@
 
   $search = $_POST['search'] ?? '';
   $query = "SELECT * FROM employees WHERE department = 'Product Order'";
+  $countQuery = "SELECT COUNT(*) FROM employees WHERE department = 'Product Order'";
   $params = [];
 
   if (!empty($search)) {
       $query .= " AND (first_name = :search OR last_name = :search OR position = :search OR id = :search OR department = :search);";
+      $countQuery .= " AND (first_name = :search OR last_name = :search OR position = :search OR department = :search OR id = :search)";
       $params[':search'] = $search;
   }
 
+  $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
+  $displayPerPage = 5;
+  $offset = ($page - 1) * $displayPerPage;
+  
+  $query .= " LIMIT $displayPerPage OFFSET $offset";
+
   $stmt = $conn->prepare($query);
-  $stmt->execute($params);
+  if (!empty($search)) {
+      $stmt->bindValue(':search', $search, PDO::PARAM_STR);
+  }
+  $stmt->execute();
   $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+  $stmt = $conn->prepare($countQuery);
+  if (!empty($search)) {
+      $stmt->bindValue(':search', $search, PDO::PARAM_STR);
+  }
+  $stmt->execute();
+  $totalRecords = $stmt->fetchColumn();
+  
+  $totalPages = ceil( $totalRecords / $displayPerPage) ;
   $pdo = null;
   $stmt = null;
 ?>
@@ -52,14 +71,9 @@
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Product Order</a>
    </ul>
-   <ul class="ml-auto flex items-center">
-  <li class="mr-1">
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium">Sample User</a>
-  </li>
-  <li class="mr-1">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300"><i class="ri-arrow-down-s-line"></i></button> 
-  </li>
-   </ul>
+   <?php 
+    require_once 'inc/logout.php';
+  ?>
   </div>
   <!-- End Top Bar -->
 
@@ -68,28 +82,28 @@
     <div class="hidden sm:block">
         <div class="border-b border-gray-200">
             <nav class="-mb-px flex flex-wrap gap-6" aria-label="Tabs">
-                <a route="/hr/employees/departments/product-order"
+                <a route="/hr/departments/product-order/page=1"
                     class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
                     aria-current="page">
                     Product Order
                 </a>
-                <a route="/hr/employees/departments/inventory"
+                <a route="/hr/departments/inventory/page=1"
                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                     Inventory
                 </a>
-                <a route="/hr/employees/departments/sales"
+                <a route="/hr/departments/sales/page=1"
                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                     Point of Sales
                 </a>
-                <a route="/hr/employees/departments/finance"
+                <a route="/hr/departments/finance/page=1"
                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                     Finance
                 </a>
-                <a route="/hr/employees/departments/delivery"
+                <a route="/hr/departments/delivery/page=1"
                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                     Delivery
                 </a>
-                <a route="/hr/employees/departments/human-resources"
+                <a route="/hr/departments/human-resources/page=1"
                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                     Human Resources
                 </a>
@@ -102,7 +116,7 @@
 <!-- employees -->
 <div class="flex flex-wrap">
     <h3 class="ml-6 mt-8 text-xl font-bold">Employees</h3>
-    <form action="/hr/employees/departments/product-order" method="POST" class="mt-6 ml-auto mr-4 flex">
+    <form action="/hr/departments/product-order/page=1" method="POST" class="mt-6 ml-auto mr-4 flex">
       <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
       <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600"><i class="ri-search-line"></i></button>
     </form>
@@ -115,81 +129,58 @@
     } 
   ?>
 <!-- end employees -->
+<!-- PAGINATION -->
+<?php 
+// PUT YOUR LINK HERE
+$link = "/hr/departments/delivery/page=";
+?>
+<ol class="flex justify-end mr-8 gap-1 text-xs font-medium mt-5">
+    <!-- Next & Previous -->
+    <?php if ($page > 1): ?>
+        <li>
+            <!-- CHANGE THE ROUTE -->
+            <a route="<?php echo $link . $page - 1 ?>"
+                class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
+                <span class="sr-only">Prev Page</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clip-rule="evenodd" />
+                </svg>
+            </a>
+        </li>
+    <?php endif; ?>
+    <!-- links for pages -->
+    <?php 
+        $start = max(1, $page - 2);
+        $end = min($totalPages, $page + 2);
 
-  <!-- TEST Employees -->
-  <!-- <div class="ml-6 flex flex-col mt-8 mr-6">
-  <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
-    <table class="min-w-full">
-      <thead>
-        <tr>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Name</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            ID</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Department</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Action</th>
-        </tr>
-      </thead>
-        <tbody class="bg-white">
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1758239990809595904/GmISpEfo_400x400.jpg"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Alban Knox
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">albanknox@example.com</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">10526</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Product Order</div>
-              <div class="text-sm leading-5 text-gray-500">Procurement Specialist</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1609173500933337090/OFGa9ue-_400x400.jpg"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Sonny Brisko
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">sonnybrisko@example.com</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">10406</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Product Order</div>
-              <div class="text-sm leading-5 text-gray-500">Quality Control Inspector</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div> -->
-  <!-- End TEST Employees -->
+        for ($i = $start; $i <= $end; $i++): 
+    ?>
+        <li>
+            <a route="<?php echo $link . $i ?>"
+                class="block size-8 rounded border <?= $i == $page ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-100 bg-white text-gray-900' ?> text-center leading-8">
+                <?= $i ?>
+            </a>
+        </li>
+    <?php endfor; ?>
+
+    <?php if ($page < $totalPages): ?>
+        <li>
+            <a route="<?php echo $link . $page + 1 ?>"
+                class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
+                <span class="sr-only">Next Page</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clip-rule="evenodd" />
+                </svg>
+            </a>
+        </li>
+    <?php endif; ?>
+</ol>
+<!-- END PAGINATION -->
+
 </main>
 <!-- End Main Bar -->
     <script  src="./../../../src/route.js"></script>

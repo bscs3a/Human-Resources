@@ -39,12 +39,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
-            </ul>
+            <?php require_once "components/logout/logout.php"?>
 
             <!-- End: Profile -->
 
@@ -71,13 +66,14 @@
                                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                                     Accounts Payable
                                 </a>
-
-
+                                <a route='/fin/ledger/accounts/taxPayable'
+                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                    Tax Payable
+                                </a>
                             </nav>
                         </div>
                     </div>
                 </div>
-                <!-- Button -->
                 <div class="flex justify-between">
                     <div class="items-start mb-2">
                         <div class="relative">
@@ -110,147 +106,295 @@
                         </div>
                     </div>
 
-                    <div class="inline-flex items-center justify-center gap-3">
-                        <a href="#"
-                            class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
-                            <span class="sr-only">Next Page</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-
-                        <p class="text-xs text-gray-900">
-                            3
-                            <span class="mx-0.25">/</span>
-                            12
-                        </p>
-
-                        <a href="#"
-                            class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
-                            <span class="sr-only">Next Page</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
+                    <div class="items-start mb-2">
+                        <button id="openModal"
+                            class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm py-1 px-3 rounded-lg border border-gray-500">
+                            <i class="ri-add-box-line"></i>
+                            Add Capital Account
+                        </button>
                     </div>
                 </div>
+
+                <!-- Modal -->
+                <div id="myModal"
+                    class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                    <div class="bg-white rounded shadow-lg w-1/3">
+                        <div class="border-b pl-3 pr-3 pt-3 flex">
+                            <h5 class="font-bold uppercase text-gray-600">New Account</h5>
+                            <!-- <button id="closeModal" class="ml-auto text-gray-600 hover:text-gray-800 cursor-pointer">
+                                <i class="ri-close-line"></i>
+                            </button> -->
+                        </div>
+                        <!-- form -->
+                        <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
+                        <div class="p-5">
+                            <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
+                            <form action="/addInvestor" method="POST">
+                                <div class="mb-4 relative">
+                                    <label for="acctype" class="block text-xs font-medium text-gray-900">
+                                        Account Type
+                                    </label>
+                                    <input type="text" id="description" name="acctype" required value="Capital Accounts"
+                                        readonly
+                                        class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
+                                </div>
+
+
+                                <div class="mb-4 relative">
+                                    <label for="name" class="block text-xs font-medium text-gray-900">
+                                        Name
+                                    </label>
+                                    <input type="text" id="name" name="name" required
+                                        class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
+
+                                </div>
+                                <div class="mb-4 relative">
+                                    <label for="contact" class="block text-xs font-medium text-gray-900">
+                                        Contact Info
+                                    </label>
+                                    <input type="text" id="contact" name="contact" required
+                                        class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
+
+                                </div>
+                                <div class="mb-4 relative">
+                                    <label for="contactName" class="block text-xs font-medium text-gray-900">
+                                        Contact Name
+                                    </label>
+                                    <input type="text" id="contactName" name="contactName" required
+                                        class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
+
+                                </div>
+                                <div class="flex justify-end items-start mb-2">
+                                    <button id="cancelModal" type="button"
+                                        class="border border-gray-700 bg-gray-200 hover:bg-gray-100 text-gray-800 text-sm font-bold py-1 px-5 rounded-md ml-4 ">Cancel</button>
+                                    <button type="submit"
+                                        class="border border-gray-700 bg-amber-400 hover:bg-amber-300 text-gray-800 text-sm font-bold py-1 px-7 rounded-md ml-4 ">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JavaScript -->
+
+
 
                 <!-- Equity -->
                 <div class="flex flex-wrap gap-5">
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-10">
-                            <h1 class="text-6xl p-5">A</h1>
-                            Equity
+                    <?php
+                    require_once "public/finance/functions/specialTransactions/payable.php";
+                    $result = getAllInvestors();
+                    ?>
+
+                    <?php foreach ($result as $results): ?>
+                        <?php $id = $results['ledgerno']; ?>
+                        <div
+                            class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center accountsDivs">
+                            <div class="text-center p-5 ">
+                                <br><br><br>
+                                <h1 class="text-5xl"><?= $results['name'] ?></h1>
+                                <p>Contact Name: <?= $results['contact_name']?>  </p>
+                                <p>Contact info: <?= $results['contact']?>  </p>
+                                <p>Total: <?= number_format($results['total_amount'],2) ?></p>
+                            </div>
+                            <div class="p-10">
+                            <button id="openLoanModal<?= $id ?>"
+                                    class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
+                                    Invest
+                                </button>   
+                                <button id="openPayModal<?= $id ?>"
+                                    class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
+                                    Withdraw
+                                </button>
+                                
+                            </div>
                         </div>
-                        <div class="p-5">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Withdraw
-                            </button>
+                        <div id="payModal<?= $id ?>"
+                            class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                            <div class="bg-white rounded shadow-lg w-1/3">
+                                <div class="border-b pl-3 pr-3 pt-3 flex">
+                                    <h5 class="font-bold uppercase text-gray-600"><?= $results['name'] ?></h5>
+                                    <!-- <button id="closeModal" class="ml-auto text-gray-600 hover:text-gray-800 cursor-pointer">
+                                <i class="ri-close-line"></i>
+                            </button> -->
+                                </div>
+                                <!-- form -->
+                                <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
+                                <div class="p-5">
+                                    <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
+                                    <form action="/withdrawAsset" method="POST">
+                                        <div class="mb-4 relative">
+
+                                            Total: <?= $results['total_amount'] ?>
+
+                                        </div>
+
+                                        <input type="hidden" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" />
+                                        <div class="mb-4 relative">
+                                            <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
+                                            </label>
+                                            <input type="text" id="amount" name="amount" placeholder="0.00" required
+                                                class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md sm:text-sm"
+                                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+                                            <span
+                                                class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
+                                        </div>
+
+                                        <?php
+                                        $db = Database::getInstance();
+                                        $conn = $db->connect();
+
+                                        $query = "SELECT name FROM ledger WHERE AccountType = 2";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+
+                                        ?>
+                                        <div class="mb-4 relative">
+                                            <label for="ledgerName" class="block text-xs font-medium text-gray-900">
+                                                Pay Using
+                                            </label>
+                                            <select name="ledgerName" id="ledgerName"
+                                                class="mt-1 py-1 px-2 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
+                                                <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+                                                    <option value="<?= $row['name'] ?>"><?= $row['name'] ?></option>
+                                                <?php endwhile; ?>
+                                            </select>
+                                        </div>
+
+
+
+                                        <div class="flex justify-end items-start mb-2">
+                                            <button id="cancelPayModal<?= $id ?>" type="button"
+                                                class="border border-gray-700 bg-gray-200 hover:bg-gray-100 text-gray-800 text-sm font-bold py-1 px-5 rounded-md ml-4 ">Cancel</button>
+                                            <button type="submit"
+                                                class="border border-gray-700 bg-amber-400 hover:bg-amber-300 text-gray-800 text-sm font-bold py-1 px-7 rounded-md ml-4 ">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-10">
-                            <h1 class="text-6xl p-5">B</h1>
-                            Equity
+
+                        <div id="LoanModal<?= $id ?>"
+                            class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                            <div class="bg-white rounded shadow-lg w-1/3">
+                                <div class="border-b pl-3 pr-3 pt-3 flex">
+                                    <h5 class="font-bold uppercase text-gray-600"><?= $results['name'] ?></h5>
+                                    <!-- <button id="closeModal" class="ml-auto text-gray-600 hover:text-gray-800 cursor-pointer">
+                                    <i class="ri-close-line"></i>
+                                </button> -->
+                                </div>
+                                <!-- form -->
+                                <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
+                                <div class="p-5">
+                                    <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
+                                    <form action="/investAsset" method="POST">
+                                        <input type="text" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" readonly/>
+                                        <div class="mb-4 relative">
+                                            <label for="description" class="block text-xs font-medium text-gray-900">
+                                                Description
+                                            </label>
+                                            <input type="text" id="description" name="description" required
+                                                class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
+
+                                        </div>
+                                        <div class="mb-4 relative">
+                                            <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
+                                            </label>
+                                            <input type="text" id="amount" name="amount" placeholder="0.00" required
+                                                class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md sm:text-sm"
+                                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+                                            <span
+                                                class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
+                                        </div>
+
+
+                                        <?php
+                                        $db = Database::getInstance();
+                                        $conn = $db->connect();
+
+                                        $query = "SELECT name FROM ledger";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+
+                                        ?>
+                                        <div class="mb-4 relative">
+                                            <label for="ledgerName" class="block text-xs font-medium text-gray-900">
+                                                Category
+                                            </label>
+                                            <select name="ledgerName" id="ledgerName"
+                                                class="mt-1 py-1 px-2 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
+                                                <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+                                                    <option value="<?= $row['name'] ?>"><?= $row['name'] ?></option>
+                                                <?php endwhile; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="flex justify-end items-start mb-2">
+                                            <button id="cancelLoanModal<?= $id ?>" type="button"
+                                                class="border border-gray-700 bg-gray-200 hover:bg-gray-100 text-gray-800 text-sm font-bold py-1 px-5 rounded-md ml-4 ">Cancel</button>
+                                            <button type="submit"
+                                                class="border border-gray-700 bg-amber-400 hover:bg-amber-300 text-gray-800 text-sm font-bold py-1 px-7 rounded-md ml-4 ">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div class="p-5">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Withdraw
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-10">
-                            <h1 class="text-6xl p-5">C</h1>
-                            Equity
-                        </div>
-                        <div class="p-5">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Withdraw
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-10">
-                            <h1 class="text-6xl p-5">D</h1>
-                            Equity
-                        </div>
-                        <div class="p-5">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Withdraw
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-10">
-                            <h1 class="text-6xl p-5">E</h1>
-                            Equity
-                        </div>
-                        <div class="p-5">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Withdraw
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-10">
-                            <h1 class="text-6xl p-5">F</h1>
-                            Equity
-                        </div>
-                        <div class="p-5">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Withdraw
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-10">
-                            <h1 class="text-6xl p-5">G</h1>
-                            Equity
-                        </div>
-                        <div class="p-5">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Withdraw
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-10">
-                            <h1 class="text-6xl p-5">H</h1>
-                            Equity
-                        </div>
-                        <div class="p-5">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Withdraw
-                            </button>
-                        </div>
-                    </div>
+
+                    <?php endforeach; ?>
                 </div>
+                
             </div>
+        </div>
     </main>
-    <script  src="./../../../src/route.js"></script>
+    <!-- script for modal -->
+    <script>
+        <?php foreach ($result as $results): ?>
+            <?php $id = $results['ledgerno']; ?>
+            function closeModalAndClearInputs<?= $id ?>() {
+                document.getElementById('payModal<?= $id ?>').classList.add('hidden');
+                document.getElementById('LoanModal<?= $id ?>').classList.add('hidden');
+                ['name', 'contact', 'contactName'].forEach(id => document.getElementById(id + '<?= $id ?>').value = '');
+            }
+
+            document.getElementById('openPayModal<?= $id ?>').addEventListener('click', function () {
+                document.getElementById('payModal<?= $id ?>').classList.remove('hidden');
+            });
+
+            document.getElementById('openLoanModal<?= $id ?>').addEventListener('click', function () {
+                document.getElementById('LoanModal<?= $id ?>').classList.remove('hidden');
+            });
+
+            document.getElementById('cancelPayModal<?= $id ?>').addEventListener('click', function (event) {
+                event.stopPropagation();
+                closeModalAndClearInputs<?= $id ?>();
+            });
+
+            document.getElementById('cancelLoanModal<?= $id ?>').addEventListener('click', function (event) {
+                event.stopPropagation();
+                closeModalAndClearInputs<?= $id ?>();
+            });
+        <?php endforeach; ?>
+
+        function closeModalAndClearInputs() {
+            document.getElementById('myModal').classList.add('hidden');
+            ['name', 'contact', 'contactName'].forEach(id => document.getElementById(id).value = '');
+        }
+
+        document.getElementById('openModal').addEventListener('click', function () {
+            document.getElementById('myModal').classList.remove('hidden');
+        });
+
+        ['cancelModal'].forEach(id => {
+            document.getElementById(id).addEventListener('click', function (event) {
+                event.stopPropagation();
+                closeModalAndClearInputs();
+                document.getElementById('myModal').classList.add('hidden');
+            });
+        });
+    </script>
+    <script src = "./../../../public\finance\javascript\accountFilter.js"></script>
+    <script src="./../../../src/form.js"></script>
+    <script src="./../../../src/route.js"></script>
     <!-- Start: Sidebar -->
     <!-- End: Dashboard -->
 </body>

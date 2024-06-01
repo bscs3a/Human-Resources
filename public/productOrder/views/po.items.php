@@ -34,19 +34,21 @@
         <!-- dropdown -->
         <div x-data="{ dropdownOpen: false }" class="relative my-32">
           <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-50 rounded-md bg-white p-2 focus:outline-none">
+            class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
+            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
 
           <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
-          <div x-show="dropdownOpen"
-            class="absolute right-0 mt-2 py-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-20">
-            <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
-          </div>
+          <form id="logout-form" action="/logout/user" method="POST">
+            <div x-show="dropdownOpen"
+              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
+              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -60,7 +62,7 @@
       <!-- Main Content -->
       <!-- new layout of table -->
       <div class="px-10 py-4">
-        <div class="justify-between items-start">
+        <div class="justify-between items-start mt-4">
           <!-- Button -->
           <div class="flex justify-between">
             <div class="items-start">
@@ -92,6 +94,7 @@
               </button>
             </div>
           </div>
+
         </div>
 
         <!-- Table -->
@@ -111,51 +114,51 @@
             </thead>
 
             <tbody>
-          
-            <?php
-            try {
-              require_once 'dbconn.php';
-              // Query to retrieve all products
-              $query = "SELECT * FROM products";
-              $statement = $conn->prepare($query);
-              $statement->execute();
-              // Check if there are any rows or results
-              if ($statement->rowCount() > 0) {
-                while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                  // Debugging statement to print image path
-                  $imagePath = '../' . $row['ProductImage'];
-                  echo'<tr>';
-                  echo '<tr class="hover:bg-gray-50 data-row" data-id="' . $row['ProductID'] . '" data-name="' . $row['ProductName'] . '" data-supplier="' . $row['Supplier'] . '" data-category="' . $row['Category'] . '" data-quality="5 stars..." data-price="' . $row['Price'] . '" data-description="' . $row['Description'] . '">';
-                  echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
-                  echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">'; 
-                  echo '<div>' . $row['ProductName'] . '</div>';
-                  echo '</td>';
-                  echo '<td class="px-4 py-4">' . $row['ProductID'] . '</td>';
-                  echo '<td class="px-4 py-4">' . $row['Supplier'] . '</td>';
-                  echo '<td class="px-4 py-4">' . $row['Category'] . '</td>';
-                  echo '<td class="px-4 py-4">' . $row['ProductWeight'] . ' kg</td>';
-                  echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
-                  echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
-                  echo '<td class="px-4 py-4">Edit</td>';
-                  echo '</tr>';
 
+              <?php
+              try {
+                require_once 'dbconn.php';
+                // Query to retrieve all products
+                $query = "SELECT * FROM products";
+                $statement = $conn->prepare($query);
+                $statement->execute();
+                // Check if there are any rows or results
+                if ($statement->rowCount() > 0) {
+                  while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    // Debugging statement to print image path
+                    $imagePath = '../' . $row['ProductImage'];
+                    echo '<tr>';
+                    echo '<tr class="hover:bg-gray-50 data-row" data-id="' . $row['ProductID'] . '" data-name="' . $row['ProductName'] . '" data-supplier="' . $row['Supplier'] . '" data-category="' . $row['Category'] . '" data-quality="5 stars..." data-price="' . $row['Price'] . '" data-description="' . $row['Description'] . '">';
+                    echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
+                    echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
+                    echo '<div>' . $row['ProductName'] . '</div>';
+                    echo '</td>';
+                    echo '<td class="px-4 py-4">' . $row['ProductID'] . '</td>';
+                    echo '<td class="px-4 py-4">' . $row['Supplier'] . '</td>';
+                    echo '<td class="px-4 py-4">' . $row['Category'] . '</td>';
+                    echo '<td class="px-4 py-4">' . $row['ProductWeight'] . ' kg</td>';
+                    echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
+                    echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
+                    echo '<td class="px-4 py-4">View(currently not functioning)</td>';
+                    echo '</tr>';
+
+                  }
+                } else {
+                  echo "No products found.";
                 }
-              } else {
-                echo "No products found.";
+              } catch (PDOException $e) {
+                echo "Connection failed: " . $e->getMessage();
               }
-            } catch (PDOException $e) {
-              echo "Connection failed: " . $e->getMessage();
-            }
-            // Close the database connection
-            $conn = null;
-            ?>
-            <!-- //end -->
-          </tbody>
-        </table>
+              // Close the database connection
+              $conn = null;
+              ?>
+              <!-- //end -->
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
 
-  </div>
+    </div>
   </div>
 
   <script>
@@ -202,8 +205,9 @@
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
+  <script src="./../src/route.js"></script>
+  <script src="./../src/form.js"></script>
 </body>
-<script src="./../src/route.js"></script>
-<script src="./../src/form.js"></script>
+
 
 </html>

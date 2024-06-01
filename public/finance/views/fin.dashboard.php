@@ -1,3 +1,10 @@
+<?php 
+define('YEAR', date('Y'));
+define('MONTH', date('m'));
+
+require_once "public/finance/functions/reportGeneration/TrialBalance.php";
+require_once "components/dashboard/dashboard.performFunctions.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,11 +14,36 @@
     <title>Dashboard</title>
     <link href="./../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
+    <!-- for calendar, cant render if not here -->
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
     <!-- Start: Sidebar -->
     <?php include "components/sidebar.php" ?>
+    <?php
+    // require_once './../functions/auditLog.php';
+    // echo __DIR__ . './../functions/auditLog.php';
+    // addAccountantAuditLog('Log in'); 
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        if (isset($_SESSION['employee_name'])) {
+
+            $db = Database::getInstance();
+            $pdo = $db->connect();
+
+            $logAction = "Log in";
+
+            $sql = "INSERT INTO tbl_fin_audit (employee_name, log_action) VALUES (:employee_name, :log_action)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(":employee_name", $_SESSION['employee_name']);
+            $stmt->bindParam(":log_action", $logAction);
+            $stmt->execute();
+        }
+    }
+    ?>
     <!-- End: Sidebar -->
     <!-- Start: Dashboard -->
     <main class="w-full md:w-[calc(100%-256px)] md:ml-64 min-h-screen transition-all main font-sans">
@@ -39,43 +71,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-
-                <div class="relative inline-block text-left">
-                    <div>
-                        <a class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm hover:bg-gray-50 focus:outline-none hover:cursor-pointer"
-                            id="options-menu" aria-haspopup="true" aria-expanded="true">
-                            <div class="text-black font-medium mr-4 ">
-                                <?= $_SESSION['fullname']; ?>
-                            </div>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </a>
-                    </div>
-
-                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
-                        id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        <div class="py-1" role="none">
-                            <a route="/fin/logout"
-                                class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                                role="menuitem">
-                                <i class="ri-logout-box-line"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    document.getElementById('options-menu').addEventListener('click', function () {
-                        var dropdownMenu = document.getElementById('dropdown-menu');
-                        if (dropdownMenu.classList.contains('hidden')) {
-                            dropdownMenu.classList.remove('hidden');
-                        } else {
-                            dropdownMenu.classList.add('hidden');
-                        }
-                    });
-                </script>
-            </ul>
+            <?php require_once "components/logout/logout.php"?>
 
             <!-- End: Profile -->
 
@@ -89,14 +85,12 @@
             <div class=" mb-6">
                 <!-- Start: Top Left-Side Section -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 ">
-                    <div class="col-span-1 border-solid border-gray-400 shadow-md rounded-xl px-5 py-10 bg-wave bg-cover bg-[center_top_6rem] bg-[length:100%_70%] bg-no-repeat
-                            
-                        ">
+                    <div class="col-span-1 border-solid border-gray-400 shadow-md rounded-xl px-5 py-10 bg-[url('../public/finance/img/wave.png')] bg-[center_top_6rem] bg-[length:100%_70%] bg-no-repeat">
                         <!-- Start: Welcome Message -->
                         <div class="flex justify-between mb-5">
                             <div>
 
-                                <h1 class="font-sans font-bold  text-5xl">Hello, Sample User!</h1>
+                                <h1 class="font-sans font-bold  text-5xl">Hello, <?= $_SESSION['user']['username']; ?>!</h1>
                                 <p class=" w-3/4 text wrap mt-3 font-sans text-md text-gray-400 ">Welcome back! Ready to
                                     gear
                                     up for another productive day?</p>
@@ -121,16 +115,17 @@
                                 <div class="flex justify-between mb-4">
                                     <div>
                                         <div class="flex items-center mb-1">
-                                            <div class="text-4xl font-semibold text-[#F8B721]">
+                                            <p class="text-4xl sm:text-md font-semibold text-[#F8B721]">
                                                 <?php
-                                                $amount = 2000;
-                                                echo number_format($amount, 2);
+                                                $income = getGroupCode('Income');
+                                                $incomeAmount = getTotalOfGroupV2($income);
+                                                echo '₱'.number_format($incomeAmount, 2);
                                                 ?>
-                                            </div>
+                                            </p>
                                         </div>
                                         <div class="text-sm font-medium text-gray-400">Total Sales</div>
                                     </div>
-                                    <div>
+                                    <div class="sm:block hidden">
                                         <img src="../public/finance/img/Profit.png" alt="Profit.png"
                                             class="bg-radial-gradient from-[#FFEB95] to-[#FECE01] py-2 px-2 rounded-full">
                                     </div>
@@ -144,8 +139,9 @@
                                         <div class="flex items-center mb-1">
                                             <div class="text-4xl font-semibold text-[#F8B721]">
                                                 <?php
-                                                $amount = 10000;
-                                                echo '₱' . number_format($amount, 2);
+                                                $expense = getGroupCode('Expenses');
+                                                $expenseAmount = getTotalOfGroupV2($expense);
+                                                echo '₱' . number_format($expenseAmount, 2);
                                                 ?>
                                             </div>
                                         </div>
@@ -153,7 +149,7 @@
                                     </div>
                                     <div>
                                         <img src="../public/finance/img/RequestMoney.png" alt="request-money.png"
-                                            class="bg-radial-gradient from-[#FFEB95] to-[#FECE01] max-w-full h-auto py-2 px-1 rounded-full sm:hidden">
+                                            class="bg-radial-gradient from-[#FFEB95] to-[#FECE01] max-w-full h-auto py-2 px-1 rounded-full">
                                     </div>
                                 </div>
                             </div>
@@ -161,17 +157,9 @@
                         </div>
                         <!-- End: Mini-Dashboard Analytics -->
                     </div>
-
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
-                        <div class="mx-5 my-5 py-3 px-3 text-white">
-                            <h1 class="text-3xl font-bold">Total Balance</h1>
-                            <p class="mt-5 text-3xl font-medium">0</p>
-                            <p class="mt-5 text-md font-bold">Summary</p>
-                        </div>
-                    </div>
-
-
-
+                    <!-- start funds -->
+                    <?php include_once "components/dashboard/dashboard.funds.php"?>
+                    <!-- end funds -->
                 </div>
                 <!-- End: Top Left-Side Section -->
             </div>
@@ -184,11 +172,15 @@
             <!-- Start: Report Section -->
             <?php include "components/dashboard/dashboard.reports.php" ?>
             <!-- End: Report Section -->
+
+            
         </div>
         <!-- End: Inner Dashboard Analytics-->
     </main>
     <!-- End: Dashboard -->
     <script src="./../src/route.js"></script>
+    <script  src="./../src/form.js"></script>
+    
 </body>
 
 </html>

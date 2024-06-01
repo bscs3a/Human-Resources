@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2024 at 07:04 AM
+-- Generation Time: Apr 10, 2024 at 02:10 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49,7 +49,9 @@ INSERT INTO `accounttype` (`AccountType`, `Description`, `grouptype`, `XactTypeC
 (6, 'Contra-Revenue', 'IC', 'DR'),
 (7, 'Direct Expense', 'EP', 'DR'),
 (8, 'Indirect Expense', 'EP', 'DR'),
-(9, 'Purchases', 'IC', 'DR');
+(9, 'Purchases', 'IC', 'DR'),
+(10, 'Tax Payable', 'LE', 'Cr'),
+(11, 'Retained', 'LE', 'Cr');
 
 -- --------------------------------------------------------
 
@@ -116,20 +118,8 @@ INSERT INTO `ledger` (`ledgerno`, `AccountType`, `name`, `contactIfLE`, `contact
 (22, 8, 'Interest Expense', NULL, NULL),
 (23, 8, 'Other Operating Expense', NULL, NULL),
 (24, 9, 'Cost of Goods Sold', NULL, NULL),
-(25, 3, 'Retained Earnings/Loss', NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `ledgerstatement`
---
-
-CREATE TABLE `ledgerstatement` (
-  `StatementID` int(11) NOT NULL,
-  `LedgerNo` int(11) NOT NULL,
-  `date` date NOT NULL,
-  `ClosingBalance` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(25, 11, 'Retained Earnings/Loss', NULL, NULL),
+(26, 10, 'Tax Payable', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -146,6 +136,14 @@ CREATE TABLE `ledgertransaction` (
   `details` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `ledgertransaction`
+--
+
+INSERT INTO `ledgertransaction` (`LedgerXactID`, `LedgerNo`, `DateTime`, `LedgerNo_Dr`, `amount`, `details`) VALUES
+(1, 11, '2024-02-15 08:13:19', 3, 1000, 'ez'),
+(2, 11, '2024-01-17 08:13:19', 3, 2000, 'ez');
+
 -- --------------------------------------------------------
 
 --
@@ -159,7 +157,8 @@ CREATE TABLE `requestexpense` (
   `payfor` int(11) NOT NULL,
   `proofofinvoice` text NOT NULL,
   `status` enum('pending','confirm','deny') NOT NULL,
-  `details` text NOT NULL
+  `details` text NOT NULL,
+  `department` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -207,13 +206,6 @@ ALTER TABLE `ledger`
   ADD KEY `AccountType` (`AccountType`);
 
 --
--- Indexes for table `ledgerstatement`
---
-ALTER TABLE `ledgerstatement`
-  ADD PRIMARY KEY (`StatementID`),
-  ADD KEY `LedgerNo` (`LedgerNo`);
-
---
 -- Indexes for table `ledgertransaction`
 --
 ALTER TABLE `ledgertransaction`
@@ -243,25 +235,19 @@ ALTER TABLE `transactiontype_de`
 -- AUTO_INCREMENT for table `accounttype`
 --
 ALTER TABLE `accounttype`
-  MODIFY `AccountType` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `AccountType` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `ledger`
 --
 ALTER TABLE `ledger`
-  MODIFY `ledgerno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
--- AUTO_INCREMENT for table `ledgerstatement`
---
-ALTER TABLE `ledgerstatement`
-  MODIFY `StatementID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ledgerno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `ledgertransaction`
 --
 ALTER TABLE `ledgertransaction`
-  MODIFY `LedgerXactID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `LedgerXactID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `requestexpense`
@@ -285,12 +271,6 @@ ALTER TABLE `accounttype`
 --
 ALTER TABLE `ledger`
   ADD CONSTRAINT `acctype` FOREIGN KEY (`AccountType`) REFERENCES `accounttype` (`AccountType`);
-
---
--- Constraints for table `ledgerstatement`
---
-ALTER TABLE `ledgerstatement`
-  ADD CONSTRAINT `ledgerCon` FOREIGN KEY (`LedgerNo`) REFERENCES `ledger` (`ledgerno`);
 
 --
 -- Constraints for table `ledgertransaction`

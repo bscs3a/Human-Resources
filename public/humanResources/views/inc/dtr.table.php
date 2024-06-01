@@ -16,7 +16,7 @@
             Out</th>
         </tr>
       </thead>
-      <?php foreach ($attendance as $dtr): ?>
+      <?php foreach ($dailyTimeRecord as $dtr): ?>
         <tbody class="bg-white">
           <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
@@ -24,7 +24,7 @@
                 <div class="flex-shrink-0 w-10 h-10">
                   <!-- THESE IS FROM EMPLOYEES TABLE -->
                   <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1669355498234318849/Kg3mWUFZ_400x400.jpg"
+                    src="<?php echo $dtr['image_url']; ?>"
                     alt="">
                 </div>
                 <div class="ml-4">
@@ -47,14 +47,21 @@
               <div class="text-sm leading-5 text-gray-900"><?php echo $dtr['department']; ?></div>
               <div class="text-sm leading-5 text-gray-500"><?php echo $dtr['position']; ?></div>
             </td>
+            <!-- THESE ARE FROM ATTENDANCE TABLE -->
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900"><?php echo $dtr['attendance_date']; ?></span>
+              <span class="text-sm leading-5 text-gray-900"><?php echo date('F d, Y', strtotime($dtr['attendance_date'])); ?></span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900"><?php echo $dtr['clock_in']; ?></span>
+              <span class="text-sm leading-5 text-gray-900"><?php echo date('h:i a', strtotime($dtr['clock_in'])); ?></span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900"><?php echo $dtr['clock_out']; ?></span>
+            <span class="text-sm leading-5 text-gray-900">
+                <?php 
+                if (!is_null($dtr['clock_out'])) {
+                    echo date('h:i a', strtotime($dtr['clock_out'])); 
+                }
+                ?>
+            </span>
             </td>
           </tr>
           <?php endforeach; ?> 

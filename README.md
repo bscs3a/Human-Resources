@@ -75,6 +75,7 @@ no need to include the root folder name just the route
         $_GET['id'] = $id;
         include $basePath . "test2.php";
 },
+ ----- add more "../" per extra slash on routes, to connect css and route and formjs
 ```
 
 ### Post-Method

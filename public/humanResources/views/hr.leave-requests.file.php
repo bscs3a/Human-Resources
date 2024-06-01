@@ -31,14 +31,9 @@
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">File a Leave</a>
    </ul>
-   <ul class="ml-auto flex items-center">
-  <li class="mr-1">
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium">Sample User</a>
-  </li>
-  <li class="mr-1">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300"><i class="ri-arrow-down-s-line"></i></button> 
-  </li>
-   </ul>
+   <?php 
+    require_once 'inc/logout.php';
+  ?>
   </div>
   <!-- End Top Bar -->
 
@@ -109,10 +104,10 @@
           id="date_submitted"
           name="date_submitted"
           type="date"
-          value="<?php echo date('Y-m-d'); ?>"
+          value="<?php date_default_timezone_set('Asia/Manila'); echo date('Y-m-d'); ?>"
           readonly
         />
-      </div>
+    </div>
   </div>
   <!-- Column 2 -->
       <div class="flex flex-col">

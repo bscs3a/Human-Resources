@@ -1,0 +1,79 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Monsterrat", sans-serif;
+}
+body{
+    padding: 1.5rem;
+}
+table{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.width-auto-wrap{
+    white-space: nowrap;
+    width: 1%;
+}
+
+.header1{
+    font-size: 3rem;
+    font-family: "Russo One", sans-serif;
+}
+
+.header2{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.headerPartner{
+    font-size: 0.75rem;
+    color: #8D8B8B;
+}
+
+section > table tr > td{
+    padding: 1rem;
+}
+
+thead{
+    
+}
+thead > tr {
+    border-radius: 10px; 
+    overflow: hidden;
+    background-color: #FFD168;
+    border-bottom: 2px solid #F8B721;
+    box-shadow: 0 4px 1px #00000040;
+}
+
+thead > tr > th{
+    text-align: left;
+    padding: 1rem;
+    border-radius: 10px; 
+    font-weight: 600;
+}
+
+.classifier{
+    
+}
+
+.content{
+    text-indent: 2rem;
+}
+
+.content-amount{
+    text-align: right;
+}
+
+tfoot{
+    color: #262261;
+    font-weight: bold;
+}

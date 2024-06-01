@@ -15,6 +15,17 @@
           <i class="ri-arrow-right-s-line"></i>
         </span>
       </a>
+
+      <a route='/po/suppliers' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
+        <span class="flex items-center">
+          <i class="ri-list-unordered" style="font-size: 1.2em;"></i>
+          <span class="mx-4 text-sm font-medium">Suppliers</span>
+        </span>
+
+        <span>
+          <i class="ri-arrow-right-s-line"></i>
+        </span>
+      </a>
       
       <a route='/po/orderDetail' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
         <span class="flex items-center">
@@ -38,10 +49,10 @@
         </span>
       </a>
 
-      <a route='/po/requestHistory' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
+      <a route='/po/pondo' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
         <span class="flex items-center">
           <i class="ri-history-line" style="font-size: 1.2em;"></i>
-          <span class="mx-4 text-sm font-medium">Request History</span>
+          <span class="mx-4 text-sm font-medium">Pondo</span>
         </span>
 
         <span>
@@ -49,14 +60,13 @@
         </span>
       </a>
 
-      <!-- testing area -->
-      <a
-        route='/po/test'
-        class="flex justify-between items-center px-4 py-2 text-gray-100 hover:bg-violet-300">
-        <span class="flex items-center">
-          <span class="mx-4 font-normal">Tester</span>
-        </span>
+      
 
+    
+
+    
+
+   
         <span>
           <svg
             class="h-4 w-4"

@@ -1,3 +1,16 @@
+<?php
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $query = "SELECT COUNT(*) as count FROM leave_requests WHERE CURDATE() BETWEEN start_date AND end_date AND status = 'Approved'";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $onLeave = $result['count'];
+
+    $pdo = null;
+    $stmt = null;
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,343 +42,357 @@
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Schedule</a>
    </ul>
-   <ul class="ml-auto flex items-center">
-  <li class="mr-1">
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium">Sample User</a>
-  </li>
-  <li class="mr-1">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300"><i class="ri-arrow-down-s-line"></i></button> 
-  </li>
-   </ul>
+   <?php 
+    require_once 'inc/logout.php';
+  ?>
   </div>
   <!-- End Top Bar -->
   <br>
-  
-        <div class="flex items-center justify-center py-8 px-4">
-            <div class="max-w-sm w-full shadow-lg">
-                <div class="md:p-8 p-5 dark:bg-gray-800 bg-white rounded-t">
-                    <div class="px-4 flex items-center justify-between">
-                        <span  tabindex="0" class="focus:outline-none  text-base font-bold dark:text-gray-100 text-gray-800">October 2020</span>
-                        <div class="flex items-center">
-                            <button aria-label="calendar backward" class="focus:text-gray-400 hover:text-gray-400 text-gray-800 dark:text-gray-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <polyline points="15 6 9 12 15 18" />
-                            </svg>
-                        </button>
-                        <button aria-label="calendar forward" class="focus:text-gray-400 hover:text-gray-400 ml-3 text-gray-800 dark:text-gray-100"> 
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler  icon-tabler-chevron-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <polyline points="9 6 15 12 9 18" />
-                            </svg>
-                        </button>
 
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between pt-12 overflow-x-auto">
-                        <table class="w-full">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <div class="w-full flex justify-center">
-                                            <p class="text-base font-medium text-center text-gray-800 dark:text-gray-100">Mo</p>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="w-full flex justify-center">
-                                            <p class="text-base font-medium text-center text-gray-800 dark:text-gray-100">Tu</p>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="w-full flex justify-center">
-                                            <p class="text-base font-medium text-center text-gray-800 dark:text-gray-100">We</p>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="w-full flex justify-center">
-                                            <p class="text-base font-medium text-center text-gray-800 dark:text-gray-100">Th</p>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="w-full flex justify-center">
-                                            <p class="text-base font-medium text-center text-gray-800 dark:text-gray-100">Fr</p>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="w-full flex justify-center">
-                                            <p class="text-base font-medium text-center text-gray-800 dark:text-gray-100">Sa</p>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="w-full flex justify-center">
-                                            <p class="text-base font-medium text-center text-gray-800 dark:text-gray-100">Su</p>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="pt-6">
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center"></div>
-                                    </td>
-                                    <td class="pt-6">
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center"></div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center"></div>
-                                    </td>
-                                    <td class="pt-6">
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">1</p>
-                                        </div>
-                                    </td>
-                                    <td class="pt-6">
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">2</p>
-                                        </div>
-                                    </td>
-                                    <td class="pt-6">
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100">3</p>
-                                        </div>
-                                    </td>
-                                    <td class="pt-6">
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100">4</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">5</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">6</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">7</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="w-full h-full">
-                                          <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                              <p class="text-base text-gray-500 dark:text-gray-100 font-medium">8</p>
-                                          </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">9</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100">10</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100">11</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">12</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">13</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">14</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">15</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">16</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100">17</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100">18</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">19</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">20</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">21</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">22</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">23</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100">24</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100">25</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">26</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">27</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">28</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">29</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
-                                            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">30</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+<!-- component -->
+<div class="lg:flex lg:h-auto lg:flex-col">
+  <header class="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
+    <h1 class="text-base font-semibold leading-6 text-gray-900">
+        <time datetime="<?php echo date('Y-m'); ?>"><?php echo date('F Y'); ?></time>
+    </h1>
+    <div class="flex items-center">
+        <!-- The Add Event button -->
+        <button id="addEventButton" type="button" class="ml-6 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"><i class="ri-add-line"></i>Add event</button>
+
+        <!-- The Add Event modal -->
+        <div id="addEventModal" class="hidden fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-4 rounded">
+                <h2 class="text-lg font-bold mb-2"><i class="ri-add-line"></i>Add Event</h2>
+                <hr>
+                <form action="/create/schedule" id="addEventForm" method="POST">
+
+                <div class="mb-4 mt-2">
+                  <label for="eventName" class="block mb-2 mt-0 text-sm font-bold text-gray-700">Name of the Event</label>
+                  <input id="event_name" name="event_name" type="text" class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" required>
                 </div>
-                <div class="md:py-8 py-5 md:px-16 px-5 dark:bg-gray-700 bg-gray-50 rounded-b">
-                    <div class="px-4">
-                        <div class="border-b pb-4 border-gray-400 border-dashed">
-                            <p class="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">9:00 AM</p>
-                            <a tabindex="0" class="focus:outline-none text-lg font-medium leading-5 text-gray-800 dark:text-gray-100 mt-2">Zoom call with design team</a>
-                            <p class="text-sm pt-2 leading-4 leading-none text-gray-600 dark:text-gray-300">Discussion on UX sprint and Wireframe review</p>
-                        </div>
-                        <div class="border-b pb-4 border-gray-400 border-dashed pt-5">
-                            <p class="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">10:00 AM</p>
-                            <a tabindex="0" class="focus:outline-none text-lg font-medium leading-5 text-gray-800 dark:text-gray-100 mt-2">Orientation session with new hires</a>
-                        </div>
-                        <div class="border-b pb-4 border-gray-400 border-dashed pt-5">
-                            <p class="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">9:00 AM</p>
-                            <a tabindex="0" class="focus:outline-none text-lg font-medium leading-5 text-gray-800 dark:text-gray-100 mt-2">Zoom call with design team</a>
-                            <p class="text-sm pt-2 leading-4 leading-none text-gray-600 dark:text-gray-300">Discussion on UX sprint and Wireframe review</p>
-                        </div>
-                    </div>
+              
+                <div class="mb-4">
+                  <label for="eventDate" class="block mb-2 mt-0 text-sm font-bold text-gray-700">Date</label>
+                  <input id="date" name="date" type="date" class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" required>
                 </div>
+
+                <div class="mb-4">
+                  <label for="eventDay" class="block mb-2 mt-0 text-sm font-bold text-gray-700">Day</label>
+                  <input id="day" name="day" type="text" class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" readonly>
+                </div>
+
+                  <div class="flex justify-center items-center">
+                    <button type="submit" class="ml-3 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Save</button>
+                    <button id="cancelAddButton" type="button" class="ml-3 rounded-md bg-gray-100 px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Cancel</button>
+                  </div>
+                </form>
             </div>
         </div>
-    
+        <script>
+          document.getElementById('addEventButton').addEventListener('click', function() {
+              // Show the Add Event modal
+              document.getElementById('addEventModal').classList.remove('hidden');
+          });
 
+          document.getElementById('cancelAddButton').addEventListener('click', function() {
+              // Hide the Add Event modal
+              document.getElementById('addEventModal').classList.add('hidden');
+          });
+
+          document.getElementById('date').addEventListener('change', function() {
+              // When the date is picked, automatically check which day it is
+              var date = new Date(this.value);
+              document.getElementById('day').value = date.toLocaleDateString('en-US', { weekday: 'long' });
+          });
+        </script>
+
+        <div class="ml-3 h-6 w-px bg-gray-300"></div>
+
+        <!-- The Remove Event button -->
+        <button id="removeEventButton" type="button" class="ml-3 rounded-md bg-yellow-400 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"><i class="ri-subtract-line"></i>Remove event</button>
+
+        <!-- The Remove Event modal -->
+        <div id="removeEventModal" class="hidden fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-4 rounded">
+                <h2 class="text-lg font-bold mb-2"><i class="ri-subtract-line"></i>Remove Event</h2>
+                <hr>
+                <form action="/master/remove/schedule" id="removeEventForm" method="POST">
+                <div class="mb-4 mt-2">
+                  <label for="eventDay" class="block mb-2 mt-0 text-sm font-bold text-gray-700">Event</label>
+                    <select id="event" name="event" class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline">
+                    <option value="">Select Event to Remove</option>
+                    <?php
+                      $db = Database::getInstance();
+                      $conn = $db->connect();
+                      $query = "SELECT id, event_name, date FROM calendar";
+                      $stmt = $conn->prepare($query);
+                      $stmt->execute();
+                      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                          $event = $row['event_name'];
+                          $date = date('F d, Y', strtotime($row['date']));
+                          $event .= ' — ' . $date;
+                          echo "<option value='{$row['id']}'>{$event}</option>";
+                      }
+                    ?>
+                    </select>
+                </div>
+                    <div class="flex justify-center items-center">
+                      <button type="submit" class="ml-3 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Remove</button>
+                      <button id="cancelRemoveButton" type="button" class="ml-3 rounded-md bg-gray-100 px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Cancel</button>
+                  </div>
+                </form>
+            </div>
+        </div>
+      <script>
+      document.getElementById('removeEventButton').addEventListener('click', function() {
+          // Show the Remove Event modal
+          document.getElementById('removeEventModal').classList.remove('hidden');
+      });
+      document.getElementById('cancelRemoveButton').addEventListener('click', function() {
+          // Hide the Remove Event modal
+          document.getElementById('removeEventModal').classList.add('hidden');
+      });
+      </script>
+
+      </div>
+    </div>
+  </header>
+  
+<div class="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
+<!-- DAYS OF THE WEEK -->
+<div class="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none">
+  <div class="flex justify-center bg-blue-200 py-2">
+    <span>M</span>
+    <span class="sr-only sm:not-sr-only">on</span>
+  </div>
+  <div class="flex justify-center bg-blue-200 py-2">
+    <span>T</span>
+    <span class="sr-only sm:not-sr-only">ue</span>
+  </div>
+  <div class="flex justify-center bg-blue-200 py-2">
+    <span>W</span>
+    <span class="sr-only sm:not-sr-only">ed</span>
+  </div>
+  <div class="flex justify-center bg-blue-200 py-2">
+    <span>T</span>
+    <span class="sr-only sm:not-sr-only">hu</span>
+  </div>
+  <div class="flex justify-center bg-blue-200 py-2">
+    <span>F</span>
+    <span class="sr-only sm:not-sr-only">ri</span>
+  </div>
+  <div class="flex justify-center bg-blue-200 py-2">
+    <span>S</span>
+    <span class="sr-only sm:not-sr-only">at</span>
+  </div>
+  <div class="flex justify-center bg-blue-200 py-2">
+    <span>S</span>
+    <span class="sr-only sm:not-sr-only">un</span>
+  </div>
+</div>
+<!-- END DAYS OF THE WEEK -->
+
+<div class="flex bg-gray-50 text-xs leading-6 text-gray-700 lg:flex-auto">
+<!-- CALENDAR DAYS -->
+<div class="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
+<?php
+    date_default_timezone_set('Asia/Manila');
+
+    // Get the current month and year
+    $month = date('m');
+    $year = date('Y');
+
+    // Get the number of days in the month
+    $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+
+    // Find out what day of the week the first day of the month is
+    $firstDayOfMonth = date('N', strtotime("$year-$month-01"));
+
+    // Calculate how many days to go back to the previous month
+    $daysToGoBack = $firstDayOfMonth - 1;
+
+    // Get the timestamp for the day to start from in the previous month
+    $startDayOfPrevMonth = strtotime("$year-$month-01 - $daysToGoBack day");
+    
+    $query = $conn->query("SELECT * FROM calendar");
+    $holidays = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    // Loop through each day of the month
+    for ($day = 1; $day <= $daysInMonth; $day++) {
+        // Format the date
+        $date = $year . '-' . $month . '-' . str_pad($day, 2, '0', STR_PAD_LEFT);
+
+        // Find out what day of the week this day is
+        $dayOfWeek = date('N', strtotime($date));
+
+        // If this is the first day of the loop, add divs for the last few days of the previous month
+        if ($day == 1) {
+            for ($i = 0; $i < $daysToGoBack; $i++) {
+                // Get the date for this day of the previous month
+                $prevMonthDate = date('Y-m-d', $startDayOfPrevMonth + ($i * 24 * 60 * 60));
+
+                // Output the div for this day
+                echo '<div class="relative bg-gray-100 px-3 py-2 text-gray-500">';
+                echo '<time datetime="' . $prevMonthDate . '">' . date('j', strtotime($prevMonthDate)) . '</time>';
+                echo '</div>';
+            }
+        }
+?>
+<div class="relative bg-white px-3 py-2">
+    <?php
+    $currentDate = date('Y-m-d');
+    $timeClass = $date == $currentDate ? 'flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 font-semibold text-white' : '';
+
+    // Check if this day is a holiday
+    $holidaysToday = [];
+    foreach ($holidays as $holiday) {
+        if ($holiday['date'] == $date) {
+            $holidaysToday[] = $holiday;
+        }
+    }
+    ?>
+    <time datetime="<?php echo $date; ?>" class="<?php echo $timeClass; ?>"><?php echo $day; ?></time>
+    <?php foreach ($holidaysToday as $holiday): ?>
+      <p class="flex-auto mt-2 mb-2 truncate text-sm italic text-blue-600"><?php echo $holiday['event_name']; ?></p>
+    <?php endforeach; ?>
+    <?php if ($date == $currentDate && $onLeave > 0): ?>
+      <ol class="mt-2">
+    <li>
+        <a href="#" class="group flex">
+        <p class="flex-auto mt-2 mb-2 truncate text-sm font-medium text-gray-900">Employees</p>
+        </a>
+    </li>
+    <li>
+        <a href="#" class="group flex" id="onLeaveButton">
+        <p class="flex-auto mb-4 truncate text-sm font-medium text-gray-900">On Leave</p>
+        <p class="ml-3 hidden flex-none text-sm font-bold text-blue-500 xl:block"><?php echo $onLeave; ?></p>
+        </a>
+    </li>
+</ol>
+
+<!-- The Employee Details modal -->
+<div id="employeeDetailsModal" class="hidden fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-4 rounded">
+        <h2 class="text-lg font-bold mb-2">On Leave</h2>
+        <hr>
+        <?php
+          $db = Database::getInstance();
+          $conn = $db->connect();
+
+          $query = "SELECT leave_requests.*, employees.image_url, employees.first_name, employees.middle_name, employees.last_name, employees.position, employees.department FROM leave_requests";
+          $query .= " LEFT JOIN employees ON leave_requests.employees_id = employees.id";
+          $query .= " WHERE leave_requests.status = 'approved' AND CURDATE() BETWEEN leave_requests.start_date AND leave_requests.end_date";
+
+          $stmt = $conn->prepare($query);
+          $stmt->execute(); // Execute the prepared statement
+          $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+          $pdo = null;
+          $stmt = null;
+          ?>
+        <div class="ml-6 flex flex-col mt-2 mr-6 mb-4">
+        <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
+          <table class="min-w-full">
+            <!-- START HEADER -->
+            <thead>
+              <tr>
+                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                  Name</th>
+                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                  Department</th>
+                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                  Type of Leave</th>
+              </tr>
+            </thead>
+            <!-- END HEADER -->
+            <?php foreach ($employees as $employee): ?>
+              <tbody class="bg-white">
+                <tr>
+                  <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                    <div class="flex items-center">
+                      <div class="flex-shrink-0 w-10 h-10">
+                        <img class="w-10 h-10 rounded-full object-cover object-center"
+                          src="<?php echo $employee['image_url']; ?>"
+                          alt="">
+                      </div>
+                      <div class="ml-4">
+                      <div class="text-sm font-medium leading-5 text-gray-900">
+                          <?php 
+                              echo $employee['first_name'] . ' ';
+                              if (!empty($employee['middle_name'])) {
+                                  echo substr($employee['middle_name'], 0, 1) . '. ';
+                              }
+                              echo $employee['last_name']; 
+                          ?>
+                      </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                    <div class="text-sm leading-5 text-gray-900"><?php echo $employee['position']; ?></div>
+                    <div class="text-sm leading-5 text-gray-500"><?php echo $employee['department']; ?></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                    <div class="text-sm leading-5 text-gray-900"><?php echo $employee['type']; ?></div>
+                  </td>
+                </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="flex justify-end items-center mr-6">
+          <button id="closeEmployeeDetailsButton" type="button" class="ml-3 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('onLeaveButton').addEventListener('click', function() {
+    // Show the Employee Details modal
+    document.getElementById('employeeDetailsModal').classList.remove('hidden');
+});
+
+document.getElementById('closeEmployeeDetailsButton').addEventListener('click', function() {
+    // Hide the Employee Details modal
+    document.getElementById('employeeDetailsModal').classList.add('hidden');
+});
+</script>
+    <?php endif; ?>
+</div>
+<?php
+    // If this is the last day of the loop and it's not a Sunday, add divs for the first few days of the next month
+    if ($day == $daysInMonth) {
+        // Get the timestamp for the first day of the next month
+        $firstDayOfNextMonth = strtotime("$year-$month-$day + 1 day");
+
+        for ($i = $dayOfWeek; $i < 7; $i++) {
+            // Get the date for this day of the next month
+            $nextMonthDate = date('Y-m-d', $firstDayOfNextMonth);
+
+            // Output the div for this day
+            echo '<div class="relative bg-gray-200 px-3 py-2 text-gray-500">';
+            echo '<time datetime="' . $nextMonthDate . '">' . date('j', $firstDayOfNextMonth) . '</time>';
+            echo '</div>';
+
+            // Add one day to the timestamp
+            $firstDayOfNextMonth += 24 * 60 * 60;
+        }
+    }
+    }
+?>
+</div>
+<!-- END OF CALENDAR DAYS -->
+</div>
+</div>
+</div>
+  <!-- component -->
 </main>
 <!-- End Main Bar -->
 <script  src="./../src/route.js"></script>
 <script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
-
-<!-- NO CLUE HOW TO BUILD THIS ONE LOL -->
-<!-- <script>
-    let currentMonth = 10; // Example: October
-    let currentYear = 2020; // Example: 2020
-
-    function previousMonth() {
-        currentMonth--;
-        if (currentMonth ===
-        0) {
-            currentYear--;
-            currentMonth = 12;
-        }
-        renderCalendar(currentYear, currentMonth);
-    }
-
-    function nextMonth() {
-        currentMonth++;
-        if (currentMonth === 13) {
-            currentYear++;
-            currentMonth = 1;
-        }
-        renderCalendar(currentYear, currentMonth);
-    }
-
-    function renderCalendar(year, month) {
-        // Clear previous calendar dates
-        document.getElementById('calendarBody').innerHTML = '';
-
-        // Dynamically generate calendar dates for the given month and year
-        let startDate = new Date(year, month - 1, 1);
-        let endDate = new Date(year, month, 0);
-        let daysInMonth = endDate.getDate();
-
-        let calendarBody = document.getElementById('calendarBody');
-
-        // Start from the first day of the month
-        let currentDay = 1;
-
-        // Loop through each week
-        for (let i = 0; i < 6; i++) {
-            let row = document.createElement('tr');
-            // Loop through each day of the week
-            for (let j = 0; j < 7; j++) {
-                let cell = document.createElement('td');
-                // Check if it's within the month's range
-                if (currentDay <= daysInMonth) {
-                    cell.textContent = currentDay;
-                    // You can add additional logic here for events or styling
-                    // Example: cell.classList.add('event-date') if it has an event
-                    currentDay++;
-                }
-                row.appendChild(cell);
-            }
-            calendarBody.appendChild(row);
-        }
-    }
-
-    // Initial render
-    renderCalendar(currentYear, currentMonth); -->
 </script>
 </body>
 </html>

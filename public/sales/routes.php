@@ -1,8 +1,8 @@
 <?php
 
-$_SESSION['user'] = 'admin';
-$_SESSION['role'] = 'admin';
-$_SESSION['employee_name'] = "Alfaro, Aian Louise";
+// $_SESSION['user'] = 'admin';
+// $_SESSION['role'] = 'admin';
+// $_SESSION['employee_name'] = "Alfaro, Aian Louise";
 
 $path = './public/sales/views';
 $basePath = "$path/sls.";

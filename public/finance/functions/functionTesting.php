@@ -1,10 +1,14 @@
 <?php
-// for testing purposes
-// run function in the command line using
-// php -r "require 'public\finance\functions\functionTesting.php';"  
-// php -r "require 'public\finance\views\test.php';'
+require_once 'otherGroups/salary.php';
+require_once 'pondo/generalPondo.php';
+// require_once 'ponod/insertPondo.php';
 
-require_once 'generalFunctions.php';
+$monthlySalary = 10000;
+$withHoldingTax = 1000;
+$isPending = true;
+$paymentMethod = "Cash on bank";
 
-echo getTotalOfAccountType("Sales");
 
+
+echo inputSalary($monthlySalary, $withHoldingTax, $isPending, $paymentMethod);
+// echo getRemainingHRPondo($paymentMethod);

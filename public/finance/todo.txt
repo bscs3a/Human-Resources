@@ -1,0 +1,19 @@
+Todo:
+8. Check Everything
+
+other todo:
+9. T-Accounts
+
+Done:
+14. audit page
+10.  search general
+13. audit logs
+1. REPORTS ON DASHBOARD
+7. check payable(add salary tax payable, and withholding tax payable to pondo of hr)
+4. pondo/request --- needs checking
+2. login(kausapin ang hr) -- needs help bruce
+6. Check purchases in income report(this is just inventory -- depending on the system)
+5. special insert sa ibang group
+3. audit log -- remove; for changes sa database nalang to
+11. Dashboard design
+12. Search filter of payables
