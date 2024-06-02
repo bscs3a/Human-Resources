@@ -92,16 +92,16 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                                     Human Resources
                                 </a>
                                 <a route='/fin/funds/PO/page=1'
-                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                                   >
+                                class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                   
                                     Product Order
                                 </a>
                                 <a route='/fin/funds/Sales/page=1'
-                                    class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
+                                class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
                                     aria-current="page"
                                     >
                                     Sales
-                                </a>
+                                </>
                                 <a route='/fin/funds/Inventory/page=1'
                                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                                 >
@@ -125,6 +125,8 @@ $remainingPondo = $cashOnHand + $cashOnBank;
 
             <!-- for adding transaction -->
             <div class="w-full px-6 py-3 bg-white">
+                <div class="justify-between items-start">
+                    <!-- Button -->
                     <div class="flex justify-between">
                         <div class="items-start mb-1">
                             <div class="relative">
@@ -181,13 +183,43 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                             </div>
                         </div>
                         <div class="items-start mb-2">
-                            <button id="openModal"
-                                class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm py-1 px-3 rounded-lg border border-gray-500">
-                                <i class="ri-add-box-line"></i>
-                                New Transactions
-                            </button>
                         </div>
                     </div>
+
+
+                    <!-- Modal -->
+                    <div id="myModal"
+                        class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                        <div class="bg-white rounded shadow-lg w-1/3">
+                            <div class="border-b pl-3 pr-3 pt-3 flex">
+                                <h5 class="font-bold uppercase text-gray-600">New Transactions</h5>
+                            </div>
+                            <!-- form -->
+                            <div class="p-5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- JavaScript -->
+
+                    <script>
+                        function closeModalAndClearInputs() {
+                            document.getElementById('myModal').classList.add('hidden');
+                            ['description', 'credit', 'debit', 'amount'].forEach(id => document.getElementById(id).value = '');
+                        }
+
+                        document.getElementById('openModal').addEventListener('click', function () {
+                            document.getElementById('myModal').classList.remove('hidden');
+                        });
+                        //'closeModal',
+                        ['cancelModal'].forEach(id => {
+                            document.getElementById(id).addEventListener('click', function (event) {
+                                event.stopPropagation();
+                                closeModalAndClearInputs();
+                            });
+                        });
+                    </script>
+                </div>
             </div>
 
             <!-- allowance info -->

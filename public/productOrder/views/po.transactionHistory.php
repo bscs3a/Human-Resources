@@ -207,7 +207,7 @@ function displayTransactionHistory()
             }
             // for VIEW order
             echo '<td class="px-4 py-4">';
-            echo '<a route="/master/po/viewtransaction/Batch=' . $transaction['Batch_ID'] . '">View</a>';
+            echo '<a route="/po/viewtransaction/Batch=' . $transaction['Batch_ID'] . '">View</a>';
             echo '</td>';
             echo '</tr>';
             echo '</tbody>';

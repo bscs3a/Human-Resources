@@ -1,11 +1,19 @@
 <?php require_once "public/finance/functions\generalFunctions.php"?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    import Swal from 'sweetalert2'
+
+    const Swal = require('sweetalert2')
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var divs = document.querySelectorAll('div[id*="payModal"]');
-
+    
     divs.forEach(function(div) {
         var forms = div.querySelectorAll('form');
+        
         forms.forEach(function(form) {
+            
+
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
                 // Your code here
@@ -22,12 +30,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Inventory' : <?php echo getAccountBalanceV2('Inventory')?>
                 };
 
+                let currentInvestments = document.querySelector('[name="totalAllowableValue"]').value;
                 var maxValue = validValue[ledgerNameValue];
                 
-                if (amountValue > maxValue) {
-                    amountInput.setCustomValidity('The amount exceeds the maximum value');
+                if (amountValue > maxValue || amountValue > currentInvestments) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Amount',
+                        text: 'The amount exceeds the maximum value'
+                    });
                 } else {
-                    amountInput.setCustomValidity('');
                     if(form.checkValidity()) {
                         form.submit();
                     }

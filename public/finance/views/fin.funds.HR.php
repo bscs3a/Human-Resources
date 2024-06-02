@@ -178,11 +178,6 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                             </div>
                         </div>
                         <div class="items-start mb-2">
-                            <button id="openModal"
-                                class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm py-1 px-3 rounded-lg border border-gray-500">
-                                <i class="ri-add-box-line"></i>
-                                New Transactions
-                            </button>
                         </div>
                     </div>
 
@@ -196,101 +191,6 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                             </div>
                             <!-- form -->
                             <div class="p-5">
-                                <form action="/pondo/transaction" method="POST">
-                                    <div class="mb-4 relative">
-                                        <label for="date" class="block text-xs font-medium text-gray-900"> Date </label>
-                                        <input type="text" id="date" name="date" required readonly
-                                            class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md  sm:text-sm" />
-                                        <i
-                                            class="ri-calendar-fill absolute left-2 top-6 transform -translate-y-0.5 h-6 w-6 text-gray-400"></i>
-                                    </div>
-
-                                    <script>
-                                        var today = new Date();
-                                        var dd = String(today.getDate()).padStart(2, '0');
-                                        var monthNames = ["January", "February", "March", "April", "May", "June",
-                                            "July", "August", "September", "October", "November", "December"];
-                                        var mm = monthNames[today.getMonth()]; //January is 0!
-                                        var yyyy = today.getFullYear();
-
-                                        today = mm + ' ' + dd + ', ' + yyyy;
-                                        document.getElementById('date').value = today;
-                                    </script>
-                                    <div class="mb-4 relative">
-                                        <label for="employee_id" class="block text-xs font-medium text-gray-900">
-                                            EmployeeID
-                                        </label>
-                                        <input type="text" id="employee_id" name="employee_id" required readonly
-                                            class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" value = "<?php echo $_SESSION['user']['employee_id']?>"/>
-                                    </div>
-                                    <div class="mb-4 relative">
-                                        <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
-                                        </label>
-                                         <!-- changes here -->
-                                         <input type="text" id="amount" name="amount" placeholder="0.00" required
-                                            class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md sm:text-sm"
-                                            onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46"
-                                            oninput="validateInput(this)" />
-
-                                        <script>
-                                        var cashOnHand = <?php echo json_encode($cashOnHand); ?>;
-                                        var cashOnBank = <?php echo json_encode($cashOnBank); ?>;
-
-                                        function validateInput(input) {
-                                            var limit = document.getElementById('payUsing').value === 'Cash on hand' ? cashOnHand : cashOnBank;
-                                            var value = parseFloat(input.value);
-                                            if (isNaN(value) || value > limit) {
-                                                input.setCustomValidity('Please enter a number not greater than ' + limit);
-                                            } else {
-                                                input.setCustomValidity('');
-                                            }
-                                        }
-
-                                        window.addEventListener('DOMContentLoaded', function() {
-                                            document.getElementById('payUsing').addEventListener('change', function() {
-                                            validateInput(document.getElementById('amount'));
-                                            });
-                                        });
-                                        </script>
-                                        <!-- upto here -->
-                                        <span
-                                            class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <div class="mb-4 relative p-1 grow">
-                                            <label for="payFor" class="block text-xs font-medium text-gray-900"> Pay For: </label>
-                                            <select id="payFor" name="payFor" required class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
-                                                <option value="" selected>...</option>
-                                                <?php
-                                                    $validDebit = validDebit();
-                                                    foreach($validDebit as $row){
-                                                        echo "<option value='".$row['ledgerno']."'>".$row['name']."</option>";
-                                                    }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        <div class="mb-4 relative p-1 grow">
-                                            <label for="payUsing" class="block text-xs font-medium text-gray-900"> Pay Using: </label>
-                                            <select id="payUsing" name="payUsing" required class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
-                                                <option value="" selected>...</option>
-                                                <?php 
-                                                $validCredit = validCredit();
-                                                foreach($validCredit as $row){
-                                                    $value = $row['name'] == 'Cash on hand' ? $cashOnHand : $cashOnBank;
-                                                    echo "<option value='".$row['name']."'>".$row['name']. "-". $value ."</option>";
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex justify-end items-start mb-2">
-                                        <button id="cancelModal" type="button"
-                                            class="border border-gray-700 bg-gray-200 hover:bg-gray-100 text-gray-800 text-sm font-bold py-1 px-5 rounded-md ml-4 ">Cancel</button>
-                                        <button type="submit"
-                                            class="border border-gray-700 bg-amber-400 hover:bg-amber-300 text-gray-800 text-sm font-bold py-1 px-7 rounded-md ml-4 ">Save</button>
-                                    </div>
-                                </form>
                             </div>
                         </div>
                     </div>

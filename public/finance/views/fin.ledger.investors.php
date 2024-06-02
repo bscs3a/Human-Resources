@@ -228,7 +228,7 @@
                                             Total: <?= $results['total_amount'] ?>
 
                                         </div>
-
+                                        <input type="hidden" name="totalAllowableValue" value = "<?= $results['total_amount']?>">
                                         <input type="hidden" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" />
                                         <div class="mb-4 relative">
                                             <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
@@ -256,7 +256,7 @@
                                             <select name="ledgerName" id="ledgerName"
                                                 class="mt-1 py-1 px-2 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
                                                 <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
-                                                    <option value="<?= $row['name'] ?>"><?= $row['name'] ?></option>
+                                                    <option value="<?= $row['name'] ?>"><?= $row['name'] ?> - <?= getAccountBalanceV2($row['name'])?></option>
                                                 <?php endwhile; ?>
                                             </select>
                                         </div>
@@ -392,6 +392,7 @@
             });
         });
     </script>
+
     <?php require_once __DIR__ . "/..\javascript\payables.php"?>
     <script src = "./../../../public\finance\javascript\accountFilter.js"></script>
     <script src="./../../../src/form.js"></script>

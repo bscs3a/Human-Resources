@@ -31,7 +31,7 @@
         </p>
         
         <?php 
-        if(isset($_GET['error'])){
+        if(isset($_SESSION['error'])){
         ?>
         <p class="mt-3 text-sm text-red-400 ">
             Invalid Credentials

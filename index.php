@@ -28,6 +28,9 @@ Router::post('/login', function () {
     $base_url = 'master'; // Define your base URL here
 
     if ($user && password_verify($password, $user['password'])) {
+        if(isset($_SESSION['error'])){
+            unset($_SESSION['error']);
+        }
     // if ($user && $password == $user['password']) { // ung passwords namin from HR di naka-hash HAUSHDASDH
         $_SESSION['user'] = array();
         // Password is correct
@@ -69,7 +72,8 @@ Router::post('/login', function () {
             exit();
         }
     } else {
-        header("Location: /$base_url/?error=1");
+        $_SESSION['error'] = 'Invalid Credentials';
+        header("Location: /$base_url");
         exit();
     }
 });

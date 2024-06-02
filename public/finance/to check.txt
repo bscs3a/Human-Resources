@@ -1,0 +1,19 @@
+to check:
+
+audit logs
+- pagination problem
+- count change line 153 - 165
+
+funds
+- add search function(like general ledger)
+- line 6 to 16 count
+- line 128 - 190 search bar
+- line 364 - 366 getAlltransaction value
+- 202 to 299
+
+payables
+-front end validation
+
+database merge
+check everything
+

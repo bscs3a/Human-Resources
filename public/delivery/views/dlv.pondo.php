@@ -158,7 +158,12 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                             </div>
                             <!-- form -->
                             <div class="p-5">
-                                <form action="/pondo/transaction" method="POST">
+                                <form action="/pondo/transaction" method="POST" onsubmit="return validateInput(document.getElementById('amount'));">
+                                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+                                        import Swal from 'sweetalert2'
+
+                                        const Swal = require('sweetalert2')
+                                    </script>
                                     <div class="mb-4 relative">
                                         <label for="date" class="block text-xs font-medium text-gray-900"> Date </label>
                                         <input type="text" id="date" name="date" required readonly
@@ -191,27 +196,27 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                                         <!-- changes here -->
                                         <input type="text" id="amount" name="amount" placeholder="0.00" required
                                             class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md sm:text-sm"
-                                            onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46"
-                                            oninput="validateInput(this)" />
+                                            onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46" />
 
-                                        <script>
-                                        var cashOnHand = <?php echo json_encode($cashOnHand); ?>;
-                                        var cashOnBank = <?php echo json_encode($cashOnBank); ?>;
+                                            <script>
+                                                var cashOnHand = <?php echo json_encode($cashOnHand); ?>;
+                                                var cashOnBank = <?php echo json_encode($cashOnBank); ?>;
 
-                                        function validateInput(input) {
-                                            var limit = document.getElementById('payUsing').value === 'Cash on hand' ? cashOnHand : cashOnBank;
-                                            var value = parseFloat(input.value);
-                                            if (isNaN(value) || value > limit) {
-                                                input.setCustomValidity('Please enter a number not greater than ' + limit);
-                                            } else {
-                                                input.setCustomValidity('');
-                                            }
-                                        }
-
-                                        document.getElementById('payUsing').addEventListener('change', function() {
-                                            validateInput(document.getElementById('amount'));
-                                        });
-                                        </script>
+                                                function validateInput(input) {
+                                                    var limit = document.getElementById('payUsing').value === 'Cash on hand' ? cashOnHand : cashOnBank;
+                                                    var value = parseFloat(input.value);
+                                                    if (isNaN(value) || value > limit) {
+                                                        Swal.fire({
+                                                            icon: 'error',
+                                                            title: 'Invalid Amount',
+                                                            text: 'Please enter a number not greater than ' + limit
+                                                        });
+                                                        input.value = ''; // reset the input value
+                                                        return false; // prevent form submission
+                                                    }
+                                                    return true; // allow form submission
+                                                }
+                                            </script>
                                         <!-- upto here -->
                                         <span
                                             class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>

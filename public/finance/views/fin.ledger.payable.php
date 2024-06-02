@@ -219,7 +219,7 @@
                             class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                             <div class="bg-white rounded shadow-lg w-1/3">
                                 <div class="border-b pl-3 pr-3 pt-3 flex">
-                                    <h5 class="font-bold uppercase text-gray-600"><?= $results['name'] ?></h5>
+                                    <h5 class="font-bold uppercase text-gray-600"><?= $results['name'] ?> </h5>
                                     <!-- <button id="closeModal" class="ml-auto text-gray-600 hover:text-gray-800 cursor-pointer">
                                 <i class="ri-close-line"></i>
                             </button> -->
@@ -233,7 +233,7 @@
                                             Total: <?= $results['total_amount'] ?>
 
                                         </div>
-
+                                        <input type="hidden" name="totalAllowableValue" value = "<?= $results['total_amount']?>">
                                         <input type="hidden" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" />
                                         <div class="mb-4 relative">
                                             <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
@@ -261,7 +261,7 @@
                                             <select name="ledgerName" id="ledgerName"
                                                 class="mt-1 py-1 px-2 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
                                                 <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
-                                                    <option value="<?= $row['name'] ?>"><?= $row['name'] ?></option>
+                                                    <option value="<?= $row['name'] ?>"><?= $row['name'] ?> - <?= getAccountBalanceV2($row['name'])?></option>
                                                 <?php endwhile; ?>
                                             </select>
                                         </div>
