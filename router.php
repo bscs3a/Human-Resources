@@ -1,5 +1,7 @@
 <?php
+
 require __DIR__ . '/vendor/autoload.php';
+
 require "./web.php";
 
 class Router
@@ -33,6 +35,7 @@ class Router
 
         $validRoutes = self::$validRoutes;
         if (array_key_exists($currentUri, $validRoutes)) {
+            
             self::audit_log();
             require_once $validRoutes[$currentUri];
         } else {
@@ -114,6 +117,7 @@ class Router
     }
 
     public static function audit_log(){
+
         $db = Database::getInstance();
         $conn = $db->connect();
     

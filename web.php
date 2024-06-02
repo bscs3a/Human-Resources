@@ -1,4 +1,5 @@
 <?php 
+
 require "./public/finance/routes.php";
 require "./public/sales/routes.php";
 require "./public/delivery/routes.php";
@@ -51,12 +52,12 @@ foreach ($routes as $route => $action) {
         if (preg_match("#^$pattern$#", $path, $matches)) {
             // Call the action with the id as a parameter
             $action($matches[1]);
-            exit();
+            // exit();
         }
     } else if ($path === $route || $path === $route . '/') {
         // This is a static route
         include $action;
-        exit();
+        // exit();
     }
 }
 

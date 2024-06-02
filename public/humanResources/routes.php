@@ -18,11 +18,11 @@ $hr = [
     // '/hr/departments/delivery' => $basePath . "departments.dlv.php", // hr.departments.dlv.php
     // '/hr/departments/human-resources' => $basePath . "departments.HR.php", // hr.departments.HR.php
     // applicants
-    '/hr/applicants' => $basePath . "applicants.php",
-    '/hr/applicants/accept={id}' => function($id) use ($basePath) {
-        $_SESSION['id'] = $id;
-        include $basePath . "applicants.accept.php";
-    },
+    // '/hr/applicants' => $basePath . "applicants.php",
+    // '/hr/applicants/accept={id}' => function($id) use ($basePath) {
+    //     $_SESSION['id'] = $id;
+    //     include $basePath . "applicants.accept.php";
+    // },
     // leave requests
     '/hr/leave-requests' => $basePath . "leave-requests.php",
     '/hr/leave-requests/reviewed' => $basePath . "leave-requests.reviewed.php",
@@ -98,6 +98,14 @@ $hr = [
     '/hr/funds/page={pageNumber}' => function($pageNumber) use ($basePath){
         $_GET['page'] = $pageNumber;
         include $basePath . "funds.php";
+    },
+    '/hr/dtr/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "daily-time-record.php";
+    },
+    '/hr/audit/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "audit-logs.php";
     },
 ];
 // TAX CALCULATION

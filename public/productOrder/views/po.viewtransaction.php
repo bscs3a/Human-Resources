@@ -301,7 +301,7 @@
             </div>
             <!-- Display the Back button -->
             <div class="flex justify-end gap-2">
-              <a href='/master/po/transactionHistory' class="py-2 px-6 border border-gray-600 font-bold rounded-md">
+              <a route='/po/transactionHistory' class="py-2 px-6 border border-gray-600 font-bold rounded-md">
                 Back
                 </a>
               <!-- Display the Save button only if feedback is not "done" -->

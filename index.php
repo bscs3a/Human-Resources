@@ -1,5 +1,6 @@
 <?php
  session_start();
+
  // database conncetion
 //  session_destroy();
 require_once './src/dbconn.php';
