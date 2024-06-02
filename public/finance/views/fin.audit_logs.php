@@ -159,8 +159,8 @@
                 $stmt->bindParam(':department', $department, PDO::PARAM_STR);
 
                 $stmt->execute();
-                $totalPages = $stmt->fetchColumn();
-                
+                $totalRecords = $stmt->fetchColumn();
+                $totalPages = ceil($totalRecords / $numberPerPage);
                 // PUT YOUR LINK HERE
                 $link = "/fin/logs/page=";
                 ?>

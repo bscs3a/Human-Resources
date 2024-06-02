@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 02, 2024 at 02:16 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: 127.0.0.1:3306
+-- Generation Time: Jun 02, 2024 at 01:03 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `bscs3a`
 --
-CREATE DATABASE IF NOT EXISTS `bscs3a` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `bscs3a`;
 
 -- --------------------------------------------------------
 
@@ -157,87 +155,8 @@ CREATE TABLE `audit_log` (
 --
 
 INSERT INTO `audit_log` (`id`, `account_id`, `datetime`, `action`) VALUES
-(1, 6, '2024-06-02 11:22:24', 'POST: /master/login'),
-(2, 6, '2024-06-02 11:22:24', 'GET: /master/po/audit_logs/page=1'),
-(3, 6, '2024-06-02 11:22:25', 'GET: /master/po/audit_logs/page=1'),
-(4, 6, '2024-06-02 11:22:33', 'GET: /master/po/audit_logs/page=1'),
-(5, 6, '2024-06-02 11:22:33', 'GET: /master/po/audit_logs/page=1'),
-(6, 6, '2024-06-02 11:22:38', 'GET: /master/po/audit_logs/page=1'),
-(7, 6, '2024-06-02 11:22:38', 'GET: /master/po/audit_logs/page=1'),
-(8, 6, '2024-06-02 11:23:15', 'GET: /master/po/audit_logs/page=1'),
-(9, 6, '2024-06-02 11:23:15', 'GET: /master/po/audit_logs/page=1'),
-(10, 6, '2024-06-02 11:23:24', 'GET: /master/po/audit_logs/page=1'),
-(11, 6, '2024-06-02 11:23:24', 'GET: /master/po/audit_logs/page=1'),
-(12, 6, '2024-06-02 11:23:31', 'GET: /master/po/audit_logs/page=1'),
-(13, 6, '2024-06-02 11:23:31', 'GET: /master/po/audit_logs/page=1'),
-(14, 6, '2024-06-02 11:23:33', 'GET: /master/po/audit_logs/page=1'),
-(15, 6, '2024-06-02 11:23:33', 'GET: /master/po/audit_logs/page=1'),
-(16, 6, '2024-06-02 11:23:36', 'GET: /master/po/audit_logs/page=1'),
-(17, 6, '2024-06-02 11:23:36', 'GET: /master/po/audit_logs/page=1'),
-(18, 6, '2024-06-02 11:27:13', 'GET: /master/po/audit_logs/page=1'),
-(19, 6, '2024-06-02 11:27:13', 'GET: /master/po/audit_logs/page=1'),
-(20, 6, '2024-06-02 11:28:46', 'POST: /master/logout'),
-(21, 8, '2024-06-02 11:29:19', 'POST: /master/login'),
-(22, 8, '2024-06-02 11:29:27', 'POST: /master/fin/getBalanceReport'),
-(23, 8, '2024-06-02 11:29:27', 'POST: /master/fin/getEquityReport'),
-(24, 8, '2024-06-02 11:29:27', 'POST: /master/fin/getCashFlowReport'),
-(25, 8, '2024-06-02 11:29:43', 'GET: /master/fin/logs/page=1'),
-(26, 8, '2024-06-02 11:29:45', 'GET: /master/fin/logs/page=1'),
-(27, 8, '2024-06-02 11:29:46', 'GET: /master/fin/funds/finance/page=1'),
-(28, 8, '2024-06-02 11:29:47', 'GET: /master/fin/logs/page=1'),
-(29, 8, '2024-06-02 11:30:01', 'POST: /master/logout'),
-(30, 10, '2024-06-02 11:30:17', 'POST: /master/login'),
-(31, 10, '2024-06-02 11:30:19', 'GET: /master/sls/Audit-Logs/page=1'),
-(32, 10, '2024-06-02 11:30:23', 'GET: /master/sls/Audit-Logs/page=1'),
-(33, 10, '2024-06-02 11:30:28', 'GET: /master/sls/Audit-Logs/page=1'),
-(34, 10, '2024-06-02 11:30:30', 'GET: /master/sls/funds/Sales/page=1'),
-(35, 10, '2024-06-02 11:30:32', 'GET: /master/sls/Audit-Logs/page=1'),
-(36, 10, '2024-06-02 11:30:36', 'GET: /master/sls/Audit-Logs/page=1'),
-(37, 10, '2024-06-02 11:30:41', 'GET: /master/sls/Audit-Logs/page=1'),
-(38, 10, '2024-06-02 11:30:42', 'GET: /master/sls/funds/Sales/page=1'),
-(39, 10, '2024-06-02 11:30:43', 'GET: /master/sls/Audit-Logs/page=1'),
-(40, 10, '2024-06-02 11:30:47', 'GET: /master/sls/funds/Sales/page=1'),
-(41, 10, '2024-06-02 11:30:48', 'GET: /master/sls/Audit-Logs/page=1'),
-(42, 10, '2024-06-02 11:30:52', 'GET: /master/sls/Audit-Logs/page=1'),
-(43, 10, '2024-06-02 11:31:26', 'GET: /master/sls/Audit-Logs/page=1'),
-(44, 10, '2024-06-02 11:31:49', 'POST: /master/logout'),
-(45, 1, '2024-06-02 11:32:02', 'POST: /master/login'),
-(46, 1, '2024-06-02 11:32:13', 'GET: /master/hr/funds/page=1'),
-(47, 1, '2024-06-02 11:32:18', 'GET: /master/hr/generate-payslip/page=1'),
-(48, 1, '2024-06-02 11:32:27', 'GET: /master/hr/funds/page=1'),
-(49, 1, '2024-06-02 11:32:29', 'GET: /master/hr/departments/product-order/page=1'),
-(50, 1, '2024-06-02 11:32:31', 'GET: /master/hr/funds/page=1'),
-(51, 1, '2024-06-02 11:32:59', 'GET: /master/hr/departments/product-order/page=1'),
-(52, 1, '2024-06-02 11:33:00', 'GET: /master/hr/funds/page=1'),
-(53, 1, '2024-06-02 11:33:19', 'POST: /master/logout'),
-(54, 7, '2024-06-02 11:33:25', 'POST: /master/login'),
-(55, 7, '2024-06-02 11:33:28', 'GET: /master/dlv/audit/page=1'),
-(56, 7, '2024-06-02 11:33:31', 'GET: /master/dlv/audit/page=1'),
-(57, 7, '2024-06-02 11:33:33', 'GET: /master/dlv/audit/page=1'),
-(58, 7, '2024-06-02 11:33:34', 'GET: /master/dlv/pondo/page=1'),
-(59, 7, '2024-06-02 11:33:35', 'GET: /master/dlv/audit/page=1'),
-(60, 7, '2024-06-02 11:34:04', 'GET: /master/dlv/audit/page=1'),
-(61, 7, '2024-06-02 11:34:06', 'GET: /master/dlv/audit/page=1'),
-(62, 7, '2024-06-02 11:34:37', 'GET: /master/dlv/audit/page=1'),
-(63, 7, '2024-06-02 11:34:40', 'GET: /master/dlv/pondo/page=1'),
-(64, 7, '2024-06-02 11:34:40', 'GET: /master/dlv/audit/page=1'),
-(65, 7, '2024-06-02 11:36:17', 'POST: /master/logout'),
-(66, 9, '2024-06-02 11:36:28', 'POST: /master/login'),
-(67, 8, '2024-06-02 11:38:48', 'POST: /master/login'),
-(68, 8, '2024-06-02 11:38:49', 'POST: /master/fin/getBalanceReport'),
-(69, 8, '2024-06-02 11:38:49', 'POST: /master/fin/getEquityReport'),
-(70, 8, '2024-06-02 11:38:49', 'POST: /master/fin/getCashFlowReport'),
-(71, 8, '2024-06-02 11:38:54', 'POST: /master/fin/getBalanceReport'),
-(72, 8, '2024-06-02 11:38:55', 'POST: /master/fin/getEquityReport'),
-(73, 8, '2024-06-02 11:38:55', 'POST: /master/fin/getCashFlowReport'),
-(74, 8, '2024-06-02 11:38:55', 'GET: /master/fin/logs/page=1'),
-(75, 8, '2024-06-02 11:38:58', 'GET: /master/fin/funds/finance/page=1'),
-(76, 8, '2024-06-02 11:39:00', 'GET: /master/fin/logs/page=1'),
-(77, 8, '2024-06-02 11:39:03', 'GET: /master/fin/ledger/page=1'),
-(78, 8, '2024-06-02 11:39:04', 'GET: /master/fin/logs/page=1'),
-(79, 8, '2024-06-02 11:40:29', 'POST: /master/fin/getBalanceReport'),
-(80, 8, '2024-06-02 11:40:29', 'POST: /master/fin/getEquityReport'),
-(81, 8, '2024-06-02 11:40:29', 'POST: /master/fin/getCashFlowReport');
+(1, 10, '2024-06-02 13:03:03', 'POST: /master/clock-in'),
+(2, 10, '2024-06-02 13:03:14', 'POST: /master/clock-out');
 
 -- --------------------------------------------------------
 
@@ -264,7 +183,11 @@ CREATE TABLE `batch_orders` (
 INSERT INTO `batch_orders` (`Batch_ID`, `Supplier_ID`, `Time_Ordered`, `Date_Ordered`, `Items_Subtotal`, `Total_Amount`, `Order_Status`, `Pay_Using`, `Funds_Transact_ID`) VALUES
 (1, 2, '12:33:56', '2024-06-02', 1, 112, 'Cancelled', 'Cash on bank', 3),
 (2, 2, '12:39:23', '2024-06-02', 2, 235, 'Completed + Delayed', 'Cash on bank', 4),
-(3, 2, '13:17:42', '2024-06-02', 200, 22312, 'Completed', 'Cash on bank', 10);
+(3, 2, '13:17:42', '2024-06-02', 200, 22312, 'Completed', 'Cash on bank', 10),
+(4, 4, '17:54:07', '2024-06-02', 250, 148705, 'Completed', 'Cash on bank', 13),
+(5, 4, '17:54:55', '2024-06-02', 350, 279205, 'Completed', 'Cash on bank', 14),
+(6, 5, '17:55:26', '2024-06-02', 400, 62290, 'Completed', 'Cash on bank', 15),
+(7, 6, '17:55:55', '2024-06-02', 200, 34100, 'Completed', 'Cash on bank', 16);
 
 -- --------------------------------------------------------
 
@@ -364,35 +287,6 @@ CREATE TABLE `customers` (
   `Email` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `customers`
---
-
-INSERT INTO `customers` (`CustomerID`, `Name`, `Phone`, `Email`) VALUES
-(1, 'Karleigh', '+1 (808) 268-2524', 'xylepysyr@mailinator.com'),
-(2, 'Jayme', '+1 (368) 738-9216', 'xylepysyr@mailinator.com'),
-(3, 'Jayme', '+1 (368) 738-9216', 'xylepysyr@mailinator.com'),
-(4, 'Yoshio Stokes', '+1 (146) 618-8326', 'lowo@mailinator.com'),
-(5, 'Yoshio Stokes', '+1 (146) 618-8326', 'lowo@mailinator.com'),
-(6, 'Isabella Erickson', '+1 (151) 109-3246', 'taloz@mailinator.com'),
-(7, 'Odysseus Lawson', '+1 (896) 629-3289', 'tajoxus@mailinator.com'),
-(8, 'Brianna Guthrie', '+1 (923) 609-6678', 'hejozulyle@mailinator.com'),
-(9, 'Brianna Guthrie', '+1 (923) 609-6678', 'hejozulyle@mailinator.com'),
-(10, 'Brianna Guthrie', '+1 (923) 609-6678', 'hejozulyle@mailinator.com'),
-(11, 'Brianna Guthrie', '+1 (923) 609-6678', 'hejozulyle@mailinator.com'),
-(12, 'Brianna Guthrie', '+1 (923) 609-6678', 'hejozulyle@mailinator.com'),
-(13, 'Brianna Guthrie', '+1 (923) 609-6678', 'hejozulyle@mailinator.com'),
-(14, 'Emmanuel Delaney', '+1 (462) 652-4078', 'xafuruh@mailinator.com'),
-(15, 'Deanna Bruce', '+1 (507) 122-4291', 'kyfidewa@mailinator.com'),
-(16, 'Bruce Salas', '+1 (655) 236-2264', 'tyqusilyhu@mailinator.com'),
-(17, 'Carol Reid', '+1 (233) 586-5253', 'cixozeraso@mailinator.com'),
-(18, 'Carol Reid', '+1 (233) 586-5253', 'cixozeraso@mailinator.com'),
-(19, 'Malik Abbott', '+1 (473) 919-6409', 'hecukas@mailinator.com'),
-(20, 'mr helm', '09123456711', 'colineberde1@example.com'),
-(21, 'something', 'something', 'something@email'),
-(22, '123', '123', '123@em'),
-(23, 'mr 1 helm', '09123456711', 'colineberde1@example.com');
-
 -- --------------------------------------------------------
 
 --
@@ -414,14 +308,6 @@ CREATE TABLE `deliveryorders` (
   `TruckID` int(11) DEFAULT NULL,
   `Region` enum('North','South','West','East') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `deliveryorders`
---
-
-INSERT INTO `deliveryorders` (`DeliveryOrderID`, `SaleID`, `ProductID`, `Quantity`, `ProductWeight`, `Province`, `Municipality`, `StreetBarangayAddress`, `DeliveryDate`, `ReceivedDate`, `DeliveryStatus`, `TruckID`, `Region`) VALUES
-(1, 4, 2, 2, 2.00, 'Pampanga', 'San Fernando', 'san juan', '2024-06-18', '0000-00-00', 'Failed to Deliver', 1, NULL),
-(2, 4, 3, 1, 1.00, 'Pampanga', 'San Fernando', 'san juan', '2024-06-18', NULL, 'Pending', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -617,7 +503,11 @@ INSERT INTO `funds_transaction` (`id`, `employee_id`, `lt_id`) VALUES
 (9, 5, 13),
 (10, 6, 17),
 (11, 10, 21),
-(12, 11, 28);
+(12, 11, 28),
+(13, 6, 30),
+(14, 6, 31),
+(15, 6, 32),
+(16, 6, 33);
 
 -- --------------------------------------------------------
 
@@ -752,21 +642,14 @@ INSERT INTO `ledgertransaction` (`LedgerXactID`, `LedgerNo`, `DateTime`, `Ledger
 (11, 32, '2024-05-02 12:59:41', 4, 500000, NULL),
 (12, 4, '2024-06-02 07:00:05', 28, 68124.87, 'Pondo expense for Human Resources'),
 (13, 4, '2024-06-02 07:00:05', 27, 11875.13, 'Pondo expense for Human Resources'),
-(14, 6, '2024-06-02 13:16:28', 24, 223, 'Recount Inventory'),
-(15, 11, '2024-06-02 13:16:28', 3, 800, 'made a sale with tax'),
-(16, 29, '2024-06-02 13:16:28', 18, 96, 'made a sale with tax'),
 (17, 4, '2024-06-02 07:17:42', 6, 22312, 'Pondo expense for Product Order'),
-(18, 6, '2024-06-02 13:18:50', 24, 223, 'Recount Inventory'),
-(19, 11, '2024-06-02 13:18:50', 4, 800, 'made a sale with tax'),
-(20, 29, '2024-06-02 13:18:50', 18, 96, 'made a sale with tax'),
 (21, 4, '2024-06-02 07:23:43', 1, 100, 'Pondo expense for Point of Sales'),
-(22, 6, '2024-06-02 13:31:33', 24, 223, 'Recount Inventory'),
-(23, 11, '2024-06-02 13:31:33', 3, 800, 'made a sale with tax'),
-(24, 29, '2024-06-02 13:31:33', 18, 96, 'made a sale with tax'),
-(25, 6, '2024-06-02 13:48:43', 24, 323, 'Recount Inventory'),
-(26, 11, '2024-06-02 13:48:43', 3, 1350, 'made a sale with tax'),
-(27, 29, '2024-06-02 13:48:44', 18, 156, 'made a sale with tax'),
-(28, 4, '2024-06-02 07:52:09', 16, 100, 'Pondo expense for Delivery');
+(28, 4, '2024-06-02 07:52:09', 16, 100, 'Pondo expense for Delivery'),
+(29, 32, '2024-05-30 11:52:26', 4, 20000000, 'Investment of 32 in 4 with 20000000'),
+(30, 4, '2024-06-02 11:54:07', 6, 148705, 'Pondo expense for Product Order'),
+(31, 4, '2024-06-02 11:54:55', 6, 279205, 'Pondo expense for Product Order'),
+(32, 4, '2024-06-02 11:55:26', 6, 62290, 'Pondo expense for Product Order'),
+(33, 4, '2024-06-02 11:55:55', 6, 34100, 'Pondo expense for Product Order');
 
 -- --------------------------------------------------------
 
@@ -793,7 +676,29 @@ INSERT INTO `order_details` (`Order_ID`, `Product_ID`, `Supplier_ID`, `Batch_ID`
 (5, 2, 2, 2, 1, '12:39:23', '2024-06-02'),
 (6, 3, 2, 2, 1, '12:39:23', '2024-06-02'),
 (7, 2, 2, 3, 100, '13:17:42', '2024-06-02'),
-(8, 3, 2, 3, 100, '13:17:42', '2024-06-02');
+(8, 3, 2, 3, 100, '13:17:42', '2024-06-02'),
+(16, 6, 4, 4, 50, '17:54:07', '2024-06-02'),
+(17, 14, 4, 4, 50, '17:54:07', '2024-06-02'),
+(18, 15, 4, 4, 50, '17:54:07', '2024-06-02'),
+(19, 16, 4, 4, 50, '17:54:07', '2024-06-02'),
+(20, 17, 4, 4, 50, '17:54:07', '2024-06-02'),
+(26, 6, 4, 5, 50, '17:54:55', '2024-06-02'),
+(27, 14, 4, 5, 100, '17:54:55', '2024-06-02'),
+(28, 15, 4, 5, 100, '17:54:55', '2024-06-02'),
+(29, 16, 4, 5, 50, '17:54:55', '2024-06-02'),
+(30, 17, 4, 5, 50, '17:54:55', '2024-06-02'),
+(31, 18, 5, 6, 50, '17:55:26', '2024-06-02'),
+(32, 19, 5, 6, 50, '17:55:26', '2024-06-02'),
+(33, 20, 5, 6, 50, '17:55:26', '2024-06-02'),
+(34, 21, 5, 6, 50, '17:55:26', '2024-06-02'),
+(35, 22, 5, 6, 50, '17:55:26', '2024-06-02'),
+(36, 27, 5, 6, 50, '17:55:26', '2024-06-02'),
+(37, 28, 5, 6, 50, '17:55:26', '2024-06-02'),
+(38, 29, 5, 6, 50, '17:55:26', '2024-06-02'),
+(39, 32, 6, 7, 50, '17:55:55', '2024-06-02'),
+(40, 33, 6, 7, 50, '17:55:55', '2024-06-02'),
+(41, 34, 6, 7, 50, '17:55:55', '2024-06-02'),
+(42, 35, 6, 7, 50, '17:55:55', '2024-06-02');
 
 -- --------------------------------------------------------
 
@@ -850,40 +755,40 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`ProductID`, `Supplier_ID`, `Category_ID`, `ProductImage`, `ProductName`, `Supplier`, `Description`, `Category`, `DeliveryRequired`, `Price`, `Supplier_Price`, `Stocks`, `UnitOfMeasurement`, `TaxRate`, `ProductWeight`, `Status`, `Availability`) VALUES
-(2, 2, 3, 'uploads/Acrylic_Paint_Set.png', 'Acrylic Paint Set', 'MRS DIY', 'Set of vibrant acrylic paints suitable for various surfaces', 'Art Supplies', 'No', 99.00, 65.00, 96, 'pcs', 0.12, 0.70, '', 'Not Available'),
-(3, 2, 2, 'uploads/Adjustable_Wrench_(12_inches).png', 'Adjustable Wrench (12 inches)', 'MRS DIY', 'Adjustable wrench for plumbing and mechanical work', 'Tools', 'No', 109.00, 86.00, 97, 'pcs', 0.12, 1.20, '', 'Available'),
-(4, 3, 1, 'uploads/Hammer_(Large).png', 'Hammer (Large)(Large)', 'MR DIY', 'Heavy-duty hammer for construction work', 'Tools', 'No', 329.00, 260.00, NULL, 'pcs', 0.12, 1.50, '', 'Available'),
-(5, 3, 1, 'uploads/Screwdriver_Set_(Standard).png', 'Screwdriver Set (Standard)', 'MR DIY', 'Set of 6 screwdrivers with various sizes', 'Tools', 'No', 969.00, 670.00, NULL, 'set', 0.12, 0.80, '', 'Available'),
-(6, 4, 2, 'uploads/Cement_(50kg).png', 'Cement (50kg)', 'Girlsen', 'Portland cement for construction purposes', 'Building Materials', 'Yes', 240.00, 160.00, NULL, 'pcs', 0.12, 50.00, '', 'Available'),
-(7, 2, 3, 'uploads/Paint_Brush_Set.png', 'Paint Brush Set', 'MRS DIY', 'Set of 10 paint brushes for art projects', 'Art Supplies', 'No', 209.00, 180.00, NULL, 'set', 0.12, 0.50, '', 'Available'),
-(8, 3, 4, 'uploads/Safety_Helmet.png', 'Safety Helmet', 'MR DIY', 'Hard hat helmet for construction safety', 'Safety Gear', 'No', 470.00, 415.00, NULL, 'pcs', 0.12, 0.30, '', 'Available'),
-(9, 3, 1, 'uploads/drill machine.jpg', 'Drill Machine', 'MR DIY', 'Cordless drill machine with rechargeable batteries', 'Tools', 'No', 1100.00, 860.00, NULL, 'pcs', 0.12, 2.00, '', 'Available'),
-(10, 3, 2, 'uploads/Plywood (4x8 feet).jpg', 'Plywood (4x8 feet)', 'MR DIY', 'Plywood sheets for carpentry and construction', 'Building Materials', 'Yes', 650.00, 560.00, NULL, 'sheet', 0.12, 20.00, '', 'Available'),
-(11, 3, 2, 'uploads/Steel_Bar_(1_meter).png', 'Steel Bar (1 meter)', 'MR DIY', 'Deformed steel bars for reinforcement in concrete ...', 'Building Materials', 'Yes', 55.00, 35.00, NULL, 'meter', 0.12, 2.50, '', 'Available'),
-(12, 3, 2, 'uploads/Concrete Blocks (Standard).jpg', 'Concrete Blocks (Standard)', 'MR DIY', 'Standard concrete blocks for building walls', 'Building Materials', 'Yes', 12.00, 8.00, NULL, 'pcs', 0.12, 2.30, '', 'Available'),
-(13, 2, 5, 'uploads/Paint_Thinner.png', 'Paint Thinner', 'MRS DIY', 'Solvent used for thinning oil-based paints and cleaning paint brushes', 'Paints and Chemicals', 'No', 170.00, 135.00, NULL, 'pcs', 0.12, 1.00, '', 'Available'),
-(14, 4, 2, 'uploads/Roofing_Shingles_(Bundle).png', 'Roofing Shingles (Bundle)', 'Girlsen', 'Bundle of roofing shingles for covering roofs', 'Building Materials', 'Yes', 1750.00, 1360.00, NULL, 'bundle', 0.12, 13.61, '', 'Available'),
-(15, 4, 2, 'uploads/Sand_(1_cubic_yard).jpg', 'Sand (1 cubic yard)', 'Girlsen', 'Fine aggregate sand for various construction applications', 'Building Materials', 'Yes', 1500.00, 1250.00, NULL, 'cubic yard', 0.12, 1088.62, '', 'Available'),
-(16, 4, 2, 'uploads/Brick_(Standard).png', 'Brick (Standard)', 'Girlsen', 'Standard clay bricks for construction', 'Building Materials', 'Yes', 12.00, 7.00, NULL, 'pcs', 0.12, 2.50, '', 'Available'),
-(17, 4, 1, 'uploads/Wood_Studs_(8_feet).png', 'Wood Studs (8 feet)', 'Girlsen', 'Standard wood studs for framing walls', 'Tools', 'Yes', 225.00, 196.00, NULL, '8 feet', 0.12, 3.63, '', 'Available'),
-(18, 5, 2, 'uploads/Galvanized_Nails_(5_lbs).png', 'Galvanized Nails (5 lbs)', 'Edward Shop', 'Galvanized nails for various construction applicat...', 'Building Materials', 'Yes', 50.00, 24.00, NULL, 'lbs', 0.12, 2.27, '', 'Available'),
-(19, 5, 2, 'uploads/Drywall_(4x8_feet).png', 'Drywall (4x8 feet)', 'Edward Shop', 'Drywall sheets for interior wall finishing', 'Building Materials', 'Yes', 450.00, 395.00, NULL, 'sheet', 0.12, 22.68, '', 'Available'),
-(20, 5, 2, 'uploads/Concrete_Mix_(50_lb).png', 'Concrete Mix (50 lb)', 'Edward Shop', 'Pre-mixed concrete for small-scale construction projects', 'Building Materials', 'Yes', 365.00, 315.00, NULL, 'lb', 0.12, 18.68, '', 'Available'),
-(21, 5, 1, 'uploads/Adjustable_Wrench_(12_inches).png', 'Adjustable Wrench (12 inches)', 'Edward Shop', 'Adjustable wrench for plumbing and mechanical work', 'Tools', 'No', 115.00, 107.00, NULL, 'pcs', 0.12, 1.20, '', 'Available'),
-(22, 5, 1, 'uploads/Electric_Screwdriver.png', 'Electric Screwdriver', 'Edward Shop', 'Electric screwdriver with multiple torque settings', 'Tools', 'No', 269.00, 253.00, NULL, 'pcs', 0.12, 1.80, '', 'Available'),
-(23, 2, 2, 'uploads/PVC_Pipes_(10_feet).png', 'PVC Pipes (10 feet)', 'MRS DIY', 'PVC pipes for plumbing and drainage systems', 'Building Materials', 'Yes', 42.00, 38.00, NULL, 'feet', 0.12, 6.00, '', 'Available'),
-(24, 2, 2, 'uploads/Insulation_Foam_Board_(4x8_feet).png', 'Insulation Foam Board (4x8 feet)', 'MRS DIY', 'Foam boards for insulation purposes in construction', 'Building Materials', 'Yes', 380.00, 369.00, NULL, 'sheet', 0.12, 12.00, '', 'Available'),
-(25, 2, 3, 'uploads/Watercolor_Paint_Set.png', 'Watercolor Paint Set', 'MRS DIY', 'Set of high-quality watercolor paints for artists', 'Art Supplies', 'No', 109.00, 87.00, NULL, 'set', 0.12, 0.60, '', 'Available'),
-(26, 2, 3, 'uploads/Acrylic_Paint_Set.png', 'Acrylic Paint Set', 'MRS DIY', 'Set of vibrant acrylic paints suitable for various surfaces', 'Art Supplies', 'No', 75.00, 55.00, NULL, 'set', 0.12, 0.65, '', 'Available'),
-(27, 5, 5, 'uploads/Oil_Paint_Set.png', 'Oil Paint Set', 'Edward Shop', 'Set of high-quality oil paints for professional artists', 'Paints and Chemicals', 'No', 129.00, 97.00, NULL, 'set', 0.12, 0.80, '', 'Available'),
-(28, 5, 3, 'uploads/Sketching_Pencils_(Set_of_12).png', 'Sketching Pencils (Set of 12)', 'Edward Shop', 'Set of graphite sketching pencils for drawing and ...', 'Art Supplies', 'No', 45.00, 25.00, NULL, 'set', 0.12, 0.30, '', 'Available'),
-(29, 5, 3, 'uploads/Canvas_Roll_(6_feet).png', 'Canvas Roll (6 feet)', 'Edward Shop', 'Roll of primed canvas for painting', 'Art Supplies', 'Yes', 40.00, 29.00, NULL, 'roll', 0.12, 3.00, '', 'Available'),
-(30, 3, 4, 'uploads/Hard_Hat_with_Ear_Protection.png', 'Hard Hat with Ear Protection', 'MR DIY', 'Safety hard hat with built-in ear protection for noisy environments', 'Safety Gear', 'No', 305.00, 287.00, NULL, 'pcs', 0.12, 0.50, '', 'Available'),
-(31, 3, 4, 'uploads/Steel-Toed_Boots.png', 'Steel-Toed Boots', 'MR DIY', 'Heavy-duty steel-toed boots for foot protection in...', 'Safety Gear', 'No', 799.00, 0.00, NULL, 'pair', 0.12, 2.00, '', 'Available'),
-(32, 6, 4, 'uploads/Reflective_Safety_Tape_(Roll).png', 'Reflective Safety Tape (Roll)', 'Kobe Shop', 'Roll of reflective tape for enhancing visibility on safety gear', 'Safety Gear', 'No', 40.00, 25.00, NULL, 'roll', 0.12, 0.20, '', 'Available'),
-(33, 6, 2, 'uploads/Wood_Stain_(1_quart).jpg', 'Wood Stain (1 quart)', 'Kobe Shop', 'High-quality wood stain for finishing wood surface...', 'Building Materials', 'No', 215.00, 185.00, NULL, 'quart', 0.12, 2.00, '', 'Available'),
-(34, 6, 1, 'uploads/Paint_Roller_Set.png', 'Paint Roller Set', 'Kobe Shop', 'Set of paint rollers for applying paint smoothly on surfaces', 'Tools', 'No', 300.00, 280.00, NULL, 'set', 0.12, 0.80, '', 'Available'),
-(35, 6, 5, 'uploads/Adhesive_Primer_(1_gallon).png', 'Adhesive Primer (1 gallon)', 'Kobe Shop', 'Adhesive primer for preparing surfaces before pain...', 'Paints and Chemicals', 'No', 210.00, 190.00, NULL, 'gallon', 0.12, 8.00, '', 'Available');
+(2, 2, 3, 'uploads/Acrylic_Paint_Set.png', 'Acrylic Paint Set', 'MRS DIY', 'Set of vibrant acrylic paints suitable for various surfaces', 'Art Supplies', NULL, 99.00, 65.00, 96, 'pcs', 0.12, 0.70, '', 'Not Available'),
+(3, 2, 2, 'uploads/Adjustable_Wrench_(12_inches).png', 'Adjustable Wrench (12 inches)', 'MRS DIY', 'Adjustable wrench for plumbing and mechanical work', 'Tools', NULL, 109.00, 86.00, 97, 'pcs', 0.12, 1.20, '', 'Available'),
+(4, 3, 1, 'uploads/Hammer_(Large).png', 'Hammer (Large)(Large)', 'MR DIY', 'Heavy-duty hammer for construction work', 'Tools', NULL, 329.00, 260.00, NULL, 'pcs', 0.12, 1.50, '', 'Available'),
+(5, 3, 1, 'uploads/Screwdriver_Set_(Standard).png', 'Screwdriver Set (Standard)', 'MR DIY', 'Set of 6 screwdrivers with various sizes', 'Tools', NULL, 969.00, 670.00, NULL, 'set', 0.12, 0.80, '', 'Available'),
+(6, 4, 2, 'uploads/Cement_(50kg).png', 'Cement (50kg)', 'Girlsen', 'Portland cement for construction purposes', 'Building Materials', NULL, 240.00, 160.00, 100, 'pcs', 0.12, 50.00, '', 'Available'),
+(7, 2, 3, 'uploads/Paint_Brush_Set.png', 'Paint Brush Set', 'MRS DIY', 'Set of 10 paint brushes for art projects', 'Art Supplies', NULL, 209.00, 180.00, NULL, 'set', 0.12, 0.50, '', 'Available'),
+(8, 3, 4, 'uploads/Safety_Helmet.png', 'Safety Helmet', 'MR DIY', 'Hard hat helmet for construction safety', 'Safety Gear', NULL, 470.00, 415.00, NULL, 'pcs', 0.12, 0.30, '', 'Available'),
+(9, 3, 1, 'uploads/drill machine.jpg', 'Drill Machine', 'MR DIY', 'Cordless drill machine with rechargeable batteries', 'Tools', NULL, 1100.00, 860.00, NULL, 'pcs', 0.12, 2.00, '', 'Available'),
+(10, 3, 2, 'uploads/Plywood (4x8 feet).jpg', 'Plywood (4x8 feet)', 'MR DIY', 'Plywood sheets for carpentry and construction', 'Building Materials', NULL, 650.00, 560.00, NULL, 'sheet', 0.12, 20.00, '', 'Available'),
+(11, 3, 2, 'uploads/Steel_Bar_(1_meter).png', 'Steel Bar (1 meter)', 'MR DIY', 'Deformed steel bars for reinforcement in concrete ...', 'Building Materials', NULL, 55.00, 35.00, NULL, 'meter', 0.12, 2.50, '', 'Available'),
+(12, 3, 2, 'uploads/Concrete Blocks (Standard).jpg', 'Concrete Blocks (Standard)', 'MR DIY', 'Standard concrete blocks for building walls', 'Building Materials', NULL, 12.00, 8.00, NULL, 'pcs', 0.12, 2.30, '', 'Available'),
+(13, 2, 5, 'uploads/Paint_Thinner.png', 'Paint Thinner', 'MRS DIY', 'Solvent used for thinning oil-based paints and cleaning paint brushes', 'Paints and Chemicals', NULL, 170.00, 135.00, NULL, 'pcs', 0.12, 1.00, '', 'Available'),
+(14, 4, 2, 'uploads/Roofing_Shingles_(Bundle).png', 'Roofing Shingles (Bundle)', 'Girlsen', 'Bundle of roofing shingles for covering roofs', 'Building Materials', NULL, 1750.00, 1360.00, 150, 'bundle', 0.12, 13.61, '', 'Available'),
+(15, 4, 2, 'uploads/Sand_(1_cubic_yard).jpg', 'Sand (1 cubic yard)', 'Girlsen', 'Fine aggregate sand for various construction applications', 'Building Materials', NULL, 1500.00, 1250.00, 150, 'cubic yard', 0.12, 1088.62, '', 'Available'),
+(16, 4, 2, 'uploads/Brick_(Standard).png', 'Brick (Standard)', 'Girlsen', 'Standard clay bricks for construction', 'Building Materials', NULL, 12.00, 7.00, 100, 'pcs', 0.12, 2.50, '', 'Available'),
+(17, 4, 2, 'uploads/Wood_Studs_(8_feet).png', 'Wood Studs (8 feet)', 'Girlsen', 'Standard wood studs for framing walls', 'Building Materials', NULL, 225.00, 196.00, 98, '8 feet', 0.12, 3.63, '', 'Available'),
+(18, 5, 2, 'uploads/Galvanized_Nails_(5_lbs).png', 'Galvanized Nails (5 lbs)', 'Edward Shop', 'Galvanized nails for various construction applicat...', 'Building Materials', NULL, 50.00, 24.00, 50, 'lbs', 0.12, 2.27, '', 'Available'),
+(19, 5, 2, 'uploads/Drywall_(4x8_feet).png', 'Drywall (4x8 feet)', 'Edward Shop', 'Drywall sheets for interior wall finishing', 'Building Materials', NULL, 450.00, 395.00, 50, 'sheet', 0.12, 22.68, '', 'Available'),
+(20, 5, 2, 'uploads/Concrete_Mix_(50_lb).png', 'Concrete Mix (50 lb)', 'Edward Shop', 'Pre-mixed concrete for small-scale construction projects', 'Building Materials', NULL, 365.00, 315.00, 50, 'lb', 0.12, 18.68, '', 'Available'),
+(21, 5, 1, 'uploads/Adjustable_Wrench_(12_inches).png', 'Adjustable Wrench (12 inches)', 'Edward Shop', 'Adjustable wrench for plumbing and mechanical work', 'Tools', NULL, 115.00, 107.00, 49, 'pcs', 0.12, 1.20, '', 'Available'),
+(22, 5, 1, 'uploads/Electric_Screwdriver.png', 'Electric Screwdriver', 'Edward Shop', 'Electric screwdriver with multiple torque settings', 'Tools', NULL, 269.00, 253.00, 49, 'pcs', 0.12, 1.80, '', 'Available'),
+(23, 2, 2, 'uploads/PVC_Pipes_(10_feet).png', 'PVC Pipes (10 feet)', 'MRS DIY', 'PVC pipes for plumbing and drainage systems', 'Building Materials', NULL, 42.00, 38.00, NULL, 'feet', 0.12, 6.00, '', 'Available'),
+(24, 2, 2, 'uploads/Insulation_Foam_Board_(4x8_feet).png', 'Insulation Foam Board (4x8 feet)', 'MRS DIY', 'Foam boards for insulation purposes in construction', 'Building Materials', NULL, 380.00, 369.00, NULL, 'sheet', 0.12, 12.00, '', 'Available'),
+(25, 2, 3, 'uploads/Watercolor_Paint_Set.png', 'Watercolor Paint Set', 'MRS DIY', 'Set of high-quality watercolor paints for artists', 'Art Supplies', NULL, 109.00, 87.00, NULL, 'set', 0.12, 0.60, '', 'Available'),
+(26, 2, 3, 'uploads/Acrylic_Paint_Set.png', 'Acrylic Paint Set', 'MRS DIY', 'Set of vibrant acrylic paints suitable for various surfaces', 'Art Supplies', NULL, 75.00, 55.00, NULL, 'set', 0.12, 0.65, '', 'Available'),
+(27, 5, 5, 'uploads/Oil_Paint_Set.png', 'Oil Paint Set', 'Edward Shop', 'Set of high-quality oil paints for professional artists', 'Paints and Chemicals', NULL, 129.00, 97.00, 50, 'set', 0.12, 0.80, '', 'Available'),
+(28, 5, 3, 'uploads/Sketching_Pencils_(Set_of_12).png', 'Sketching Pencils (Set of 12)', 'Edward Shop', 'Set of graphite sketching pencils for drawing and ...', 'Art Supplies', NULL, 45.00, 25.00, 50, 'set', 0.12, 0.30, '', 'Available'),
+(29, 5, 3, 'uploads/Canvas_Roll_(6_feet).png', 'Canvas Roll (6 feet)', 'Edward Shop', 'Roll of primed canvas for painting', 'Art Supplies', NULL, 40.00, 29.00, 50, 'roll', 0.12, 3.00, '', 'Available'),
+(30, 3, 4, 'uploads/Hard_Hat_with_Ear_Protection.png', 'Hard Hat with Ear Protection', 'MR DIY', 'Safety hard hat with built-in ear protection for noisy environments', 'Safety Gear', NULL, 305.00, 287.00, NULL, 'pcs', 0.12, 0.50, '', 'Available'),
+(31, 3, 4, 'uploads/Steel-Toed_Boots.png', 'Steel-Toed Boots', 'MR DIY', 'Heavy-duty steel-toed boots for foot protection in...', 'Safety Gear', NULL, 799.00, 650.00, NULL, 'pair', 0.12, 2.00, '', 'Available'),
+(32, 6, 4, 'uploads/Reflective_Safety_Tape_(Roll).png', 'Reflective Safety Tape (Roll)', 'Kobe Shop', 'Roll of reflective tape for enhancing visibility on safety gear', 'Safety Gear', NULL, 40.00, 25.00, 50, 'roll', 0.12, 0.20, '', 'Available'),
+(33, 6, 2, 'uploads/Wood_Stain_(1_quart).jpg', 'Wood Stain (1 quart)', 'Kobe Shop', 'High-quality wood stain for finishing wood surface...', 'Building Materials', NULL, 215.00, 185.00, 50, 'quart', 0.12, 2.00, '', 'Available'),
+(34, 6, 1, 'uploads/Paint_Roller_Set.png', 'Paint Roller Set', 'Kobe Shop', 'Set of paint rollers for applying paint smoothly on surfaces', 'Tools', NULL, 300.00, 280.00, 49, 'set', 0.12, 0.80, '', 'Available'),
+(35, 6, 5, 'uploads/Adhesive_Primer_(1_gallon).png', 'Adhesive Primer (1 gallon)', 'Kobe Shop', 'Adhesive primer for preparing surfaces before pain...', 'Paints and Chemicals', NULL, 210.00, 190.00, 50, 'gallon', 0.12, 8.00, '', 'Available');
 
 -- --------------------------------------------------------
 
@@ -970,20 +875,6 @@ CREATE TABLE `saledetails` (
   `TotalAmount` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `saledetails`
---
-
-INSERT INTO `saledetails` (`SaleDetailID`, `SaleID`, `ProductID`, `Quantity`, `ProductWeight`, `UnitPrice`, `Subtotal`, `Tax`, `TotalAmount`) VALUES
-(1, 1, 2, 1, 1.00, 500.00, 500.00, 60.00, 560.00),
-(2, 1, 3, 1, 1.00, 300.00, 300.00, 36.00, 336.00),
-(3, 2, 2, 1, 1.00, 500.00, 500.00, 60.00, 560.00),
-(4, 2, 3, 1, 1.00, 300.00, 300.00, 36.00, 336.00),
-(5, 3, 2, 1, 1.00, 500.00, 500.00, 60.00, 560.00),
-(6, 3, 3, 1, 1.00, 300.00, 300.00, 36.00, 336.00),
-(7, 4, 2, 2, 2.00, 500.00, 1000.00, 120.00, 1120.00),
-(8, 4, 3, 1, 1.00, 300.00, 300.00, 36.00, 336.00);
-
 -- --------------------------------------------------------
 
 --
@@ -1004,16 +895,6 @@ CREATE TABLE `sales` (
   `EmployeeID` int(11) DEFAULT NULL,
   `CustomerID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `sales`
---
-
-INSERT INTO `sales` (`SaleID`, `SaleDate`, `SalePreference`, `ShippingFee`, `PaymentMode`, `CardNumber`, `ExpiryDate`, `CVV`, `Discount`, `TotalAmount`, `EmployeeID`, `CustomerID`) VALUES
-(1, '2024-06-02 13:16:28', 'Pick-up', 0.00, 'Cash', '', '', '', 0.00, 896.00, 10, 20),
-(2, '2024-06-02 13:18:49', 'Pick-up', 0.00, 'Card', '123123', '123123123', '123', 0.00, 896.00, 10, 21),
-(3, '2024-06-02 13:31:32', 'Pick-up', 0.00, 'Cash', '', '', '', 0.00, 896.00, 10, 22),
-(4, '2024-06-02 13:48:42', 'Delivery', 50.00, 'Cash', '', '', '', 0.00, 1506.00, 10, 23);
 
 -- --------------------------------------------------------
 
@@ -1072,14 +953,6 @@ CREATE TABLE `targetsales` (
   `TargetAmount` decimal(10,2) DEFAULT NULL,
   `EmployeeID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `targetsales`
---
-
-INSERT INTO `targetsales` (`TargetID`, `MonthYear`, `TargetAmount`, `EmployeeID`) VALUES
-(1, '2024-06-01', 1000.00, NULL),
-(2, '2024-01-01', 200.00, NULL);
 
 -- --------------------------------------------------------
 
@@ -1171,7 +1044,11 @@ CREATE TABLE `transaction_history` (
 INSERT INTO `transaction_history` (`Transaction_ID`, `Batch_ID`, `Supplier_ID`, `Date_Delivered`, `Time_Delivered`, `Order_Status`, `Feedback`) VALUES
 (1, 1, 2, '2024-06-02', '12:34:09', 'Cancelled', NULL),
 (2, 2, 2, '2024-06-02', '12:39:53', 'Completed + Delayed', 'Done'),
-(3, 3, 2, '2024-06-02', '13:17:45', 'Completed', NULL);
+(3, 3, 2, '2024-06-02', '13:17:45', 'Completed', NULL),
+(4, 4, 4, '2024-06-02', '17:54:10', 'Completed', NULL),
+(5, 5, 4, '2024-06-02', '17:54:59', 'Completed', NULL),
+(6, 6, 5, '2024-06-02', '17:55:31', 'Completed', NULL),
+(7, 7, 6, '2024-06-02', '17:55:58', 'Completed', NULL);
 
 -- --------------------------------------------------------
 
@@ -1192,7 +1069,7 @@ CREATE TABLE `trucks` (
 --
 
 INSERT INTO `trucks` (`TruckID`, `PlateNumber`, `TruckType`, `Capacity`, `TruckStatus`) VALUES
-(1, 'ALD123', 'Light-Duty', 4000.00, 'Unavailable'),
+(1, 'ALD123', 'Light-Duty', 4000.00, 'Available'),
 (2, 'DUY234', 'Light-Duty', 4000.00, 'Unavailable'),
 (3, 'VRR125', 'Light-Duty', 4000.00, 'Unavailable'),
 (4, 'DJD233', 'Heavy-Duty', 20000.00, 'Unavailable'),
@@ -1472,13 +1349,13 @@ ALTER TABLE `attendance`
 -- AUTO_INCREMENT for table `audit_log`
 --
 ALTER TABLE `audit_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `batch_orders`
 --
 ALTER TABLE `batch_orders`
-  MODIFY `Batch_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Batch_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `benefit_info`
@@ -1502,13 +1379,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `CustomerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `CustomerID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `deliveryorders`
 --
 ALTER TABLE `deliveryorders`
-  MODIFY `DeliveryOrderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `DeliveryOrderID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `employees`
@@ -1538,7 +1415,7 @@ ALTER TABLE `feedbacks`
 -- AUTO_INCREMENT for table `funds_transaction`
 --
 ALTER TABLE `funds_transaction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `leave_requests`
@@ -1556,13 +1433,13 @@ ALTER TABLE `ledger`
 -- AUTO_INCREMENT for table `ledgertransaction`
 --
 ALTER TABLE `ledgertransaction`
-  MODIFY `LedgerXactID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `LedgerXactID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `Order_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `Order_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `payroll`
@@ -1592,13 +1469,13 @@ ALTER TABLE `salary_info`
 -- AUTO_INCREMENT for table `saledetails`
 --
 ALTER TABLE `saledetails`
-  MODIFY `SaleDetailID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `SaleDetailID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `session`
@@ -1616,7 +1493,7 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT for table `targetsales`
 --
 ALTER TABLE `targetsales`
-  MODIFY `TargetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `TargetID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tax_info`
@@ -1628,7 +1505,7 @@ ALTER TABLE `tax_info`
 -- AUTO_INCREMENT for table `transaction_history`
 --
 ALTER TABLE `transaction_history`
-  MODIFY `Transaction_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Transaction_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `trucks`

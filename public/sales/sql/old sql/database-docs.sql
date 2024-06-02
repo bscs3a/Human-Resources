@@ -260,12 +260,15 @@ VALUES
         ('2024-02-05 14:45:00', 'Pick-up', 0.00, 'Card', 310.00, 2, NULL),
         ('2024-03-20 11:00:00', 'Delivery', 20.00, 'Cash', 260.00, 3, NULL);
 
-    -- Dummy Target Sales Data for 2024
+    -- Dummy Target Sales Data for 2024 (up to May)
     INSERT INTO `targetsales` (`MonthYear`, `TargetAmount`, `EmployeeID`) 
     VALUES 
         ('2024-01-01', 6100.00, 1),
         ('2024-02-01', 7100.00, 2),
-        ('2024-03-01', 8100.00, 3);
+        ('2024-03-01', 8100.00, 3),
+        ('2024-04-01', 6500.00, 1),
+        ('2024-05-01', 7500.00, 2);
+
 
     -- Adjust TotalAmount for each sale to be close to or above the target sales
     UPDATE `sales` s

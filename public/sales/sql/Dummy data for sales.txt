@@ -1,0 +1,83 @@
+-- Dummy Sales Data for 2022
+INSERT INTO `sales` (`SaleDate`, `SalePreference`, `ShippingFee`, `PaymentMode`, `TotalAmount`, `EmployeeID`, `CustomerID`, `Discount`) 
+VALUES 
+    ('2022-01-15 10:30:00', 'Delivery', 10.00, 'Cash', 150.00, 10, NULL, 0),
+    ('2022-02-05 14:45:00', 'Pick-up', 0.00, 'Card', 250.00, 10, NULL, 0),
+    ('2022-03-20 11:00:00', 'Delivery', 20.00, 'Cash', 180.00, 10, NULL, 0),
+    ('2022-04-10 09:15:00', 'Delivery', 15.00, 'Cash', 200.00, 10, NULL, 0),
+    ('2022-05-22 13:00:00', 'Pick-up', 0.00, 'Cash', 300.00, 10, NULL, 0),
+    ('2022-06-08 16:30:00', 'Delivery', 25.00, 'Card', 350.00, 10, NULL, 0),
+    ('2022-07-14 10:00:00', 'Delivery', 10.00, 'Cash', 180.00, 10, NULL, 0),
+    ('2022-08-29 12:45:00', 'Pick-up', 0.00, 'Cash', 270.00, 10, NULL, 0),
+    ('2022-09-05 15:20:00', 'Delivery', 20.00, 'Card', 400.00, 10, NULL, 0),
+    ('2022-10-18 09:30:00', 'Delivery', 15.00, 'Cash', 220.00, 10, NULL, 0),
+    ('2022-11-25 11:45:00', 'Pick-up', 0.00, 'Cash', 280.00, 10, NULL, 0),
+    ('2022-12-30 14:00:00', 'Delivery', 25.00, 'Card', 320.00, 10, NULL, 0);
+
+-- Dummy Sales Data for 2023
+INSERT INTO `sales` (`SaleDate`, `SalePreference`, `ShippingFee`, `PaymentMode`, `TotalAmount`, `EmployeeID`, `CustomerID`, `Discount`) 
+VALUES 
+    ('2023-01-15 10:30:00', 'Delivery', 10.00, 'Cash', 200.00, 10, NULL, 0),
+    ('2023-02-05 14:45:00', 'Pick-up', 0.00, 'Card', 300.00, 10, NULL, 0),
+    ('2023-03-20 11:00:00', 'Delivery', 20.00, 'Cash', 250.00, 10, NULL, 0),
+    ('2023-04-10 09:15:00', 'Delivery', 15.00, 'Cash', 350.00, 10, NULL, 0),
+    ('2023-05-22 13:00:00', 'Pick-up', 0.00, 'Cash', 400.00, 10, NULL, 0),
+    ('2023-06-08 16:30:00', 'Delivery', 25.00, 'Card', 450.00, 10, NULL, 0),
+    ('2023-07-14 10:00:00', 'Delivery', 10.00, 'Cash', 300.00, 10, NULL, 0),
+    ('2023-08-29 12:45:00', 'Pick-up', 0.00, 'Cash', 350.00, 10, NULL, 0),
+    ('2023-09-05 15:20:00', 'Delivery', 20.00, 'Card', 500.00, 10, NULL, 0),
+    ('2023-10-18 09:30:00', 'Delivery', 15.00, 'Cash', 400.00, 10, NULL, 0),
+    ('2023-11-25 11:45:00', 'Pick-up', 0.00, 'Cash', 450.00, 10, NULL, 0),
+    ('2023-12-30 14:00:00', 'Delivery', 25.00, 'Card', 500.00, 10, NULL, 0);
+
+-- Dummy Sales Data for 2024 (up to May)
+INSERT INTO `sales` (`SaleDate`, `SalePreference`, `ShippingFee`, `PaymentMode`, `TotalAmount`, `EmployeeID`, `CustomerID`, `Discount`) 
+VALUES 
+    ('2024-01-15 10:30:00', 'Delivery', 10.00, 'Cash', 210.00, 10, NULL, 0),
+    ('2024-02-05 14:45:00', 'Pick-up', 0.00, 'Card', 310.00, 10, NULL, 0),
+    ('2024-03-20 11:00:00', 'Delivery', 20.00, 'Cash', 260.00, 10, NULL, 0),
+    ('2024-04-10 09:15:00', 'Delivery', 15.00, 'Cash', 270.00, 10, NULL, 0),
+    ('2024-05-22 13:00:00', 'Pick-up', 0.00, 'Cash', 320.00, 10, NULL, 0);
+
+
+
+    -- Dummy Target Sales Data for 2022
+    INSERT INTO `targetsales` (`MonthYear`, `TargetAmount`, `EmployeeID`) 
+    VALUES 
+        ('2022-01-01', 5000.00, 1),
+        ('2022-02-01', 6000.00, 2),
+        ('2022-03-01', 7000.00, 3),
+        ('2022-04-01', 5500.00, 1),
+        ('2022-05-01', 6500.00, 2),
+        ('2022-06-01', 7500.00, 3),
+        ('2022-07-01', 6000.00, 1),
+        ('2022-08-01', 7000.00, 2),
+        ('2022-09-01', 8000.00, 3),
+        ('2022-10-01', 6000.00, 1),
+        ('2022-11-01', 6500.00, 2),
+        ('2022-12-01', 7500.00, 3);
+
+    -- Dummy Target Sales Data for 2023
+    INSERT INTO `targetsales` (`MonthYear`, `TargetAmount`, `EmployeeID`) 
+    VALUES 
+        ('2023-01-01', 6000.00, 1),
+        ('2023-02-01', 7000.00, 2),
+        ('2023-03-01', 8000.00, 3),
+        ('2023-04-01', 6500.00, 1),
+        ('2023-05-01', 7500.00, 2),
+        ('2023-06-01', 8500.00, 3),
+        ('2023-07-01', 7000.00, 1),
+        ('2023-08-01', 8000.00, 2),
+        ('2023-09-01', 9000.00, 3),
+        ('2023-10-01', 7000.00, 1),
+        ('2023-11-01', 7500.00, 2),
+        ('2023-12-01', 8500.00, 3);
+
+-- Dummy Target Sales Data for 2024 (up to May)
+INSERT INTO `targetsales` (`MonthYear`, `TargetAmount`, `EmployeeID`) 
+VALUES 
+    ('2024-01-01', 6100.00, 1),
+    ('2024-02-01', 7100.00, 2),
+    ('2024-03-01', 8100.00, 3),
+    ('2024-04-01', 6500.00, 1),
+    ('2024-05-01', 7500.00, 2);

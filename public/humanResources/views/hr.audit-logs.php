@@ -145,14 +145,15 @@
         
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM audit_log as al 
-           INNER JOIN account_info as ai ON ai.id = al.account_id
-           INNER JOIN employees as e ON e.id = ai.employees_id
-           WHERE e.department = :department AND (ai.username LIKE :searchQuery OR CONCAT(e.first_name, ' ', e.last_name) LIKE :searchQuery OR al.action LIKE :searchQuery OR CAST(al.id AS CHAR) LIKE :searchQuery OR CAST(al.datetime AS CHAR) LIKE :searchQuery)");
+                INNER JOIN account_info as ai ON ai.id = al.account_id
+                INNER JOIN employees as e ON e.id = ai.employees_id
+                WHERE e.department = :department AND (ai.username LIKE :searchQuery OR CONCAT(e.first_name, ' ', e.last_name) LIKE :searchQuery OR al.action LIKE :searchQuery OR CAST(al.id AS CHAR) LIKE :searchQuery OR CAST(al.datetime AS CHAR) LIKE :searchQuery)");
         $stmt->bindParam(':searchQuery', $searchQuery);
         $stmt->bindParam(':department', $department, PDO::PARAM_STR);
 
         $stmt->execute();
-        $totalPages = $stmt->fetchColumn();
+        $totalRecords = $stmt->fetchColumn();
+        $totalPages = ceil($totalRecords / $numberPerPage);
         
         // PUT YOUR LINK HERE
         $link = "/hr/audit/page=";

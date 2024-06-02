@@ -382,10 +382,11 @@
                     }
                 </style>
                 <div class="flex justify-between px-5 py-1 mb-1 space-x-4">
-                    <button class="flex items-center justify-center font-bold py-1 px-4 rounded w-1/2 border border-black shadow custom-button">
+                    <!-- <button class="flex items-center justify-center font-bold py-1 px-4 rounded w-1/2 border border-black shadow custom-button">
                         <i class="ri-pause-line text-lg mr-2"></i>
                         Hold
-                    </button>
+                    </button> -->
+                    <div></div>
                     <button id="checkout-button" class="flex items-center justify-center font-bold py-1 px-4 rounded w-1/2 border border-black shadow custom-button">
                         <i class="ri-shopping-basket-2-fill mr-2"></i>
                         Proceed

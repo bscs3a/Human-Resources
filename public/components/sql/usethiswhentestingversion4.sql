@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2024 at 02:16 PM
+-- Generation Time: Jun 02, 2024 at 02:42 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -640,6 +640,52 @@ INSERT INTO `grouptype` (`grouptype`, `description`, `requiresinfo`) VALUES
 ('EP', 'Expenses', 0),
 ('IC', 'Income', 0),
 ('LE', 'liabilities and owner\'s equity', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inventory`
+--
+
+CREATE TABLE `inventory` (
+  `id` int(11) NOT NULL,
+  `stock_id` int(11) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `product` varchar(255) NOT NULL,
+  `price` bigint(20) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `category` varchar(50) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `inventory`
+--
+
+INSERT INTO `inventory` (`id`, `stock_id`, `image`, `product`, `price`, `quantity`, `category`, `status`, `date_added`) VALUES
+(6, 3, NULL, 'Cement (50kg)', 240, 0, 'Building Materials', 'Overstock', '2024-06-02 01:43:33');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inventoryorders`
+--
+
+CREATE TABLE `inventoryorders` (
+  `order_id` int(11) NOT NULL,
+  `product_name` text NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `date_ordered` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `inventoryorders`
+--
+
+INSERT INTO `inventoryorders` (`order_id`, `product_name`, `product_id`, `quantity`, `date_ordered`) VALUES
+(2, 'Screwdriver Set (Standard)', 2, 155, '2024-06-02 01:17:14');
 
 -- --------------------------------------------------------
 
@@ -1321,6 +1367,19 @@ ALTER TABLE `grouptype`
   ADD PRIMARY KEY (`grouptype`);
 
 --
+-- Indexes for table `inventory`
+--
+ALTER TABLE `inventory`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `stock_id` (`stock_id`);
+
+--
+-- Indexes for table `inventoryorders`
+--
+ALTER TABLE `inventoryorders`
+  ADD PRIMARY KEY (`order_id`);
+
+--
 -- Indexes for table `leave_requests`
 --
 ALTER TABLE `leave_requests`
@@ -1539,6 +1598,18 @@ ALTER TABLE `feedbacks`
 --
 ALTER TABLE `funds_transaction`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `inventory`
+--
+ALTER TABLE `inventory`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `inventoryorders`
+--
+ALTER TABLE `inventoryorders`
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `leave_requests`

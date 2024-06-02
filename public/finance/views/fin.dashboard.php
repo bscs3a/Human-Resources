@@ -125,7 +125,7 @@ require_once "components/dashboard/dashboard.performFunctions.php";
                                         </div>
                                         <div class="text-sm font-medium text-gray-400">Total Sales</div>
                                     </div>
-                                    <div class="sm:block hidden">
+                                    <div class="hidden 2xl:block ">
                                         <img src="../public/finance/img/Profit.png" alt="Profit.png"
                                             class="bg-radial-gradient from-[#FFEB95] to-[#FECE01] py-2 px-2 rounded-full">
                                     </div>
@@ -133,7 +133,7 @@ require_once "components/dashboard/dashboard.performFunctions.php";
                             </div>
                             <!-- End: Dashboard Analytics: Total Sales -->
                             <!-- Start: Dashboard Analytics: Total Expense -->
-                            <div class="bg-white rounded-md border border-gray-300 p-4 shadow-lg">
+                            <div class="bg-white rounded-md border border-gray-300 p-4 shadow-lg text-wrap">
                                 <div class="flex justify-between mb-4">
                                     <div>
                                         <div class="flex items-center mb-1">
@@ -147,7 +147,7 @@ require_once "components/dashboard/dashboard.performFunctions.php";
                                         </div>
                                         <div class="text-sm font-medium text-gray-400">Total Expense</div>
                                     </div>
-                                    <div>
+                                    <div class = "2xl:block hidden">
                                         <img src="../public/finance/img/RequestMoney.png" alt="request-money.png"
                                             class="bg-radial-gradient from-[#FFEB95] to-[#FECE01] max-w-full h-auto py-2 px-1 rounded-full">
                                     </div>
