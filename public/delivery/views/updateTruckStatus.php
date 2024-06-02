@@ -16,7 +16,7 @@ $stmt->execute();
 $currentDate = date('Y-m-d');
 
 // Then check the attendance of each employee assigned to a truck
-$stmt = $conn->prepare("SELECT et.TruckID, COUNT(a.employee_id) as EmployeeCount FROM EmployeeTrucks et LEFT JOIN attendance a ON et.EmployeeID = a.employee_id AND DATE(a.attendance_date) = :currentDate AND (a.clock_out IS NULL OR a.clock_out > NOW()) GROUP BY et.TruckID");
+$stmt = $conn->prepare("SELECT et.TruckID, COUNT(a.employees_id) as EmployeeCount FROM EmployeeTrucks et LEFT JOIN attendance a ON et.EmployeeID = a.employees_id AND DATE(a.attendance_date) = :currentDate AND (a.clock_out IS NULL OR a.clock_out > NOW()) GROUP BY et.TruckID");
 $stmt->bindParam(':currentDate', $currentDate);
 $stmt->execute();
 

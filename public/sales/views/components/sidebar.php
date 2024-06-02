@@ -91,9 +91,9 @@
         </li>
 
          <li class="mb-1 hover:bg-slate-400 rounded-xl">
-             <a route='/sls/Audit-Trail' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
+             <a route='/sls/Audit-Logs/page=1' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
                  <i class="ri-history-fill mr-3 text-lg"></i>
-                 <span class="text-sm font-medium">Audit Trail</span>
+                 <span class="text-sm font-medium">Audit Logs</span>
                  <i class="ri-arrow-down-s-line ml-auto"></i>
              </a>
          </li>
@@ -102,6 +102,14 @@
             <a route='/sls/Sales-Management' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
                 <i class="ri-bar-chart-fill mr-3 text-lg"></i>
                 <span class="text-sm font-medium">Sales Management</span>
+                <i class="ri-arrow-down-s-line ml-auto"></i>
+            </a>
+        </li>
+
+        <li class="mb-1 hover:bg-slate-400 rounded-xl">
+            <a route='/sls/funds/Sales/page=1' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
+                <i class="ri-pie-chart-fill mr-3 text-lg"></i> <!-- Changed icon here -->
+                <span class="text-sm font-medium">Department Funds</span>
                 <i class="ri-arrow-down-s-line ml-auto"></i>
             </a>
         </li>

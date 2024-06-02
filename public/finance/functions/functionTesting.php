@@ -3,12 +3,13 @@ require_once 'otherGroups/salary.php';
 require_once 'pondo/generalPondo.php';
 // require_once 'ponod/insertPondo.php';
 
-$monthlySalary = 10000;
-$withHoldingTax = 1000;
-$isPending = true;
-$paymentMethod = "Cash on bank";
+$department = 'Product Order';
+$cashAccount = 'Cash on hand';
 
 
+var_dump(pondoForEveryone($department));
 
-echo inputSalary($monthlySalary, $withHoldingTax, $isPending, $paymentMethod);
+echo getExpensesPondo($department, $cashAccount);
+
+echo getRemainingPondo($department, "Cash on hand") + getRemainingPondo($department, "Cash on bank");
 // echo getRemainingHRPondo($paymentMethod);

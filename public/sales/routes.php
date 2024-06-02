@@ -1,5 +1,8 @@
 <?php
 
+require_once "public/finance/functions/otherGroups/sales.php";
+require_once "public/finance/functions/otherGroups/inventory.php";
+
 // $_SESSION['user'] = 'admin';
 // $_SESSION['role'] = 'admin';
 // $_SESSION['employee_name'] = "Alfaro, Aian Louise";
@@ -17,6 +20,7 @@ $sls = [
     '/sls/POS/Checkout' => $basePath . "checkout.php",
     '/sls/POS/Receipt' => $basePath . "Receipt.php",
     '/sls/Audit-Trail' => $basePath . "AuditTrail.php",
+
     '/sls/Revenue' => $basePath . "Revenue.php",
     '/sls/Returns' => $basePath . "ReturnTable.php",
     '/sls/Sales-Management' => $basePath . "SalesManagement.php",
@@ -49,6 +53,19 @@ $sls = [
     // functions
     // can't recognize by the router logout can proceed
     '/sls/logout' => "./public/sales/views/function/logout.php",
+
+
+    '/sls/funds/Sales/page={pageNumber}' => function ($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "pondo.php";
+    },
+
+    '/sls/Audit-Logs/page={pageNumber}' => function ($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "audit_logs.php";
+    },
+
+
 ];
 
 // // Get the current URL path
@@ -73,14 +90,13 @@ $sls = [
 // START: Add Sales
 class Customer
 {
-    public function create($firstName, $lastName, $phone, $email)
+    public function create($name, $phone, $email)
     {
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        $stmt = $conn->prepare("INSERT INTO Customers (FirstName, LastName, Phone, Email) VALUES (:firstName, :lastName, :phone, :email)");
-        $stmt->bindParam(':firstName', $firstName);
-        $stmt->bindParam(':lastName', $lastName);
+        $stmt = $conn->prepare("INSERT INTO Customers (Name, Phone, Email) VALUES (:name, :phone, :email)");
+        $stmt->bindParam(':name', $name);
         $stmt->bindParam(':phone', $phone);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
@@ -91,24 +107,23 @@ class Customer
 
 class Sale
 {
-    public function create($saleDate, $salePreference, $paymentMode, $totalAmount, $employeeId, $customerId, $cardNumber, $expiryDate, $cvv, $shippingFee)
+    public function create($saleDate, $salePreference, $paymentMode, $totalAmount, $employeeId, $customerId, $cardNumber, $expiryDate, $cvv, $shippingFee, $discount)
     {
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        // Add the shippingFee to the totalAmount
-        $totalAmount += $shippingFee;
-
-        $stmt = $conn->prepare("INSERT INTO Sales (SaleDate, SalePreference, PaymentMode, TotalAmount, CustomerID, CardNumber, ExpiryDate, CVV, ShippingFee) VALUES (:saleDate, :salePreference, :paymentMode, :totalAmount, :customerId, :cardNumber, :expiryDate, :cvv, :shippingFee)");
+        $stmt = $conn->prepare("INSERT INTO Sales (SaleDate, SalePreference, PaymentMode, TotalAmount, EmployeeID, CustomerID, CardNumber, ExpiryDate, CVV, ShippingFee, Discount) VALUES (:saleDate, :salePreference, :paymentMode, :totalAmount, :employeeId, :customerId, :cardNumber, :expiryDate, :cvv, :shippingFee, :discount)");
         $stmt->bindParam(':saleDate', $saleDate);
         $stmt->bindParam(':salePreference', $salePreference);
         $stmt->bindParam(':paymentMode', $paymentMode);
         $stmt->bindParam(':totalAmount', $totalAmount);
+        $stmt->bindParam(':employeeId', $employeeId);
         $stmt->bindParam(':customerId', $customerId);
         $stmt->bindParam(':cardNumber', $cardNumber);
         $stmt->bindParam(':expiryDate', $expiryDate);
         $stmt->bindParam(':cvv', $cvv);
         $stmt->bindParam(':shippingFee', $shippingFee);
+        $stmt->bindParam(':discount', $discount);
         $stmt->execute();
 
         return $conn->lastInsertId();
@@ -184,20 +199,27 @@ class Product
 
 Router::post('/addSales', function () {
     $customer = new Customer();
-    $customerId = $customer->create($_POST['customerFirstName'], $_POST['customerLastName'], $_POST['customerPhone'], $_POST['customerEmail']);
+    $customerId = $customer->create($_POST['customerName'], $_POST['customerPhone'], $_POST['customerEmail']);
 
+
+    // Get the EmployeeID of the currently logged in user
+    $employeeId = $_SESSION['user']['account_id'];
     date_default_timezone_set('Asia/Manila');
     $sale = new Sale();
-    $saleId = $sale->create(date('Y-m-d H:i:s'), $_POST['SalePreference'], $_POST['payment-mode'], $_POST['totalAmount'], '1', $customerId, $_POST['cardNumber'], $_POST['expiryDate'], $_POST['cvv'], $_POST['shippingFee']);
+    $saleId = $sale->create(date('Y-m-d H:i:s'), $_POST['SalePreference'], $_POST['payment-mode'], $_POST['totalAmount'], $employeeId, $customerId, $_POST['cardNumber'], $_POST['expiryDate'], $_POST['cvv'], $_POST['shippingFee'], $_POST['discount']);
 
     $saleDetail = new SaleDetail();
     $deliveryOrder = new DeliveryOrder();
     $product = new Product();
     $cart = json_decode($_POST['cartData'], true);
+    $totalTax = 0;
+
     foreach ($cart as $item) {
         $subtotal = $item['price'] * $item['quantity'];
-        $tax = $item['price'] * $item['TaxRate'];
-        $totalAmount = ($item['price'] + $tax) * $item['quantity'];
+        $tax = $subtotal * $item['TaxRate']; // Calculate the tax on the subtotal
+        $totalAmount = $subtotal + $tax; // Add the tax to the subtotal to get the total amount
+
+        $totalTax += $tax; // Add the tax of the current item to the total tax
 
         $productWeight = $product->getWeight($item['id']);
         $totalProductWeight = $productWeight * $item['quantity'];  // Calculate total weight of each product purchased
@@ -208,6 +230,21 @@ Router::post('/addSales', function () {
             $deliveryOrder->create($saleId, $item['id'], $item['quantity'], $_POST['province'], $_POST['municipality'], $_POST['streetBarangayAddress'], $_POST['deliveryDate'], $totalProductWeight);
         }
     }
+
+    $paymentMode = $_POST['payment-mode'];
+
+    if ($paymentMode === 'cash') {
+        $paymentMode = 'Cash on hand';
+    } elseif ($paymentMode === 'card') {
+        $paymentMode = 'Cash on bank';
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $supplierPriceTotal = $_POST["supplierPriceTotal"];
+        recountInventory($supplierPriceTotal);
+    }
+
+    insertSalesLedger($_POST['totalAmount'], $totalTax, $paymentMode, $_POST['discount']);
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/sls/POS/Receipt");
@@ -220,6 +257,21 @@ Router::post('/AddTarget', function () {
 
     $monthYear = $_POST['month_year'] . '-01';  // Append '-01' to make it a valid date
     $targetSales = $_POST['target_sales'];
+
+    // Prepare a select statement to check if the MonthYear already exists
+    $stmt = $conn->prepare("SELECT * FROM TargetSales WHERE MonthYear = :monthYear");
+    $stmt->bindParam(':monthYear', $monthYear);
+
+    // Execute the statement
+    $stmt->execute();
+
+    // Check if the MonthYear already exists
+    if ($stmt->fetchColumn()) {
+        $_SESSION['notification'] = "The target MonthYear already exists.";
+        $rootFolder = dirname($_SERVER['PHP_SELF']);
+        header("Location: $rootFolder/sls/Sales-Management");
+        return;
+    }
 
     $stmt = $conn->prepare("INSERT INTO TargetSales (MonthYear, TargetAmount) VALUES (:monthYear, :targetSales)");
     $stmt->bindParam(':monthYear', $monthYear);
@@ -253,6 +305,8 @@ Router::post('/returnProduct', function () {
 
     // Execute the statement
     $stmt->execute();
+
+    insertSalesReturn($paymentReturned, 'Cash on hand');
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/sls/Returns");

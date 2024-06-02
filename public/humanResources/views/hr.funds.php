@@ -3,8 +3,17 @@
 $department = $_SESSION['user']['role'];
 $db = Database::getInstance();
 $conn = $db->connect();
-$stmt = $conn->prepare("SELECT COUNT(*) FROM funds_transaction as ft JOIN employees as e ON ft.employee_id = e.id WHERE department = :department");
+$searchQuery = isset($_SESSION['postdata']['generalLedgerSelected']) ? $_SESSION['postdata']['generalLedgerSelected'] : null;
+
+$sql = "SELECT COUNT(*) FROM funds_transaction as ft JOIN employees as e ON ft.employee_id = e.id JOIN ledgertransaction as lt ON ft.lt_id = lt.ledgerxactid WHERE department = :department";
+if ($searchQuery) {
+    $sql .= " AND (lt.LedgerNo_Dr = :searchQuery)";
+}
+$stmt = $conn->prepare($sql);
 $stmt->bindParam(':department', $department);
+if ($searchQuery) {
+    $stmt->bindParam(':searchQuery', $searchQuery);
+}
 $stmt->execute();
 $totalRecords = $stmt->fetchColumn();
 
@@ -78,7 +87,61 @@ $remainingPondo = $cashOnHand + $cashOnBank;
             <div class="w-full px-6 py-3 bg-white">
                 <div class="justify-between items-start">
                     <!-- Button -->
-                    <div class="flex justify-end">
+                    <div class="flex justify-between">
+                        <div class="items-start mb-1">
+                            <div class="relative">
+                                <div class="inline-flex items-center overflow-hidden rounded-lg  border border-gray-500">
+                                    <form action="/fin/fundSearch" method="post" class="flex items-center">
+                                        <?php 
+                                            $selected = isset($_SESSION['postdata']['generalLedgerSelected']) ? $_SESSION['postdata']['generalLedgerSelected'] : null;
+                                            $recent = (isset($_SESSION['postdata']) && array_key_exists('recent', $_SESSION['postdata'])) ? $_SESSION['postdata']['recent'] : true;
+                                        ?>
+                                        <label for="recent" id="recentLabel" class="border-r-5 border-black px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 min-w-12">
+                                            <span id="labelText"><?php echo $recent ? "Recent" : "Old"?></span>
+                                            <input type="checkbox" name="recent" id="recent" class="hidden" <?php echo $recent ? "selected" : "" ?>>
+                                        </label>
+                                        <script>
+                                            document.getElementById('recent').addEventListener('change', function() {
+                                                var labelText = document.getElementById('labelText');
+                                                if (this.checked) {
+                                                    labelText.textContent = 'Recent';
+                                                } else {
+                                                    labelText.textContent = 'Old';
+                                                }
+                                            });
+                                        </script>
+                                        <!-- bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm  -->
+                                        <select class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500" name="generalLedgerSelected">
+                                            <option value="" <?php echo is_null($selected) ? "selected" : ""?>>Select</option>
+                                            <?php 
+                                            $select = getAllLedgerAccounts();
+                                            foreach ($select as $row) {
+                                                $option = $row['ledgerno'] == $selected ? "selected" : "";
+                                                echo "<option value=\"{$row['ledgerno']}\" "."$option".">{$row['name']}</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                        <input type="hidden" name="pageNumber" value = "<?php echo isset ($_GET['page']) ? (int) $_GET['page'] : 1?>">
+                                        <button
+                                            type ="submit"
+                                            class="px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900">
+                                            <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                                            <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                                viewBox="0 0 488.4 488.4" xml:space="preserve">
+                                            <g>
+                                                <g>
+                                                    <path d="M0,203.25c0,112.1,91.2,203.2,203.2,203.2c51.6,0,98.8-19.4,134.7-51.2l129.5,129.5c2.4,2.4,5.5,3.6,8.7,3.6
+                                                        s6.3-1.2,8.7-3.6c4.8-4.8,4.8-12.5,0-17.3l-129.6-129.5c31.8-35.9,51.2-83,51.2-134.7c0-112.1-91.2-203.2-203.2-203.2
+                                                        S0,91.15,0,203.25z M381.9,203.25c0,98.5-80.2,178.7-178.7,178.7s-178.7-80.2-178.7-178.7s80.2-178.7,178.7-178.7
+                                                        S381.9,104.65,381.9,203.25z"/>
+                                                </g>
+                                            </g>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <div class="items-start mb-2">
                             <button id="openModal"
                                 class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm py-1 px-3 rounded-lg border border-gray-500">
@@ -261,7 +324,9 @@ $remainingPondo = $cashOnHand + $cashOnBank;
 
                     <tbody class="divide-y divide-gray-200 text-center">
                         <?php 
-                        $pondoTable = getAllTransactions($department,$page, $displayPerPage);
+                        $searchQuery = isset($_SESSION['postdata']['generalLedgerSelected']) ? $_SESSION['postdata']['generalLedgerSelected'] : null;
+
+                        $pondoTable = getAllTransactions($department,$searchQuery, $recent,$page, $displayPerPage);
                         foreach($pondoTable as $row){
                         ?>
                         <tr>

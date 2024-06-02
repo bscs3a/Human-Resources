@@ -48,7 +48,8 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Truck Assign</title>
-    <link href="/Master/src/tailwind.css" rel="stylesheet">
+
+    <link href="./../../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 
     <!-- This is for sorting library -->
@@ -84,12 +85,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
-            </ul>
+            <?php require_once __DIR__ . "/logout.php"?>
 
             <!-- End: Profile -->
 
@@ -105,12 +101,13 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </button>
                 </div>
                 <!-- content -->
-
+                
                 <!-- You could provide a form here to assign the truck to an order -->
                 <div class="m-4 font-bold text-lg flex flex-col space-y-4">
                     <div class="flex justify-start space-x-20">
                         <p>Plate Number: <span class="font-normal text-gray-500"><?php echo $truck['PlateNumber']; ?></span></p>
                         <p>Truck Type: <span class="font-normal text-gray-500"><?php echo $truck['TruckType']; ?></p><br><br>
+                        <p>Weight Limit: <span class="font-normal text-gray-500"><?php echo $truck['Capacity']; ?></p><br><br>
                     </div>
                     <div class="flex space-x-10">
                         <p>Select:</p>
@@ -125,6 +122,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <th class="w-1/8 border px-4 py-2">Quantity</th>
                                             <th class="w-1/8 border px-4 py-2">Order Date</th>
                                             <th class="w-1/8 border px-4 py-2">Delivery Date</th>
+                                            <th class="w-1/8 border px-4 py-2">Municipality</th>
                                         </tr>
                                     </thead>
                                     <tbody class="font-normal text-center">
@@ -139,6 +137,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <td class="border px-4 py-2"><?php echo $row['Quantity']; ?></td>
                                                 <td class="border px-4 py-2"><?php echo date('Y-m-d', strtotime($row['SaleDate'])); ?></td>
                                                 <td class="border px-4 py-2"><?php echo $row['DeliveryDate']; ?></td>
+                                                <td class="border px-4 py-2"><?php echo $row['Municipality']; ?></td>
                                             </tr>
                                         <?php endforeach; ?>         
                                     </tbody>
@@ -268,7 +267,6 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </script>
             <!-- Uncheck All -->
     <script>
-        // Listen for click events on the "Uncheck All" button
         document.getElementById('uncheck-all').addEventListener('click', function() {
             // Uncheck all checkboxes and enable them
             var checkboxes = document.getElementsByClassName('select-checkbox');
@@ -284,8 +282,12 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             // Update the content of the elements displaying the total weight and the number of selected orders
             totalWeightElement.textContent = '0.00 kg';
             selectedCountElement.textContent = '0';
+
+            // Show all rows in the table
+            $("#myTable tbody tr").show();
         });
     </script>
+
             <!-- Only select one productID -->
     <script>
         // Listen for click events on checkboxes
@@ -294,7 +296,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             checkboxes[i].addEventListener('click', function() {
                 // Get the ID of the product corresponding to the clicked checkbox
                 var id = this.getAttribute('data-id');
-
+/*
                 // If the checkbox with data-id="4" or data-id="13" is checked, uncheck and disable all other checkboxes
                 if ((id === '4' || id === '13') && this.checked) {
                     for (var j = 0; j < checkboxes.length; j++) {
@@ -310,7 +312,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         checkboxes[j].disabled = false;  // Enable the checkbox
                     }
                 }
-
+*/        
                 // Calculate the total weight and the count of selected orders
                 totalWeight = 0;
                 selectedCount = 0;
@@ -321,28 +323,107 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     }
                 }
 
-                // Check if the total weight exceeds the maximum allowed weight based on the truck type
-                var maxWeight = <?php echo $truck['TruckType'] === 'Light-Duty' ? 1000 : 2000; ?>;
+                // Fetch the capacity from the database based on the truck type
+                var maxWeight = <?php echo $truck['Capacity']; ?>;
+
+                var maxSingleProductWeight = 20000;  // Maximum weight for a single product
+                var productWeight = parseFloat(this.getAttribute('data-weight'));   // Assuming 'data-weight' attribute holds the weight of the product
+
                 if (totalWeight > maxWeight) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Truck Notice.',
                         text: 'Please reduce order. The total weight of ' + totalWeight.toFixed(2) + ' kg exceeds the maximum allowed weight for this truck type.'
                     });
-                    this.checked = false;  // Uncheck the checkbox
-                    totalWeight -= parseFloat(this.getAttribute('data-weight'));
+
+                    this.checked = false;  // Uncheck the checkbox  
+                    totalWeight -= productWeight;
                     selectedCount--;
                 }
 
+                if (productWeight > maxSingleProductWeight) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Product Notice.',
+                        text: 'The weight of a single product exceeds the maximum limit of 2000kg.'
+                    });
+
+                }
                 // Update the content of the elements displaying the total weight and the number of selected orders
                 totalWeightElement.textContent = totalWeight.toFixed(2) + ' kg';
                 selectedCountElement.textContent = selectedCount;
             });
+
+            <?php
+            // Fetch the truck's capacity
+            $maxWeight = $truck['Capacity'];
+
+            // Split orders that exceed the truck's capacity
+            foreach ($results as $i => $row) {
+                if ($row['ProductWeight'] > $maxWeight) {
+                    // Calculate the number of split orders needed and their weights
+                    $numSplitOrders = ceil($row['ProductWeight'] / $maxWeight);
+                    $weights = array_fill(0, $numSplitOrders, $maxWeight);
+                    $weights[count($weights) - 1] = $row['ProductWeight'] % $maxWeight;
+
+                    // Create the split orders
+                    $splitOrders = [];
+                    for ($j = 0; $j < $numSplitOrders; $j++) {
+                        $splitOrder = $row;
+                        $splitOrder['DeliveryOrderID'] .= '-' . ($j + 1);  // Append a suffix to the DeliveryOrderID
+                        $splitOrder['ProductWeight'] = $weights[$j];
+                        $splitOrders[] = $splitOrder;
+                    }
+
+                    // Replace the original order with the split orders in the $results array
+                    array_splice($results, $i, 1, $splitOrders);
+                }
+            }
+            ?>
         }
     </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Mapping of regions to municipalities
+        var regionMap = {
+            North: ["San Fernando", "Angeles", "Mabalacat", "Magalang"],
+            South: ["Sto Tomas", "Apalit", "Minalin", "Macabebe", "Masantol", "Sasmuan"],
+            West: ["Guagua", "Santa Rita", "Lubao", "Floridablanca", "Porac", "Bacolor"],
+            East: ["Mexico", "Sta Ana", "Arayat", "Candaba"]
+        };
+    
+        // When a checkbox is selected
+        $("input[type='checkbox']").change(function() {
+            // Get the DeliveryOrderID from the selected checkbox
+            var selectedDeliveryOrderID = $(this).val();
+    
+            // Hide all rows
+            $("#myTable tbody tr").hide();
+    
+            // Show only the rows that match the selected region
+            $("#myTable tbody tr").each(function() {
+                var rowDeliveryOrderID = $(this).find("input[type='checkbox']").val();
+                var rowMunicipality = $(this).find("td:last").text();
+                var rowRegion = Object.keys(regionMap).find(key => regionMap[key].includes(rowMunicipality));
+    
+                if (selectedDeliveryOrderID == rowDeliveryOrderID) {
+                    $("#myTable tbody tr").filter(function() {
+                        var thisMunicipality = $(this).find("td:last").text();
+                        var thisRegion = Object.keys(regionMap).find(key => regionMap[key].includes(thisMunicipality));
+                        return thisRegion == rowRegion;
+                    }).show();
+                }
+            });
+        });
+    });
+    </script>
+
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/master/src/route.js"></script>
-    <script src="/master/src/form.js"></script>
+    <script src="./../../src/route.js"></script>
+    <script src="./../../src/form.js"></script>
 </body>
 
 </html>

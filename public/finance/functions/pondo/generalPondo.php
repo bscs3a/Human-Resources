@@ -136,7 +136,8 @@
     }
 
     // pass savings if you want to return all departments
-    function getAllTransactions($department, $page = 1, $itemsPerPage = 10, $year = null, $month = null){
+    function getAllTransactions($department, $searchQuery, $recent, $page = 1, $itemsPerPage = 10, $year = null, $month = null){
+        $order = $recent ? 'DESC' : 'ASC';
         if (!acceptableDepartment($department)){
             throw new Exception("Department does not exist");
         }
@@ -169,8 +170,11 @@
                 $sql .= " AND YEAR(lt.datetime) = :year AND MONTH(lt.datetime) = :month";
             }
         }
+        if ($searchQuery) {
+            $sql .= " AND (lt.LedgerNo_Dr = :searchQuery)";
+        }
     
-        $sql .= " ORDER BY lt.datetime DESC LIMIT :itemsPerPage OFFSET :offset";
+        $sql .= " ORDER BY lt.datetime $order LIMIT :itemsPerPage OFFSET :offset";
     
         $stmt = $conn->prepare($sql);
     
@@ -181,6 +185,9 @@
         if (is_numeric($year) && is_numeric($month) && $month > 0 && $month < 13) {
             $stmt->bindValue(':year', $year, PDO::PARAM_INT);
             $stmt->bindValue(':month', $month, PDO::PARAM_INT);
+        }
+        if ($searchQuery) {
+            $stmt->bindValue(':searchQuery', $searchQuery, PDO::PARAM_STR);
         }
         $stmt->bindValue(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);

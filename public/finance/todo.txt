@@ -5,6 +5,8 @@ other todo:
 9. T-Accounts
 
 Done:
+16. cancel order in product order
+15. minimize sidebar
 14. audit page
 10.  search general
 13. audit logs

@@ -51,39 +51,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-
-                <div class="relative inline-block text-left">
-                   <div>
-                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
-                            <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
-                            </div>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </a>
-                    </div>
-
-                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        <div class="py-1" role="none">
-                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
-                                <i class="ri-logout-box-line"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    document.getElementById('options-menu').addEventListener('click', function() {
-                        var dropdownMenu = document.getElementById('dropdown-menu');
-                        if (dropdownMenu.classList.contains('hidden')) {
-                            dropdownMenu.classList.remove('hidden');
-                        } else {
-                            dropdownMenu.classList.add('hidden');
-                        }
-                    });
-                </script>
-            </ul>
+            <?php require_once "components/logout/logout.php" ?>
 
             <!-- End: Profile -->
 
@@ -106,35 +74,90 @@
                     <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
                         <thead class="bg-green-800 text-white">
                             <tr class="font-bold">
-                                <th class="px-4 py-2">Assets</th>
+                                <th class="px-4 py-2">Gross Sales</th>
                                 <th class="px-4 py-2">Revenue</th>
-                                <th class="px-4 py-2">Percentage</th>
                             </tr>
 
                         </thead>
                         <tbody>
                             <tr class="border-b border">
                                 <td class="p-4 font-semibold">Amount of Raw Sales</td>
-                                <td class="p-4 text-green-400">₱10000</td>
-                                <td class="p-4 text-green-400">%10</td>
+                                <td class="p-4 text-green-400">
+                                    <?php
+                                    // Check if the function exists before calling it
+                                    if (function_exists('amountOfRawSales')) {
+                                        // Call the function and store its return value
+                                        $salesAmount = amountOfRawSales();
+
+                                        // Multiply the sales amount by -1
+                                        $salesAmount *= -1;
+
+                                        // Check if the function returned a value
+                                        if ($salesAmount !== null) {
+                                            echo "₱" . $salesAmount;
+                                        } else {
+                                            echo "Error: amountOfRawSales() returned null.";
+                                        }
+                                    } else {
+                                        echo "Error: amountOfRawSales() function does not exist.";
+                                    }
+                                    ?>
+                                </td>
                             </tr>
 
                             <tr class="border-b border">
                                 <td class="p-4 font-semibold">Amount of Tax Included</td>
-                                <td class="p-4 text-green-400">₱10000</td>
-                                <td class="p-4 text-green-400">%10</td>
+                                <td class="p-4 text-green-400">
+                                    <?php
+                                    // Check if the function exists before calling it
+                                    if (function_exists('amountOfSalesTax')) {
+                                        // Call the function and store its return value
+                                        $salesTaxAmount = amountOfSalesTax();
+
+                                        // Multiply the sales tax amount by -1
+                                        $salesTaxAmount *= -1;
+
+                                        // Check if the function returned a value
+                                        if ($salesTaxAmount !== null) {
+                                            echo "₱" . $salesTaxAmount;
+                                        } else {
+                                            echo "Error: amountOfSalesTax() returned null.";
+                                        }
+                                    } else {
+                                        echo "Error: amountOfSalesTax() function does not exist.";
+                                    }
+                                    ?>
+                                </td>
                             </tr>
 
-                            <tr class="border-b border">
-                                <td class="p-4 font-semibold">Amount of Transactions</td>
-                                <td class="p-4 text-green-400">100</td>
-                                <td class="p-4 text-green-400">%10</td>
-
-                    
                             <tr class="font-semibold text-2xl">
                                 <td class="p-4 ">Total</td>
-                                <td class="p-4 text-green-600">₱10000</td>
-                                <td class="p-4 text-green-600">%1</td>
+                                <td class="p-4 text-green-600">
+                                    <?php
+                                    // Check if the functions exist before calling them
+                                    if (function_exists('amountOfRawSales') && function_exists('amountOfSalesTax')) {
+                                        // Call the functions and store their return values
+                                        $salesAmount = amountOfRawSales();
+                                        $salesTaxAmount = amountOfSalesTax();
+
+                                        // Multiply the amounts by -1
+                                        $salesAmount *= -1;
+                                        $salesTaxAmount *= -1;
+
+                                        // Subtract the sales tax amount from the sales amount to get the total
+                                        $total = $salesAmount + $salesTaxAmount;
+
+                                        // Check if the functions returned values
+                                        if ($salesAmount !== null && $salesTaxAmount !== null) {
+                                            echo "₱" . $total;
+                                        } else {
+                                            echo "Error: One of the functions returned null.";
+                                        }
+                                    } else {
+                                        echo "Error: One of the functions does not exist.";
+                                    }
+                                    ?>
+                                </td>
                             </tr>
 
                         </tbody>
@@ -146,29 +169,52 @@
                             <tr class="font-bold">
                                 <th class="px-4 py-2">Contra Revenue</th>
                                 <th class="px-4 py-2">Lost</th>
-                                <th class="px-4 py-2">Percentage</th>
                             </tr>
 
                         </thead>
                         <tbody>
                             <tr class="border-b border">
                                 <td class="p-4 font-semibold">Returns</td>
-                                <td class="p-4 text-red-400">₱10000</td>
-                                <td class="p-4 text-red-400">%10</td>
+                                <td class="p-4 text-red-400">
+                                    <?php
+                                    // Check if the function exists before calling it
+                                    if (function_exists('totalReturns')) {
+                                        // Call the function and store its return value
+                                        $totalReturns = totalReturns();
+
+                                        // Check if the function returned a value
+                                        if ($totalReturns !== null) {
+                                            echo "₱" . $totalReturns;
+                                        } else {
+                                            echo "Error: totalReturns() returned null.";
+                                        }
+                                    } else {
+                                        echo "Error: totalReturns() function does not exist.";
+                                    }
+                                    ?>
+                                </td>
                             </tr>
-
-                        
-
-                            <tr class="border-b border">
-                                <td class="p-4 font-semibold">Amount of Returned Items</td>
-                                <td class="p-4 text-red-400">100</td>
-                                <td class="p-4 text-red-400">%10</td>
-                            </tr>         
 
                             <tr class="font-semibold text-2xl">
                                 <td class="p-4 ">Total</td>
-                                <td class="p-4 text-red-600">₱10000</td>
-                                <td class="p-4 text-red-600">%1</td>
+                                <td class="p-4 text-red-600">
+                                    <?php
+                                    // Check if the function exists before calling it
+                                    if (function_exists('totalReturns')) {
+                                        // Call the function and store its return value
+                                        $totalReturns = totalReturns();
+
+                                        // Check if the function returned a value
+                                        if ($totalReturns !== null) {
+                                            echo "₱" . $totalReturns;
+                                        } else {
+                                            echo "Error: totalReturns() returned null.";
+                                        }
+                                    } else {
+                                        echo "Error: totalReturns() function does not exist.";
+                                    }
+                                    ?>
+                                </td>
                             </tr>
 
                         </tbody>
@@ -179,7 +225,7 @@
                     <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
                         <thead class="bg-gray-200">
                             <tr class="font-bold">
-                                <th class="px-4 py-2">Total Assets</th>
+                                <th class="px-4 py-2">Total Gross Sales</th>
                                 <th class="px-4 py-2">Total Contra Revenue</th>
                                 <th class="px-4 py-2">Summary</th>
                             </tr>
@@ -187,9 +233,71 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="p-4 text-green-500">₱10000</td>
-                                <td class="p-4 text-red-500">₱5000</td>
-                                <td class="p-4 text-yellow-500">₱5000</td>
+                                <td class="p-4 text-green-500">
+                                    <?php
+                                    // Check if the functions exist before calling them
+                                    if (function_exists('amountOfRawSales') && function_exists('amountOfSalesTax')) {
+                                        // Call the functions and store their return values
+                                        $salesAmount = amountOfRawSales();
+                                        $salesTaxAmount = amountOfSalesTax();
+
+                                        // Multiply the amounts by -1
+                                        $salesAmount *= -1;
+                                        $salesTaxAmount *= -1;
+
+                                        // Subtract the sales tax amount from the sales amount to get the total
+                                        $total = $salesAmount + $salesTaxAmount;
+
+                                        // Check if the functions returned values
+                                        if ($salesAmount !== null && $salesTaxAmount !== null) {
+                                            echo "₱" . $total;
+                                        } else {
+                                            echo "Error: One of the functions returned null.";
+                                        }
+                                    } else {
+                                        echo "Error: One of the functions does not exist.";
+                                    }
+                                    ?>
+                                </td>
+                                <td class="p-4 text-red-500">
+                                    <?php
+                                    // Check if the function exists before calling it
+                                    if (function_exists('totalReturns')) {
+                                        // Call the function and store its return value
+                                        $totalReturns = totalReturns();
+
+                                        // Check if the function returned a value
+                                        if ($totalReturns !== null) {
+                                            echo "₱" . $totalReturns;
+                                        } else {
+                                            echo "Error: totalReturns() returned null.";
+                                        }
+                                    } else {
+                                        echo "Error: totalReturns() function does not exist.";
+                                    }
+                                    ?>
+                                </td>
+                                <td class="p-4 text-yellow-500">
+                                    <?php
+                                    // Check if the function exists before calling it
+                                    if (function_exists('totalSalesMinusTaxAndReturns')) {
+                                        // Call the function and store its return value
+                                        $totalSalesMinusTaxAndReturns = totalSalesMinusTaxAndReturns();
+
+                                        // Multiply the result by -1
+                                        $totalSalesMinusTaxAndReturns *= -1;
+
+                                        // Check if the function returned a value
+                                        if ($totalSalesMinusTaxAndReturns !== null) {
+                                            echo "₱" . $totalSalesMinusTaxAndReturns;
+                                        } else {
+                                            echo "Error: totalSalesMinusTaxAndReturns() returned null.";
+                                        }
+                                    } else {
+                                        echo "Error: totalSalesMinusTaxAndReturns() function does not exist.";
+                                    }
+                                    ?>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -197,11 +305,6 @@
 
 
             </div>
-
-            <button class="w-44 p-4 rounded-lg shadow-lg border-gray-400 border-2 bg-gray-200 font-semibold mt-12 hover:bg-gray-300 hover:border-gray-500 hover:font-bold transition-all ease-in-out">
-                <i class="ri-import-line font-medium text-2xl"></i>
-                Print Sheet
-            </button>
         </div>
 
     </main>

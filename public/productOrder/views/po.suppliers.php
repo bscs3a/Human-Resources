@@ -16,7 +16,7 @@
   <div class="flex h-screen bg-white">
     <!-- sidebar -->
     <div id="sidebar" class="flex h-screen">
-      <?php include "components/po.sidebar.php" ?>
+    <?php include "public/productOrder/views/components/po.sidebar.php" ?>
     </div>
 
     <!-- Main Content -->
@@ -31,24 +31,7 @@
         </div>
 
         <!-- dropdown -->
-        <div x-data="{ dropdownOpen: false }" class="relative my-32">
-          <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
-            <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
-              <i class="ri-arrow-down-s-line"></i>
-            </div>
-          </button>
-
-          <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
-
-          <form id="logout-form" action="/logout/user" method="POST">
-            <div x-show="dropdownOpen"
-              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
-              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
-            </div>
-          </form>
-        </div>
+        <?php require_once "public/productOrder/views/po.logout.php"?>
       </div>
 
       <script>
@@ -120,7 +103,7 @@
                         <a class="text-1xl font-semibold">Supplier Name:</a>
                         <a class="ml-3 text-black-500"><?php echo $row['Supplier_Name']; ?></a>
                       </div>
-                      <a href="/master/po/editsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
+                      <a route="/po/editsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
                         class="bg-violet-950 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Edit</a>
                     </div>
                     <div class="flex flex-row">
@@ -134,9 +117,9 @@
                   </div>
                   <div class="flex justify-between items-center pt-3">
 
-                    <a href="/master/po/viewsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
+                    <a route="/po/viewsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
                       class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</a>
-                    <a href="/master/po/viewsupplierproduct/Supplier=<?php echo $row['Supplier_ID']; ?>"
+                    <a route="/po/viewsupplierproduct/Supplier=<?php echo $row['Supplier_ID']; ?>"
                       class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Product
                       Lists/Order</a>
                   </div>

@@ -9,8 +9,8 @@ $dlv = [
     '/dlv/list' => $basePath . "delivery-list.php",
     '/dlv/viewdetails' => $basePath . "viewdetails.php",
     '/dlv/history' => $basePath . "history.php",
-    '/dlv/req' => $basePath . "expenses-req.php",
     '/dlv/assign' => $basePath . "assign.php",
+    '/dlv/req' => $basePath . "expenses-req.php",
     
     // For page with ID
     '/dlv/viewdetails/id={id}' => function($id) use ($basePath) {
@@ -27,6 +27,15 @@ $dlv = [
         include $basePath . "assign.php";
     },
     
+    '/dlv/pondo/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "pondo.php";
+    },
+
+    '/dlv/audit/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "audit_logs.php";
+    },
 ];
 
 Router::post('/statusupdateview', function () {
@@ -40,7 +49,7 @@ Router::post('/statusupdateview', function () {
     if ($status == 'Delivered') {
         $receivedDate = date('Y-m-d');
     }
-
+    
     // Fetch the TruckID associated with the DeliveryOrderID
     $stmt = $conn->prepare("SELECT TruckID FROM deliveryorders WHERE DeliveryOrderID = :orderId");
     $stmt->bindParam(':orderId', $orderId);

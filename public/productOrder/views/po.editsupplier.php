@@ -31,24 +31,8 @@
         </div>
 
         <!-- dropdown -->
-        <div x-data="{ dropdownOpen: false }" class="relative my-32">
-          <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
-            <div class="flex items-center gap-4">
-            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
-              <i class="ri-arrow-down-s-line"></i>
-            </div>
-          </button>
+        <?php require_once "public/productOrder/views/po.logout.php"?>
 
-          <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
-
-          <form id="logout-form" action="/logout/user" method="POST">
-            <div x-show="dropdownOpen"
-              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
-              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
-            </div>
-          </form>
-        </div>
       </div>
 
       <script>
@@ -60,7 +44,7 @@
 
       <!-- New Form -->
       <div class="container mx-auto py-3">
-        <div class="max-w-6xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
+        <div class="h-full w-[90%] mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
           <div id="main" class="m-3 pt-6">
 
             <!-- Supplier Edit Form -->
@@ -132,9 +116,25 @@
                               class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
                               value="<?php echo $supplier['Estimated_Delivery']; ?>" required>
                           </div>
+                          <div class="mb-4">
+                            <label for="shipping-fee" class="block text-black font-semibold mb-2">Shipping Fee</label>
+                            <input type="text" id="estimated-delivery-date" name="shipping-fee"
+                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                              value="<?php echo $supplier['Shipping_fee']; ?>" required>
+                          </div>
+
                           <!-- ... -->
                         </div>
+
                       </div>
+
+                      <div class="flex flex-col w-1/2 mx-auto mb-5">
+                        <label for="working-days" class="block text-black font-semibold mb-2">Working Days</label>
+                        <input type="text" id="working-days" name="working-days"
+                          class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                          value="<?php echo $supplier['Working_days']; ?>" required>
+                      </div>
+
                       <div>
                         <!-- Product table -->
                         <div class="overflow-x-auto rounded-lg border border-gray-400">
@@ -150,6 +150,7 @@
                               <th class="px-4 py-2 font-semibold">Description</th>
                               <th class="px-4 py-2 font-semibold">Product Weight (KG)</th>
                               <th class="px-4 py-2 font-semibold">Unit of Measurement</th>
+                              <th class="px-4 py-2 font-semibold">Tax Rate</th>
                               <th class="px-4 py-2 font-semibold"></th>
                               </tr>
                             </thead>
@@ -164,14 +165,14 @@
                               foreach ($products as $product) { ?>
                                 <tr>
                                   <!-- Product fields -->
-                                  <td class="flex gap-3 px-6 py-4 font-normal text-gray-900">
-                                <input type="file" name="product_image_<?php echo $product['ProductID']; ?>" accept="image/*">
-                                <?php
-                                // Display current product image
-                                $imagePath = '../../' . $product['ProductImage'];
-                                echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
-                                ?>
-                            </td>
+                                  <td class="flex flex-col justify-center items-center gap-3 px-2 py-4 font-normal text-gray-900">
+                                    <input class="w-40" type="file" name="product_image_<?php echo $product['ProductID']; ?>" accept="image/*">
+                                    <?php
+                                    // Display current product image
+                                    $imagePath = '../../' . $product['ProductImage'];
+                                    echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
+                                    ?>
+                                  </td>
                             <td class="px-4 py-4">
                                 <input type="text" name="product_name_<?php echo $product['ProductID']; ?>"
                                     value="<?php echo $product['ProductName']; ?>"
@@ -227,6 +228,14 @@
                             <td class="px-4 py-4">
                                 <textarea name="product_weight_<?php echo $product['ProductID']; ?>"
                                     class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['ProductWeight']; ?></textarea>
+                            </td>
+                            <td class="px-4 py-4">
+                                <textarea name="unitofmeasurement_<?php echo $product['ProductID']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['UnitOfMeasurement']; ?></textarea>
+                            </td>
+                            <td class="px-4 py-4">
+                                <textarea name="taxrate_<?php echo $product['ProductID']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['TaxRate']; ?></textarea>
                             </td>
                                   <!-- ... -->
                                   <td class="px-4 py-4">

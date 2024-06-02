@@ -41,8 +41,7 @@ CREATE TABLE Products (
 -- Customers Table
 CREATE TABLE IF NOT EXISTS Customers (
     CustomerID INT AUTO_INCREMENT PRIMARY KEY,
-    FirstName VARCHAR(100),
-    LastName VARCHAR(100),
+    Name VARCHAR(200),
     Phone VARCHAR(20),
     Email VARCHAR(100)
 );
@@ -67,6 +66,7 @@ CREATE TABLE IF NOT EXISTS Sales (
     CardNumber VARCHAR(16),
     ExpiryDate TEXT,
     CVV VARCHAR(3),
+    Discount DECIMAL(10, 2),
     TotalAmount DECIMAL(10, 2),
     EmployeeID INT,
     CustomerID INT,

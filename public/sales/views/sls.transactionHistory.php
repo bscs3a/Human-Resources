@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 
     <?php
-    require_once 'function/fetchSalesData.php';
+    // require_once 'function/fetchSalesData.php';
     ?>
 
 </head>
@@ -42,39 +42,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-
-                <div class="relative inline-block text-left">
-                    <div>
-                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
-                            <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
-                            </div>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </a>
-                    </div>
-
-                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        <div class="py-1" role="none">
-                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
-                                <i class="ri-logout-box-line"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    document.getElementById('options-menu').addEventListener('click', function() {
-                        var dropdownMenu = document.getElementById('dropdown-menu');
-                        if (dropdownMenu.classList.contains('hidden')) {
-                            dropdownMenu.classList.remove('hidden');
-                        } else {
-                            dropdownMenu.classList.add('hidden');
-                        }
-                    });
-                </script>
-            </ul>
+            <?php require_once "components/logout/logout.php"?>
 
             <!-- End: Profile -->
 
@@ -114,23 +82,47 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Fetch data from the result set -->
-                            <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
-                                <?php $saleId = $row['SaleID']; ?>
-                                <tr class='border border-gray-200 bg-white' data-sale-id='<?php echo $saleId; ?>'>
-                                    <td class='px-4 py-2'><?php echo $row['CustomerFirstName'] . " " . $row['CustomerLastName']; ?></td>
-                                    <td class='px-4 py-2'><?php echo $saleId; ?></td>
-                                    <td class='px-4 py-2'><?php echo date('F j, Y, g:i a', strtotime($row['SaleDate'])); ?></td>
-                                    <td class='px-4 py-2'><?php echo $row['SalePreference']; ?></td>
-                                    <td class='px-4 py-2'><?php echo $row['PaymentMode']; ?></td>
-                                    <td class='px-4 py-2'>₱<?php echo number_format($row['TotalAmount'], 2); ?></td>
-                                    <td class='px-4 py-2'><a route='/sls/Transaction-Details/sale=<?php echo $saleId; ?>' class='text-blue-500 hover:underline view-link'>View</a></td>
-                                </tr>
-                            <?php endwhile; ?>
+                            <?php
+                            // Get PDO instance
+                            $database = Database::getInstance();
+                            $conn = $database->connect();
+                            
+                            // SQL query to fetch sales data along with customer name
+                            $sql = "SELECT 
+                                        Sales.SaleID,
+                                        Sales.SaleDate,
+                                        Sales.SalePreference,
+                                        Sales.PaymentMode,
+                                        Sales.TotalAmount,
+                                        Customers.Name AS CustomerName
+                                    FROM 
+                                        Sales
+                                    JOIN 
+                                        Customers ON Sales.CustomerID = Customers.CustomerID
+                                    ORDER BY 
+                                        Sales.SaleDate DESC";
+                            
+                            // Execute the query
+                            $stmt = $conn->query($sql);
+                            
+                            // Fetch data from the result set
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                                $saleId = $row['SaleID']; 
+                                echo "<tr class='border border-gray-200 bg-white' data-sale-id='{$saleId}'>";
+                                echo "<td class='px-4 py-2'>{$row['CustomerName']}</td>";
+                                echo "<td class='px-4 py-2'>{$saleId}</td>";
+                                echo "<td class='px-4 py-2'>" . date('F j, Y, g:i a', strtotime($row['SaleDate'])) . "</td>";
+                                echo "<td class='px-4 py-2'>{$row['SalePreference']}</td>";
+                                echo "<td class='px-4 py-2'>{$row['PaymentMode']}</td>";
+                                echo "<td class='px-4 py-2'>₱" . number_format($row['TotalAmount'], 2) . "</td>";
+                                echo "<td class='px-4 py-2'><a route='/sls/Transaction-Details/sale={$saleId}' class='text-blue-500 hover:underline view-link'>View</a></td>";
+                                echo "</tr>";
+                            endwhile;
+                            ?>
                         </tbody>
                     </table>
 
-                    <div class="flex flex-col gap-4 justify-start items-start">
+                    <!-- <div class="flex flex-col gap-4 justify-start items-start">
 
                         <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
 
@@ -156,7 +148,7 @@
 
                         </div>
 
-                        <!-- <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
 
                             <div class="flex flex-col gap-5">
                                 <div>
@@ -165,8 +157,8 @@
                                 <div class="text-5xl font-semibold ml-5">53</div>
                                 <div class="text-sm font-medium ml-5 text-green-700">+10% more than average</div>
                             </div>
-                        </div> -->
-                    </div>
+                        </div>
+                    </div> -->
                 </div>
             </div>
         </div>

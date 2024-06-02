@@ -31,24 +31,8 @@
         </div>
 
         <!-- dropdown -->
-        <div x-data="{ dropdownOpen: false }" class="relative my-32">
-          <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
-            <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
-              <i class="ri-arrow-down-s-line"></i>
-            </div>
-          </button>
+        <?php require_once "public/productOrder/views/po.logout.php"?>
 
-          <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
-
-          <form id="logout-form" action="/logout/user" method="POST">
-            <div x-show="dropdownOpen"
-              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
-              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
-            </div>
-          </form>
-        </div>
 
       </div>
 
@@ -123,19 +107,20 @@
                       class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
                       required>
                   </div>
-                  <div class="flex flex-col justify-center items-center mb-3">
-                    <label for="location" class="block text-black font-semibold mb-2">Working Days (Monday -
-                      Sunday)</label>
-                    <input type="text" id="workingday" name="workingday"
-                      class="border border-gray-400 p-2 w-3/4 text-center rounded-lg focus:outline-none focus:border-blue-400"
-                      required>
-                  </div>
+
                 </div>
 
 
 
             </div>
 
+            <div class="flex flex-col w-1/2 mx-auto mb-5">
+              <label for="location" class="block text-black font-semibold mb-2">Working Days (Monday -
+                Sunday)</label>
+              <input type="text" id="workingday" name="workingday"
+                class="border border-gray-400 p-2 w-full text-center rounded-lg focus:outline-none focus:border-blue-400"
+                required>
+            </div>
 
             <div class="overflow-x-auto rounded-lg border border-gray-400">
               <table id="productTable" class="min-w-full text-center mx-auto bg-white">

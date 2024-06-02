@@ -67,14 +67,8 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <!-- End: Active Menu -->
 
             <!-- Start: Profile -->
-
-            <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
-            </ul>
-
+            <?php require_once __DIR__ . "/logout.php"?>
+            
             <!-- End: Profile -->
 
         </div>
@@ -122,7 +116,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <!-- Table -->
         <div class="flex-1 pr-10 pl-10 pb-10 h-full">
-            <div class="bg-white p-4 rounded-lg shadow-xl border overflow-hidden">
+            <div class="bg-white p-4 rounded-lg shadow-xl border">
                 <table id="orderTable" class="w-full">
                     <thead class="sticky top-0 bg-white z-10">
                         <tr>
@@ -136,7 +130,30 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php foreach ($results as $row): ?>
                             <tr>
                             <!-- detail result -->
-                                <td class="border px-4 py-2"><?php echo $row['PlateNumber']; ?></td>
+                            <td class="border px-4 py-2 relative cursor-pointer hover:bg-gray-200">
+                                <?php echo $row['PlateNumber']; ?>
+                                    <div class="tooltip-content absolute left-0 right-0 mx-auto top-0 mt-2 w-32 bg-blue-500 text-white text-center rounded-lg px-1 py-2 hidden z-10">
+                                        <strong>Orders Inside Truck: <?php echo $row['PlateNumber']; ?></strong><br>
+                                        <?php
+                                            // SQL query
+                                            $sql = "SELECT DeliveryOrderID FROM DeliveryOrders WHERE DeliveryStatus = 'In Transit' AND TruckID = " . $row['TruckID'];
+
+                                            // Execute query and get result
+                                            $stmt = $conn->prepare($sql);
+                                            $stmt->execute();
+
+                                            // Check if there are results
+                                            if ($stmt->rowCount() > 0) {
+                                                // Output data of each row  
+                                                while($deliveryOrder = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                                    echo "Order ID: " . $deliveryOrder["DeliveryOrderID"]. "<br>";
+                                                }
+                                            } else {
+                                                echo "No delivery assign with this truck";
+                                            }
+                                        ?>
+                                    </div>
+                            </td>
                                 <td class="border px-4 py-2"><?php echo $row['TruckType']; ?></td>
                                 <td class="border px-4 py-2"><?php echo $row['TruckStatus']; ?></td>
                                 <td class="border px-4 py-2 flex justify-center"> 
@@ -170,15 +187,15 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </main> 
             <!-- JS function for sidebar -->
-            <script>
-                document.querySelectorAll('.viewDetailsBtn').forEach(function(button) {
-                    button.addEventListener('click', function() {
-                        var route = this.getAttribute('route');
-                        window.location.href = route;
-                    });
+    <script>
+            document.querySelectorAll('.viewDetailsBtn').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var route = this.getAttribute('route');
+                    window.location.href = route;
                 });
-                </script>
-  <script>
+            });
+    </script>
+    <script>
         document.querySelector('.sidebar-toggle').addEventListener('click', function() {
             document.getElementById('sidebar-menu').classList.toggle('hidden');
             document.getElementById('sidebar-menu').classList.toggle('transform');
@@ -187,6 +204,27 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('mainContent').classList.toggle('md:ml-64');
         });
     </script>
+
+            <!-- JS function for show assign order -->
+    <script>
+        // Get all td elements
+        const tds = document.querySelectorAll('td');
+    
+        // Loop through each td
+        tds.forEach(td => {
+            // Get the tooltip content for this td
+            const tooltipContent = td.querySelector('.tooltip-content');
+    
+            // Add event listeners for mouseover and mouseout
+            td.addEventListener('mouseover', () => {
+                tooltipContent.classList.remove('hidden');
+            });
+            td.addEventListener('mouseout', () => {
+                tooltipContent.classList.add('hidden');
+            });
+        });
+    </script>
+    
     <script  src="./../src/route.js"></script>
     <script  src="./../src/form.js"></script>
 </body>

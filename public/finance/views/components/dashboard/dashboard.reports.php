@@ -3,7 +3,7 @@
     role="dialog" aria-modal="true">
     <div class=" pt-4 px-4 pb-20 sm::block sm:p-0 bg-white rounded shadow-lg ">
        
-        <form action="/reportGeneration" method="post" class="font-sans p-10 border-2 border-black rounded-md]" id="requestReportForm">
+        <form action="/reportGeneration" method="post" class="font-sans p-10 border-2 border-black rounded-md]" id="requestReportForm" target="_blank">
             <h2 class="font-semibold text-lg m-1">
                 Generate Report
             </h2>
@@ -391,6 +391,9 @@
                 // submit the form
                 let formReport = document.querySelector('#requestReportForm');
                 formReport.addEventListener("submit", function(){
+                    let submitButton = document.querySelector('#submit_btn');
+                    submitButton.disabled = true;
+
                     event.preventDefault();
                     let monthYearInput = document.querySelector('#monthYear');
                     let fromMonthYearInput = document.querySelector('#fromMonthYear');
@@ -425,11 +428,13 @@
                         let toDate = toMonthYearInput.value;
                         recordChartAsAnImage(typeFile, fromDate, toDate).then(() => {
                             formReport.submit();
+                            window.location.reload();
                         });
                     }
                     monthYearInput.readOnly = true;
                     fromMonthYearInput.readOnly = true;
                     toMonthYearInput.readOnly = true;
+                    submitButton.disabled = true;
                 });
                 window.addEventListener("DOMContentLoaded", function(){
                     var ctx = document.getElementById('emptyCanvas');
@@ -448,7 +453,7 @@
                     Cancel
                 </button>
                 <button class="border-2 rounded-md border-black bg-[#F8B721] font-bold py-2.5 px-4 drop-shadow-md"
-                    type="submit">
+                    type="submit" id = "submit_btn">
                     Generate
                 </button>
             </div>
@@ -576,7 +581,7 @@
 
         });
 
-        fetch('http://localhost/Master/fin/getBalanceReport', {
+        fetch('http://localhost/master/fin/getBalanceReport', {
             method: 'POST',
         })
         .then(response => {
@@ -713,7 +718,7 @@
             }
         });
         //ajax for equityChart
-        fetch('http://localhost/Master/fin/getEquityReport', {
+        fetch('http://localhost/master/fin/getEquityReport', {
             method: 'POST',
         })
         .then(response => {
@@ -788,7 +793,7 @@
             }
         });
         //ajax for equityChart
-        fetch('http://localhost/Master/fin/getCashFlowReport', {
+        fetch('http://localhost/master/fin/getCashFlowReport', {
             method: 'POST',
         })
         .then(response => {

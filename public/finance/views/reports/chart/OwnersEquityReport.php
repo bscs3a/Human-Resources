@@ -96,7 +96,7 @@ body {
     transform: translate(-50%, -50%);
 }
 .center img {
-    width: 1000px;
+    width: 500px;
     height: auto;
 }
 </style>

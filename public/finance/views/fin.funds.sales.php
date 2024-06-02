@@ -3,8 +3,17 @@
 $department = "Point of Sales";
 $db = Database::getInstance();
 $conn = $db->connect();
-$stmt = $conn->prepare("SELECT COUNT(*) FROM funds_transaction as ft JOIN employees as e ON ft.employee_id = e.id WHERE department = :department");
+$searchQuery = isset($_SESSION['postdata']['generalLedgerSelected']) ? $_SESSION['postdata']['generalLedgerSelected'] : null;
+
+$sql = "SELECT COUNT(*) FROM funds_transaction as ft JOIN employees as e ON ft.employee_id = e.id JOIN ledgertransaction as lt ON ft.lt_id = lt.ledgerxactid WHERE department = :department";
+if ($searchQuery) {
+    $sql .= " AND (lt.LedgerNo_Dr = :searchQuery)";
+}
+$stmt = $conn->prepare($sql);
 $stmt->bindParam(':department', $department);
+if ($searchQuery) {
+    $stmt->bindParam(':searchQuery', $searchQuery);
+}
 $stmt->execute();
 $totalRecords = $stmt->fetchColumn();
 
@@ -31,13 +40,13 @@ $remainingPondo = $cashOnHand + $cashOnBank;
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 </head>
 
-<body>
+<body class="flex">
 
     <?php require_once "components/sidebar.php" ?>
 
     <!-- Start: Dashboard -->
 
-    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 min-h-screen transition-all main">
+    <main class="flex-1 transition-all main">
 
         <!-- Start: Header -->
 
@@ -45,7 +54,7 @@ $remainingPondo = $cashOnHand + $cashOnBank;
 
             <!-- Start: Active Menu -->
 
-            <button type="button" class="text-lg sidebar-toggle">
+            <button type="button" class="text-lg sidebar-toggle" id = 'toggleSidebar'>
                 <i class="ri-menu-line"></i>
             </button>
 
@@ -116,9 +125,61 @@ $remainingPondo = $cashOnHand + $cashOnBank;
 
             <!-- for adding transaction -->
             <div class="w-full px-6 py-3 bg-white">
-                <div class="justify-between items-start">
-                    <!-- Button -->
-                    <div class="flex justify-end">
+                    <div class="flex justify-between">
+                        <div class="items-start mb-1">
+                            <div class="relative">
+                                <div class="inline-flex items-center overflow-hidden rounded-lg  border border-gray-500">
+                                    <form action="/fin/fundSearch" method="post" class="flex items-center">
+                                        <?php 
+                                            $selected = isset($_SESSION['postdata']['generalLedgerSelected']) ? $_SESSION['postdata']['generalLedgerSelected'] : null;
+                                            $recent = (isset($_SESSION['postdata']) && array_key_exists('recent', $_SESSION['postdata'])) ? $_SESSION['postdata']['recent'] : true;
+                                        ?>
+                                        <label for="recent" id="recentLabel" class="border-r-5 border-black px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 min-w-12">
+                                            <span id="labelText"><?php echo $recent ? "Recent" : "Old"?></span>
+                                            <input type="checkbox" name="recent" id="recent" class="hidden" <?php echo $recent ? "selected" : "" ?>>
+                                        </label>
+                                        <script>
+                                            document.getElementById('recent').addEventListener('change', function() {
+                                                var labelText = document.getElementById('labelText');
+                                                if (this.checked) {
+                                                    labelText.textContent = 'Recent';
+                                                } else {
+                                                    labelText.textContent = 'Old';
+                                                }
+                                            });
+                                        </script>
+                                        <!-- bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm  -->
+                                        <select class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500" name="generalLedgerSelected">
+                                            <option value="" <?php echo is_null($selected) ? "selected" : ""?>>Select</option>
+                                            <?php 
+                                            $select = getAllLedgerAccounts();
+                                            foreach ($select as $row) {
+                                                $option = $row['ledgerno'] == $selected ? "selected" : "";
+                                                echo "<option value=\"{$row['ledgerno']}\" "."$option".">{$row['name']}</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                        <input type="hidden" name="pageNumber" value = "<?php echo isset ($_GET['page']) ? (int) $_GET['page'] : 1?>">
+                                        <button
+                                            type ="submit"
+                                            class="px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900">
+                                            <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                                            <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                                viewBox="0 0 488.4 488.4" xml:space="preserve">
+                                            <g>
+                                                <g>
+                                                    <path d="M0,203.25c0,112.1,91.2,203.2,203.2,203.2c51.6,0,98.8-19.4,134.7-51.2l129.5,129.5c2.4,2.4,5.5,3.6,8.7,3.6
+                                                        s6.3-1.2,8.7-3.6c4.8-4.8,4.8-12.5,0-17.3l-129.6-129.5c31.8-35.9,51.2-83,51.2-134.7c0-112.1-91.2-203.2-203.2-203.2
+                                                        S0,91.15,0,203.25z M381.9,203.25c0,98.5-80.2,178.7-178.7,178.7s-178.7-80.2-178.7-178.7s80.2-178.7,178.7-178.7
+                                                        S381.9,104.65,381.9,203.25z"/>
+                                                </g>
+                                            </g>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <div class="items-start mb-2">
                             <button id="openModal"
                                 class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm py-1 px-3 rounded-lg border border-gray-500">
@@ -127,136 +188,6 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                             </button>
                         </div>
                     </div>
-
-
-                    <!-- Modal -->
-                    <div id="myModal"
-                        class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-                        <div class="bg-white rounded shadow-lg w-1/3">
-                            <div class="border-b pl-3 pr-3 pt-3 flex">
-                                <h5 class="font-bold uppercase text-gray-600">New Transactions</h5>
-                            </div>
-                            <!-- form -->
-                            <div class="p-5">
-                                <form action="/pondo/transaction" method="POST">
-                                    <div class="mb-4 relative">
-                                        <label for="date" class="block text-xs font-medium text-gray-900"> Date </label>
-                                        <input type="text" id="date" name="date" required readonly
-                                            class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md  sm:text-sm" />
-                                        <i
-                                            class="ri-calendar-fill absolute left-2 top-6 transform -translate-y-0.5 h-6 w-6 text-gray-400"></i>
-                                    </div>
-
-                                    <script>
-                                        var today = new Date();
-                                        var dd = String(today.getDate()).padStart(2, '0');
-                                        var monthNames = ["January", "February", "March", "April", "May", "June",
-                                            "July", "August", "September", "October", "November", "December"];
-                                        var mm = monthNames[today.getMonth()]; //January is 0!
-                                        var yyyy = today.getFullYear();
-
-                                        today = mm + ' ' + dd + ', ' + yyyy;
-                                        document.getElementById('date').value = today;
-                                    </script>
-                                    <div class="mb-4 relative">
-                                        <label for="employee_id" class="block text-xs font-medium text-gray-900">
-                                            EmployeeID
-                                        </label>
-                                        <input type="text" id="employee_id" name="employee_id" required readonly
-                                            class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" value = "<?php echo $_SESSION['user']['employee_id']?>"/>
-                                    </div>
-                                    <div class="mb-4 relative">
-                                        <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
-                                        </label>
-                                         <!-- changes here -->
-                                         <input type="text" id="amount" name="amount" placeholder="0.00" required
-                                            class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md sm:text-sm"
-                                            onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46"
-                                            oninput="validateInput(this)" />
-
-                                        <script>
-                                        var cashOnHand = <?php echo json_encode($cashOnHand); ?>;
-                                        var cashOnBank = <?php echo json_encode($cashOnBank); ?>;
-
-                                        function validateInput(input) {
-                                            var limit = document.getElementById('payUsing').value === 'Cash on hand' ? cashOnHand : cashOnBank;
-                                            var value = parseFloat(input.value);
-                                            if (isNaN(value) || value > limit) {
-                                                input.setCustomValidity('Please enter a number not greater than ' + limit);
-                                            } else {
-                                                input.setCustomValidity('');
-                                            }
-                                        }
-
-                                        window.addEventListener('DOMContentLoaded', function() {
-                                            document.getElementById('payUsing').addEventListener('change', function() {
-                                            validateInput(document.getElementById('amount'));
-                                            });
-                                        });
-                                        </script>
-                                        <!-- upto here -->
-                                        <span
-                                            class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <div class="mb-4 relative p-1 grow">
-                                            <label for="payFor" class="block text-xs font-medium text-gray-900"> Pay For: </label>
-                                            <select id="payFor" name="payFor" required class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
-                                                <option value="" selected>...</option>
-                                                <?php
-                                                    $validDebit = validDebit();
-                                                    foreach($validDebit as $row){
-                                                        echo "<option value='".$row['ledgerno']."'>".$row['name']."</option>";
-                                                    }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        <div class="mb-4 relative p-1 grow">
-                                            <label for="payUsing" class="block text-xs font-medium text-gray-900"> Pay Using: </label>
-                                            <select id="payUsing" name="payUsing" required class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
-                                                <option value="" selected>...</option>
-                                                <?php 
-                                                $validCredit = validCredit();
-                                                foreach($validCredit as $row){
-                                                    $value = $row['name'] == 'Cash on hand' ? $cashOnHand : $cashOnBank;
-                                                    echo "<option value='".$row['name']."'>".$row['name']. "-". $value ."</option>";
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex justify-end items-start mb-2">
-                                        <button id="cancelModal" type="button"
-                                            class="border border-gray-700 bg-gray-200 hover:bg-gray-100 text-gray-800 text-sm font-bold py-1 px-5 rounded-md ml-4 ">Cancel</button>
-                                        <button type="submit"
-                                            class="border border-gray-700 bg-amber-400 hover:bg-amber-300 text-gray-800 text-sm font-bold py-1 px-7 rounded-md ml-4 ">Save</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- JavaScript -->
-
-                    <script>
-                        function closeModalAndClearInputs() {
-                            document.getElementById('myModal').classList.add('hidden');
-                            ['description', 'credit', 'debit', 'amount'].forEach(id => document.getElementById(id).value = '');
-                        }
-
-                        document.getElementById('openModal').addEventListener('click', function () {
-                            document.getElementById('myModal').classList.remove('hidden');
-                        });
-                        //'closeModal',
-                        ['cancelModal'].forEach(id => {
-                            document.getElementById(id).addEventListener('click', function (event) {
-                                event.stopPropagation();
-                                closeModalAndClearInputs();
-                            });
-                        });
-                    </script>
-                </div>
             </div>
 
             <!-- allowance info -->
@@ -301,7 +232,9 @@ $remainingPondo = $cashOnHand + $cashOnBank;
 
                     <tbody class="divide-y divide-gray-200 text-center">
                         <?php 
-                        $pondoTable = getAllTransactions($department,$page, $displayPerPage);
+                        $searchQuery = isset($_SESSION['postdata']['generalLedgerSelected']) ? $_SESSION['postdata']['generalLedgerSelected'] : null;
+
+                        $pondoTable = getAllTransactions($department,$searchQuery, $recent,$page, $displayPerPage);
                         foreach($pondoTable as $row){
                         ?>
                         <tr>

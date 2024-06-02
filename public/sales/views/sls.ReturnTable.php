@@ -11,18 +11,18 @@
     <?php
     // Database connection
     $db = Database::getInstance();
-    $pdo = $db->connect();
+    $conn = $db->connect();
 
     // Fetch number of returns
     $sql = "SELECT COUNT(*) as count FROM ReturnProducts";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->execute();
     $count = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
 
     $sql = "SELECT rp.ReturnID, rp.SaleID, p.ProductID, p.ProductName, rp.Quantity, rp.Reason, rp.ReturnDate, rp.PaymentReturned 
     FROM ReturnProducts rp 
     JOIN Products p ON rp.ProductID = p.ProductID";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->execute();
     $returnedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
@@ -57,39 +57,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-
-                <div class="relative inline-block text-left">
-                      <div>
-                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
-                            <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
-                            </div>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </a>
-                    </div>
-
-                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        <div class="py-1" role="none">
-                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
-                                <i class="ri-logout-box-line"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    document.getElementById('options-menu').addEventListener('click', function() {
-                        var dropdownMenu = document.getElementById('dropdown-menu');
-                        if (dropdownMenu.classList.contains('hidden')) {
-                            dropdownMenu.classList.remove('hidden');
-                        } else {
-                            dropdownMenu.classList.add('hidden');
-                        }
-                    });
-                </script>
-            </ul>
+            <?php require_once "components/logout/logout.php"?>
 
             <!-- End: Profile -->
 
@@ -127,6 +95,7 @@
                                 <th class="px-4 py-2 font-semibold">Sale ID</th>
                                 <th class="px-4 py-2 font-semibold">Product ID</th>
                                 <th class="px-4 py-2 font-semibold">Payment Returned</th>
+                                <th class="px-4 py-2 font-semibold">Return Date</th> <!-- Added this -->
                                 <th class="px-4 py-2 font-semibold">Action</th>
                             </tr>
                         </thead>
@@ -141,6 +110,7 @@
                                     <td class='px-4 py-2'><?php echo $product['SaleID']; ?></td>
                                     <td class='px-4 py-2'><?php echo $product['ProductID']; ?></td>
                                     <td class='px-4 py-2'><?php echo $product['PaymentReturned']; ?></td>
+                                    <td class='px-4 py-2'><?php echo $product['ReturnDate']; ?></td> <!-- Added this -->
                                     <td class='px-4 py-2'>
                                         <button route="/sls/ReturnDetails/returnID=<?php echo $product['ReturnID']; ?>" class='text-blue-500 hover:underline view-link'>View</button>
                                     </td>
@@ -178,14 +148,14 @@
                                     <?php
                                     // Fetch CategoryID
                                     $sql = "SELECT Category_ID FROM Products WHERE ProductID = :product_id";
-                                    $stmt = $pdo->prepare($sql);
+                                    $stmt = $conn->prepare($sql);
                                     $stmt->bindParam(":product_id", $product['ProductID']);
                                     $stmt->execute();
                                     $categoryId = $stmt->fetch(PDO::FETCH_ASSOC)['Category_ID'];
 
                                     // Fetch CategoryName
                                     $sql = "SELECT Category_Name FROM Categories WHERE Category_ID = :category_id";
-                                    $stmt = $pdo->prepare($sql);
+                                    $stmt = $conn->prepare($sql);
                                     $stmt->bindParam(":category_id", $categoryId);
                                     $stmt->execute();
                                     $categoryName = $stmt->fetch(PDO::FETCH_ASSOC)['Category_Name'];
@@ -243,32 +213,38 @@
 
 
                     <div class="flex flex-col gap-4 justify-start items-start">
-                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-center text-lg">
                             <div class="flex flex-col gap-5">
                                 <div class="text-lg font-semibold text-gray-800">
                                     <i class="ri-shake-hands-fill text-lg mx-2"></i> Number of Returns
                                 </div>
                                 <div class="text-5xl font-semibold ml-5"><?php echo $count; ?></div>
-                                <div class="text-sm font-semibold ml-5 text-red-700">+10% more than average</div>
                             </div>
                         </div>
 
                         <?php
                             // Fetch total of PaymentReturned
                             $sql = "SELECT SUM(PaymentReturned) as total FROM ReturnProducts";
-                            $stmt = $pdo->prepare($sql);
+                            $stmt = $conn->prepare($sql);
                             $stmt->execute();
                             $totalPaymentReturned = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
                         ?>
-                        
+
                         <!-- Display total PaymentReturned -->
-                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-center text-lg">
                             <div class="flex flex-col gap-5">
                                 <div>
                                     <i class="ri-funds-line text-lg mx-2"></i>Payment Returned
                                 </div>
-                                <div class="text-5xl font-semibold ml-5"><?php echo $totalPaymentReturned; ?></div>
-                                <div class="text-sm font-medium ml-5 text-red-700">+10% more than average</div>
+                                <div class="font-semibold ml-5">
+                                    <?php 
+                                        if (strlen((string)$totalPaymentReturned) > 5) {
+                                            echo '<span class="text-4xl">₱' . $totalPaymentReturned . '</span>';
+                                        } else {
+                                            echo '<span class="text-5xl">₱' . $totalPaymentReturned . '</span>';
+                                        }
+                                    ?>
+                                </div>
                             </div>
                         </div>
 

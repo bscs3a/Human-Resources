@@ -1,8 +1,8 @@
 <!-- Start: Sidebar -->
 
-<div class="fixed bg-sidebar left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform">
+<div class="bg-sidebar w-1/5 min-h-screen p-4 z-50 sidebar-menu transition-transform" id = "sidebar">
 
-    <div route='/' class="flex items-center pb-4">
+    <div route='/' class="flex items-center pb-4 pb-4 border-b border-b-white">
         <div class="w-12 h-12 rounded bg-cover bg-[url('../public/finance/img/logo_reports.png')]">
 
         </div>
@@ -78,7 +78,6 @@
 
 </div>
 
-<div class="fixed top-0 left-0 w-full h-full z-40 md:hidden sidebar-overlay"></div>
 <!-- button dropdown -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -88,4 +87,14 @@
             // document.getElementById('reports-button').classList.toggle('bg-slate-400');
         });
     });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            var sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden', !sidebar.classList.contains('hidden'));
+        });
+    });
+
 </script>

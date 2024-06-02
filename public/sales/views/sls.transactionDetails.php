@@ -42,39 +42,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-
-                <div class="relative inline-block text-left">
-                    <div>
-                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
-                            <div class="text-black font-medium mr-4 ">
-                                <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
-                            </div>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </a>
-                    </div>
-
-                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        <div class="py-1" role="none">
-                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
-                                <i class="ri-logout-box-line"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    document.getElementById('options-menu').addEventListener('click', function() {
-                        var dropdownMenu = document.getElementById('dropdown-menu');
-                        if (dropdownMenu.classList.contains('hidden')) {
-                            dropdownMenu.classList.remove('hidden');
-                        } else {
-                            dropdownMenu.classList.add('hidden');
-                        }
-                    });
-                </script>
-            </ul>
+            <?php require_once "components/logout/logout.php"?>
 
             <!-- End: Profile -->
 
@@ -137,7 +105,7 @@
 
                     <div class="flex flex-col gap-4 font-semibold ">
 
-                        <span class="p-2"><?php echo $customer['FirstName'] . ' ' . $customer['LastName']; ?></span>
+                        <span class="p-2"><?php echo $customer['Name']; ?></span>
                         <span class="p-2"><?php echo $customer['Phone']; ?></span>
                         <span class="p-2"><?php echo $customer['Email']; ?></span>
                     </div>
@@ -161,7 +129,7 @@
                             <div class="bg-gray-200 rounded-full p-2 text-center font-bold">Heavy</div>
                             <span class="p-2"><?php echo $deliveryOrder['StreetBarangayAddress'] . ', ' . $deliveryOrder['Municipality'] . ', ' . $deliveryOrder['Province']; ?></span>
                             <span class="p-2"><?php echo $deliveryOrder['DeliveryDate']; ?></span>
-                            <div class="flex justify-center items-center">
+                            <div class="flex">
                                 <span class="p-2 bg-gray-200 px-4 rounded-full font-bold flex flex-row items-center">
                                     <div changeColor class="size-4 rounded-full mr-2"></div>
                                     <?php echo $deliveryOrder['DeliveryStatus']; ?>
@@ -272,7 +240,7 @@
                                 FROM SaleDetails sd 
                                 JOIN Products p ON sd.ProductID = p.ProductID 
                                 WHERE sd.SaleID = :sale_id";
-                                $stmt = $pdo->prepare($sql);
+                                $stmt = $conn->prepare($sql);
                                 $stmt->bindParam(":sale_id", $sale['SaleID']);
                                 $stmt->execute();
                                 $saleDetail = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -295,7 +263,8 @@
                                         const productId = <?php echo json_encode($productId); ?>;
 
                                         // Construct the route
-                                        const route = `/master/sls/ReturnProduct/sale=${saleId}/saledetails=${saleDetailId}/product=${selectedProduct.id}`;
+                                        const basePath = '/master'; // Define the base path here
+                                        const route = basePath + `/sls/ReturnProduct/sale=${saleId}/saledetails=${saleDetailId}/product=${selectedProduct.id}`;
 
                                         // Redirect to the route
                                         window.location.href = route;
@@ -368,7 +337,7 @@
                         <span class="p-2">&#8369;<?php echo number_format(array_sum(array_column($items, 'Subtotal')), 2); ?></span>
                         <span class="p-2">&#8369;<?php echo number_format(array_sum(array_column($items, 'Tax')), 2); ?></span>
                         <span class="p-2">&#8369;<?php echo number_format($sale['ShippingFee'], 2); ?></span>
-                        <span class="p-2">N/A</span>
+                        <span class="p-2">&#8369;<?php echo number_format($sale['Discount'], 2); ?></span>
                         <span class="text-xl text-green-800 bg-gray-200 rounded-full p-1 px-8 text-center font-bold">₱<?php echo number_format($sale['TotalAmount'], 2); ?></span>
                     </div>
                 </div>

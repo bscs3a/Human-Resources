@@ -21,7 +21,7 @@
         <!-- Main Content -->
         <div class="flex flex-col flex-1 overflow-y-auto">
             <!-- header -->
-            <div class="flex items-center justify-between h-16 bg-gray-200 shadow-md px-4 py-1">
+            <div class="flex items-center justify-between h-16 shadow-md px-4 py-1">
                 <div class="flex items-center gap-4">
                     <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
                         <i class="ri-menu-line"></i>
@@ -30,27 +30,8 @@
                 </div>
 
                 <!-- dropdown -->
-                <div x-data="{ dropdownOpen: false }" class="relative my-32">
-                    <button @click="dropdownOpen = !dropdownOpen"
-                        class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
-                        <div class="flex items-center gap-4">
-                            <a class="flex-none text-sm dark:text-white"
-                                href="#"><?php echo $_SESSION['user']['username']; ?></a>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </div>
-                    </button>
+                <?php require_once "public/productOrder/views/po.logout.php"?>
 
-                    <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10">
-                    </div>
-
-                    <form id="logout-form" action="/logout/user" method="POST">
-                        <div x-show="dropdownOpen"
-                            class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
-                            <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log
-                                out</button>
-                        </div>
-                    </form>
-                </div>
             </div>
 
             <script>
@@ -61,7 +42,7 @@
             </script>
 
             <!-- New Form for add product -->
-            <div class="container mx-auto py-8 px-5">
+            <div class="container mx-auto my-auto py-8 px-5">
                 <div
                     class="max-w-5xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
 
@@ -164,7 +145,7 @@
                                                     <th class="px-6 py-2 font-semibold">ProductName</th>
                                                     <th class="px-6 py-2 font-semibold">ProductID</th>
                                                     <th class="px-6 py-2 font-semibold">Category</th>
-                                                    <th class="px-6 py-2 font-semibold">Price</th>
+                                                    <th class="px-6 py-2 font-semibold">Supplier Price</th>
                                                     <th class="px-6 py-2 font-semibold">Quantity</th>
                                                     <th class="px-6 py-2 font-semibold">Status</th>
                                                     <th class="px-6 py-2 font-semibold"></th>
@@ -193,7 +174,7 @@
                     {
                         // Prepare and execute SQL query to fetch data
                         $stmt = $conn->prepare("
-                            SELECT p.*, bo.Items_Subtotal, bo.Total_Amount, bo.Order_Status, od.Product_Quantity
+                            SELECT p.*, bo.Items_Subtotal, bo.Total_Amount, bo.Order_Status, od.Product_Quantity, bo.Pay_Using
                             FROM batch_orders bo
                             JOIN order_details od ON bo.Batch_ID = od.Batch_ID
                             JOIN products p ON od.Product_ID = p.ProductID
@@ -229,7 +210,7 @@
                                         <?= $data['Category'] ?>
                                     </td> <!-- Display category -->
                                     <td class="px-6 py-2">
-                                        <?= $data['Price'] ?>
+                                        <?= $data['Supplier_Price'] ?>
                                     </td> <!-- Display price -->
                                     <td class="px-6 py-2">
                                         <?= $data['Product_Quantity'] ?>
@@ -261,19 +242,16 @@
                                     <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                                     <!-- note: dont delete all of the products if the supplier has run out of items, instead just cancel the order -->
                                     
-                                    <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
+                                    <th scope="col" class="px-4 py-4 ml-3 font-medium text-gray-900">
                                         <div class="flex flex-col text-sm gap-3">
-                                            <a class="font-bold">Items Subtotal:
-                                                <div class="font-medium">
-                                                    <?= $data['Items_Subtotal'] ?>
-
-                                                </div>
+                                            <a class="font-bold">Items Subtotal: Php <?= $data['Items_Subtotal'] ?>
+                                                
                                             </a>
-                                            <a class="font-bold">Total Amount:
-                                                <div class="font-medium"> Php
-                                                    <?= $data['Total_Amount'] ?>
-
-                                                </div>
+                                            <a class="font-bold">Total Amount: Php  <?= $data['Total_Amount'] ?>
+                                                
+                                            </a>
+                                            <a class="font-bold">Payment Method: <?= $data['Pay_Using'] ?>
+                                                
                                             </a>
                                         </div>
                                     </th>
@@ -289,14 +267,16 @@
                     ?>
 
                     </table>
+                    <div class="flex justify-end m-3">
+                        <button route='/po/orderDetail'
+                            class="py-2 px-6 border border-gray-600 bg-yellow-500 font-bold rounded-md">Back</button>
+                    </div>
                 </div>
 
+
             </div>
 
-            <div class="flex justify-end">
-                <button route='/po/orderDetail'
-                    class="py-2 px-6 border border-gray-600 bg-yellow-500 font-bold rounded-md">Back</button>
-            </div>
+
 
         </div>
     </div>

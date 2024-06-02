@@ -63,24 +63,24 @@
 
 <body>
     <?php include "components/sidebar.php" ?>
-    <?php 
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            if (isset($_SESSION['employee_name']) && isset($_SESSION['just_logged_in'])) {
-                $db = Database::getInstance();
-                $pdo = $db->connect();
-                
-                $logAction = "Log in";
-        
-                $sql = "INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES (:employee_name, :log_action)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(":employee_name", $_SESSION['employee_name']);
-                $stmt->bindParam(":log_action", $logAction);
-                $stmt->execute();
-    
-                // Unset the 'just_logged_in' session variable
-                unset($_SESSION['just_logged_in']);
-            }
+    <?php
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        if (isset($_SESSION['employee_name']) && isset($_SESSION['just_logged_in'])) {
+            $db = Database::getInstance();
+            $pdo = $db->connect();
+
+            $logAction = "Log in";
+
+            // $sql = "INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES (:employee_name, :log_action)";
+            // $stmt = $pdo->prepare($sql);
+            // $stmt->bindParam(":employee_name", $_SESSION['employee_name']);
+            // $stmt->bindParam(":log_action", $logAction);
+            // $stmt->execute();
+
+            // Unset the 'just_logged_in' session variable
+            unset($_SESSION['just_logged_in']);
         }
+    }
     ?>
 
     <!-- Main container -->
@@ -108,42 +108,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-
-                <div class="relative inline-block text-left">
-                    <div>
-                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
-                            <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
-                            </div>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </a>
-                    </div>
-
-                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
-                        id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        <div class="py-1" role="none">
-                            <a route="/sls/logout"
-                                class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                                role="menuitem">
-                                <i class="ri-logout-box-line"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    document.getElementById('options-menu').addEventListener('click', function () {
-                        var dropdownMenu = document.getElementById('dropdown-menu');
-                        if (dropdownMenu.classList.contains('hidden')) {
-                            dropdownMenu.classList.remove('hidden');
-                        } else {
-                            dropdownMenu.classList.add('hidden');
-                        }
-                    });
-                </script>
-            </ul>
+            <?php require_once "components/logout/logout.php" ?>
 
             <!-- End: Profile -->
 
@@ -162,7 +127,7 @@
                     FROM TargetSales 
                     WHERE DATE_FORMAT(MonthYear, '%Y-%m') = ?
                 ";
-                $stmtTargetSales = $pdo->prepare($sqlTargetSales);
+                $stmtTargetSales = $conn->prepare($sqlTargetSales);
                 $stmtTargetSales->execute([$currentMonth]);
                 $targetSales = $stmtTargetSales->fetchColumn();
 
@@ -172,7 +137,7 @@
                     FROM Sales 
                     WHERE DATE_FORMAT(SaleDate, '%Y-%m') = ?
                 ";
-                $stmtActualSales = $pdo->prepare($sqlActualSales);
+                $stmtActualSales = $conn->prepare($sqlActualSales);
                 $stmtActualSales->execute([$currentMonth]);
                 $actualSales = $stmtActualSales->fetchColumn();
                 ?>
@@ -208,7 +173,7 @@
                     FROM Sales 
                     WHERE DATE_FORMAT(SaleDate, '%Y-%m') = ?
                 ";
-                $stmtTransactionRate = $pdo->prepare($sqlTransactionRate);
+                $stmtTransactionRate = $conn->prepare($sqlTransactionRate);
                 $stmtTransactionRate->execute([$currentMonth]);
                 $transactionRate = $stmtTransactionRate->fetchColumn() ?: 0;
 
@@ -221,7 +186,7 @@
                         GROUP BY DATE_FORMAT(SaleDate, '%Y-%m')
                     ) AS MonthlyTransactions
                 ";
-                $stmtAverageTransactionRate = $pdo->prepare($sqlAverageTransactionRate);
+                $stmtAverageTransactionRate = $conn->prepare($sqlAverageTransactionRate);
                 $stmtAverageTransactionRate->execute();
                 $averageTransactionRate = $stmtAverageTransactionRate->fetchColumn() ?: 0;
 
@@ -286,7 +251,7 @@
                         <!-- Card title -->
                         <div class="">
                             <div class="text-lg font-semibold text-gray-800" style="color: #262261;">
-                                <i class="ri-box-3-fill" style="font-size: 1.2em;"></i> Stocks: <span class="font-bold text-gray-400">200/500</span>
+                                <i class="ri-box-3-fill" style="font-size: 1.2em;"></i> Revenue</span>
                             </div>
 
                         </div>
@@ -324,7 +289,7 @@
 
                 // Query for sale details
                 $sqlSaleDetails = "
-                    SELECT SaleDetails.*, Sales.SaleDate, Sales.CustomerID, Products.ProductName, Products.ProductImage, Customers.FirstName, Customers.LastName 
+                    SELECT SaleDetails.*, Sales.SaleDate, Sales.CustomerID, Products.ProductName, Products.ProductImage, Customers.Name
                     FROM SaleDetails 
                     JOIN Sales ON SaleDetails.SaleID = Sales.SaleID 
                     JOIN Products ON SaleDetails.ProductID = Products.ProductID 
@@ -360,7 +325,7 @@
                                 </td>
                                 <td class="px-4 py-2"><?= $saleDetail["SaleID"] ?></td>
                                 <td class="px-4 py-2"><?= date("F j, Y, g:i a", strtotime($saleDetail["SaleDate"])) ?></td>
-                                <td class="px-4 py-2"><?= $saleDetail["FirstName"] . " " . $saleDetail["LastName"] ?></td>
+                                <td class="px-4 py-2"><?= $saleDetail["Name"] ?></td>
                                 <td class='px-4 py-2'><a route='/sls/Transaction-Details/sale=<?php echo $saleDetail["SaleID"] ?>' class='text-blue-500 hover:underline view-link'>View</a></td>
                             </tr>
                         <?php endforeach; ?>
@@ -444,6 +409,57 @@
         });
     </script>
 
+    <?php
+    // Check if the functions exist before calling them
+    if (function_exists('amountOfRawSales') && function_exists('amountOfSalesTax')) {
+        // Call the functions and store their return values
+        $salesAmount = amountOfRawSales();
+        $salesTaxAmount = amountOfSalesTax();
+
+        // Multiply the amounts by -1
+        $salesAmount *= -1;
+        $salesTaxAmount *= -1;
+
+        // Subtract the sales tax amount from the sales amount to get the total
+        $total = $salesAmount + $salesTaxAmount;
+    } else {
+        echo "Error: One of the functions does not exist.";
+    }
+    ?>
+
+    <script>
+        // Transfer the value of $total to JavaScript
+        var total = <?php echo json_encode($total); ?>;
+
+        // Show the value of total in the console
+        console.log(total);
+    </script>
+
+    <?php
+    // Check if the function exists before calling it
+    if (function_exists('totalReturns')) {
+        // Call the function and store its return value
+        $totalReturns = totalReturns();
+
+        // Check if the function returned a value
+        if ($totalReturns !== null) {
+            echo "₱" . $totalReturns;
+        } else {
+            echo "Error: totalReturns() returned null.";
+        }
+    } else {
+        echo "Error: totalReturns() function does not exist.";
+    }
+    ?>
+
+    <script>
+        // Transfer the value of $totalReturns to JavaScript
+        var totalReturns = <?php echo json_encode($totalReturns); ?>;
+
+        // Show the value of totalReturns in the console
+        console.log(totalReturns);
+    </script>
+
     <!-- Chart.js configurations -->
     <script>
         // Line Chart for Sales
@@ -477,25 +493,32 @@
             }
         });
 
+        // Transfer the value of $total and $totalReturns to JavaScript
+        var grossSales = <?php echo json_encode($total); ?>;
+        var totalReturns = <?php echo json_encode($totalReturns); ?>;
+
+        // Calculate the maximum value and round it up to the nearest whole number
+        var maxValue = Math.ceil(Math.max(grossSales, totalReturns) / 10000) * 10000;
+
         // Bar Chart for Stocks
         var ctx = document.getElementById('stocksChart').getContext('2d');
         var stocksChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Stocks'],
+                labels: ['Revenue'],
                 datasets: [{
-                        label: 'Sold',
-                        data: [300],
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 2
-                    },
-                    {
-                        label: 'Remaining',
-                        data: [200],
+                        label: 'Gross Sales',
+                        data: [grossSales],
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 2
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Contra Revenue',
+                        data: [totalReturns],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
                     }
                 ]
             },
@@ -504,7 +527,10 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 500 // Set the maximum value of the y-axis to 500
+                        max: maxValue, // Set the maximum value of the y-axis based on the data
+                        ticks: {
+                            stepSize: 10000 // Set the step size to 10000
+                        }
                     }
                 }
             }
@@ -521,6 +547,7 @@
         });
     </script>
     <script src="./../src/route.js"></script>
+    <script src="./../src/form.js"></script>
 </body>
 
 </html>

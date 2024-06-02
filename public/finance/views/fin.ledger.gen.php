@@ -10,12 +10,12 @@
     
 </head>
 
-<body>
+<body class="flex">
 
     <?php include "components/sidebar.php" ?>
     <!-- Start: Dashboard -->
 
-    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 min-h-screen transition-all main">
+    <main class="flex-1 transition-all main">
 
         <!-- Start: Header -->
 
@@ -23,7 +23,7 @@
 
             <!-- Start: Active Menu -->
 
-            <button type="button" class="text-lg sidebar-toggle">
+            <button type="button" class="text-lg sidebar-toggle" id = 'toggleSidebar'>
                 <i class="ri-menu-line"></i>
             </button>
 
@@ -57,8 +57,8 @@
                             <div class="inline-flex items-center overflow-hidden rounded-lg  border border-gray-500">
                                 <form action="/fin/genSearch" method="post" class="flex items-center">
                                     <?php 
-                                    $selected = isset($_SESSION['postdata']['generalLedgerSelected']) ? $_SESSION['postdata']['generalLedgerSelected'] : null;
-                                    $recent = array_key_exists('recent', $_SESSION['postdata']) ? $_SESSION['postdata']['recent'] : true;
+                                        $selected = isset($_SESSION['postdata']['generalLedgerSelected']) ? $_SESSION['postdata']['generalLedgerSelected'] : null;
+                                        $recent = (isset($_SESSION['postdata']) && array_key_exists('recent', $_SESSION['postdata'])) ? $_SESSION['postdata']['recent'] : true;
                                     ?>
                                     <label for="recent" id="recentLabel" class="border-r-5 border-black px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 min-w-12">
                                         <span id="labelText"><?php echo $recent ? "Recent" : "Old"?></span>

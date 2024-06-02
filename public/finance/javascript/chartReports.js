@@ -21,7 +21,7 @@ async function recordChartAsAnImage(typeFile, fromDate, toDate) {
             // Convert the chart to a data URL
             var url = myChart.toBase64Image();
             // Send the image data to the server
-            fetch('http://localhost/Master/chartGenerator', {
+            fetch('http://localhost/master/chartGenerator', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ function generateIncomeChart(fromDate, toDate){
         fromDate : fromDate,
         toDate : toDate,
     };
-    return fetch('http://localhost/Master/chartGeneration/getIncomeReport', {
+    return fetch('http://localhost/master/chartGeneration/getIncomeReport', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -121,7 +121,7 @@ function generateBalanceChart(fromDate, toDate){
         toDate : toDate,
     };
     // Return the fetch Promise
-    return fetch('http://localhost/Master/chartGeneration/getBalanceReport', {
+    return fetch('http://localhost/master/chartGeneration/getBalanceReport', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -203,7 +203,7 @@ function generateEquityChart(fromDate, toDate){
         fromDate : fromDate,
         toDate : toDate,
     };
-    return fetch('http://localhost/Master/chartGeneration/getEquityReport', {
+    return fetch('http://localhost/master/chartGeneration/getEquityReport', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -288,7 +288,7 @@ function generateCashFlowChart(fromDate, toDate){
         fromDate : fromDate,
         toDate : toDate,
     };
-    return fetch('http://localhost/Master/chartGeneration/getCashFlowReport', {
+    return fetch('http://localhost/master/chartGeneration/getCashFlowReport', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

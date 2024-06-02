@@ -57,9 +57,8 @@
                 <select class="bg-gray-200 w-full text-md p-1 rounded-lg mb-4" required>
                     <option value="" selected disabled>Select...</option>
                     <option value="cash">Cash</option>
-                    <option value="creditCard">Credit Card</option>
-                    <option value="debitCard">Debit Card</option>
                     <option value="bankTransfer">Bank Transfer</option>
+                    <option value="creditCard">Credit/Debit Card</option>
                 </select>
                 </div>
 
@@ -78,12 +77,6 @@
                     <option value="maintenanceRepairs">Maintenance and Repairs</option>
                     <option value="miscellaneous">Miscellaneous</option>
                 </select><br>
-                </div>
-
-                <!-- Proof of Invoice -->
-                <label class="block text-lg font-bold mb-2">Proof Of Invoice:</label>
-                <div class="px-4">
-                <input class="bg-gray-200 w-full text-base px-2 py-2 rounded-lg mb-4 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" type="file">
                 </div>
 
                 <!-- Include SweetAlert2 library -->

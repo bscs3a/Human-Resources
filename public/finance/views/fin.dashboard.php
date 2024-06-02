@@ -19,7 +19,7 @@ require_once "components/dashboard/dashboard.performFunctions.php";
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
-<body>
+<body class = "flex">
     <!-- for calendar, cant render if not here -->
     <script src="https://jsuites.net/v4/jsuites.js"></script>
     <!-- Start: Sidebar -->
@@ -46,7 +46,7 @@ require_once "components/dashboard/dashboard.performFunctions.php";
     ?>
     <!-- End: Sidebar -->
     <!-- Start: Dashboard -->
-    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 min-h-screen transition-all main font-sans">
+    <main class="flex-1 transition-all main">
 
 
         <!-- Start: Header -->
@@ -55,7 +55,7 @@ require_once "components/dashboard/dashboard.performFunctions.php";
 
             <!-- Start: Active Menu -->
 
-            <button type="button" class="text-lg sidebar-toggle">
+            <button type="button" class="text-lg sidebar-toggle" id = 'toggleSidebar'>
                 <i class="ri-menu-line"></i>
             </button>
 
@@ -80,7 +80,7 @@ require_once "components/dashboard/dashboard.performFunctions.php";
         <!-- End: Header -->
 
         <!-- Start: Inner Dashboard Analytics-->
-        <div class="w-full h-1/4 p-6 bg-white">
+        <div class="w-full p-6 bg-white">
             <!-- Start: Top Section -->
             <div class=" mb-6">
                 <!-- Start: Top Left-Side Section -->

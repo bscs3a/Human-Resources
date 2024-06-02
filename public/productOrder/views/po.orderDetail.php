@@ -22,7 +22,7 @@
     <!-- Main Content -->
     <div class="flex flex-col flex-1 overflow-y-auto">
       <!-- header -->
-      <div class="flex items-center justify-between h-16 bg-gray-200 shadow-md px-4 py-1">
+      <div class="flex items-center justify-between h-16 shadow-md px-4 py-1">
         <div class="flex items-center gap-4">
           <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
             <i class="ri-menu-line"></i>
@@ -31,24 +31,8 @@
         </div>
 
         <!-- dropdown -->
-        <div x-data="{ dropdownOpen: false }" class="relative my-32">
-          <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
-            <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
-              <i class="ri-arrow-down-s-line"></i>
-            </div>
-          </button>
+        <?php require_once "public/productOrder/views/po.logout.php"?>
 
-          <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
-
-          <form id="logout-form" action="/logout/user" method="POST">
-            <div x-show="dropdownOpen"
-              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
-              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
-            </div>
-          </form>
-        </div>
       </div>
 
       <script>
@@ -90,8 +74,8 @@
             $conn = $db->connect();
             $deliveredCount = countDelivered($conn);
             ?>
-            <a class="text-6xl "> <?php echo $deliveredCount; ?></a>
-            <a class="text-lg">Total Delivery</a>
+              <a class="text-6xl font-bold" style="color: green;"><?php echo $deliveredCount; ?></a>
+              <a class="text-lg" style="color: green;">Total Delivery</a>
           </div>
 
 
@@ -136,8 +120,8 @@
               <tr>
                 <th class="px-4 py-2 font-semibold">Order #</th>
                 <th class="px-4 py-2 font-semibold">Supplier Name</th>
-                <th class="px-4 py-2 font-semibold">Date Order</th>
-                <th class="px-4 py-2 font-semibold">Time</th>
+                <th class="px-4 py-2 font-semibold">Date Ordered</th>
+                <th class="px-4 py-2 font-semibold">Time Ordered</th>
                 <th class="px-4 py-2 font-semibold">Location</th>
                 <th class="px-4 py-2 font-semibold">Estimated Delivery</th>
                 <th class="px-4 py-2 font-semibold">Actions</th>
@@ -192,12 +176,12 @@ function displayPendingOrders()
             // Form for Delayed status
             if ($row['Order_Status'] == 'to receive + Delayed') {
                 // If status is already 'to receive + Delayed', set button color to purple
-                echo '<button type="button" class="rounded-full border border-purple-600 bg-purple-600 block px-7 py-1 text-sm font-semibold text-white focus:outline-none" disabled style="background-color: #8A2BE2;">Delayed</button>';
+                echo '<button type="button" class="rounded-full border border-purple-600 bg-purple-600 block px-6 py-1 text-sm font-semibold text-white focus:outline-none" disabled style="background-color: #8A2BE2;">Delayed</button>';
               } else {
                 // If status is not 'to receive + Delayed', render the button with blue color
                 echo '<form action="/master/delay/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2" onsubmit="return confirm(\'Are you sure you want to mark this order as delayed?\');">';
                 echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
-                echo '<button type="submit" class="rounded-full border border-blue-600 hover:bg-blue-600 bg-blue-200 border-b block px-7 py-1 text-sm font-semibold text-blue-900 hover:text-white focus:outline-none">Delayed</button>';
+                echo '<button type="submit" class="rounded-full border border-blue-600 hover:bg-blue-600 bg-blue-200 border-b block px-6 py-1 text-sm font-semibold text-blue-900 hover:text-white focus:outline-none">Delayed</button>';
                 echo '</form>';
             }
             echo '</td>';

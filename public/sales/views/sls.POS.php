@@ -63,42 +63,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-
-                <div class="relative inline-block text-left">
-                     <div>
-                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
-                            <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
-                            </div>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </a>
-                    </div>
-
-                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
-                        id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        <div class="py-1" role="none">
-                            <a route="/sls/logout"
-                                class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                                role="menuitem">
-                                <i class="ri-logout-box-line"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    document.getElementById('options-menu').addEventListener('click', function () {
-                        var dropdownMenu = document.getElementById('dropdown-menu');
-                        if (dropdownMenu.classList.contains('hidden')) {
-                            dropdownMenu.classList.remove('hidden');
-                        } else {
-                            dropdownMenu.classList.add('hidden');
-                        }
-                    });
-                </script>
-            </ul>
+            <?php require_once "components/logout/logout.php"?>
 
             <!-- End: Profile -->
         </div>
@@ -428,7 +393,8 @@
 
                     <script>
                         const checkoutButton = document.getElementById('checkout-button');
-                        const checkoutRoute = '/master/sls/POS/Checkout'; // Define the route path here
+                        const basePath = '/master'; // Define the base path here
+                        const checkoutRoute = basePath + '/sls/POS/Checkout'; // Concatenate base path with the route
 
                         checkoutButton.addEventListener('click', (event) => {
                             // Get the cart from localStorage
@@ -548,11 +514,11 @@
 
                     <div id="grid" class="mb-10" x-bind:class="cartOpen ? ' grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? ' grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? ' grid-cols-6 gap-4' : ' grid-cols-6 gap-4'" style="display: grid;">
                         <?php foreach ($products as $product) : ?>
-                            <?php if ($product['Category_ID'] === $category) : ?> <!-- Show products only for the current category -->
+                            <?php if ($product['Category_ID'] === $category && $product['Availability'] === 'Available' && $product['Stocks'] !== null) : ?> <!-- Show products only for the current category, if they are available, and if the stocks are not null -->
 
                                 <button id="product-item-button" type="button" class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" x-for="(item, index) in cart" :key="index" data-product='<?= json_encode($product) ?>' data-product-name='<?= json_encode($product['ProductName']) ?>' data-product-category='<?= json_encode($product['Category_Name']) ?>' @click="
                                     if (<?= $product['Stocks'] ?> > 0) { 
-                                        addToCart({ id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, ProductWeight: '<?= $product['ProductWeight'] ?>', deliveryRequired: '<?= $product['DeliveryRequired'] ?>', image: '<?= $product['ProductImage'] ?>' }); cartOpen = true; 
+                                        addToCart({ id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, ProductWeight: '<?= $product['ProductWeight'] ?>', deliveryRequired: '<?= $product['DeliveryRequired'] ?>' , supplierPrice: '<?= $product['Supplier_Price'] ?>', image: '<?= $product['ProductImage'] ?>' }); cartOpen = true; 
 
                                     } else { 
                                         showAlertBox(); 
@@ -632,6 +598,7 @@
         </script>
     </main>
     <script src="./../src/route.js"></script>
+    <script src="./../src/form.js"></script>
 
     <script>
         // Listen for Alpine.js initialization event

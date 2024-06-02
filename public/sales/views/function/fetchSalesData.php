@@ -1,10 +1,7 @@
 <?php
-// Include your database connection file
-require_once './src/dbconn.php';
-
 // Get PDO instance
 $database = Database::getInstance();
-$pdo = $database->connect();
+$conn = $database->connect();
 
 // SQL query to fetch sales data along with customer name
 $sql = "SELECT 
@@ -13,8 +10,7 @@ $sql = "SELECT
             Sales.SalePreference,
             Sales.PaymentMode,
             Sales.TotalAmount,
-            Customers.FirstName AS CustomerFirstName,
-            Customers.LastName AS CustomerLastName
+            Customers.Name AS CustomerName
         FROM 
             Sales
         JOIN 
@@ -23,5 +19,5 @@ $sql = "SELECT
             Sales.SaleDate DESC";
 
 // Execute the query
-$stmt = $pdo->query($sql);
+$stmt = $conn->query($sql);
 ?>

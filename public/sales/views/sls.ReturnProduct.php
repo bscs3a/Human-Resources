@@ -11,7 +11,7 @@
     <?php
     // Database connection
     $db = Database::getInstance();
-    $pdo = $db->connect();
+    $conn = $db->connect();
 
     // Get saleId, saledetailsId, and productId from URL
     $saleId = $_GET['sale'];
@@ -23,7 +23,7 @@
         FROM Products p 
         JOIN Categories c ON p.Category_ID = c.Category_ID 
         WHERE p.ProductID = :product_id";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->bindParam(":product_id", $productId);
     $stmt->execute();
     $productDetails = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -37,7 +37,7 @@
                                      FROM SaleDetails sd 
                                      JOIN Products p ON sd.ProductID = p.ProductID 
                                      WHERE sd.SaleID = :sale_id AND sd.ProductID = :product_id";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->bindParam(":sale_id", $saleId);
     $stmt->bindParam(":product_id", $productId);
     $stmt->execute();
@@ -45,7 +45,7 @@
 
     // Fetch quantity
     $sql = "SELECT Quantity FROM SaleDetails WHERE SaleDetailID = :saledetails_id AND ProductID = :product_id";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->bindParam(":saledetails_id", $saledetailsId);
     $stmt->bindParam(":product_id", $productId);
     $stmt->execute();
@@ -83,39 +83,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-
-                <div class="relative inline-block text-left">
-                    <div>
-                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
-                            <div class="text-black font-medium mr-4 ">
-                                <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
-                            </div>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </a>
-                    </div>
-
-                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        <div class="py-1" role="none">
-                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
-                                <i class="ri-logout-box-line"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    document.getElementById('options-menu').addEventListener('click', function() {
-                        var dropdownMenu = document.getElementById('dropdown-menu');
-                        if (dropdownMenu.classList.contains('hidden')) {
-                            dropdownMenu.classList.remove('hidden');
-                        } else {
-                            dropdownMenu.classList.add('hidden');
-                        }
-                    });
-                </script>
-            </ul>
+            <?php require_once "components/logout/logout.php" ?>
 
             <!-- End: Profile -->
         </div>
@@ -152,12 +120,12 @@
 
                 // Check if the SaleID and ProductID exist in the returnproducts table
                 $sql = "SELECT 1 FROM returnproducts WHERE SaleID = :sale_id AND ProductID = :product_id";
-                $stmt = $pdo->prepare($sql);
+                $stmt = $conn->prepare($sql);
                 $stmt->execute([':sale_id' => $saleId, ':product_id' => $productId]);
                 $isReturned = $stmt->fetchColumn();
 
                 if (!$isReturned) : ?>
-                    <form action="/returnProduct" method="post" class="w-full p-4">
+                    <form action="/returnProduct" method="post" class="w-full p-4" id="returnproduct">
                         <div class="mb-4 hidden">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="product_id">
                                 Product ID
@@ -212,9 +180,24 @@
                         </div>
                     </form>
                 <?php else : ?>
-                    <p class="text-red-500 text-xl p-4">This product has already been returned.</p>
+                    <div class="flex h-full flex-grid gap-4 text-2xl font-semibold justify-center items-center px-10 pb-10">
+                    <i class="ri-checkbox-fill text-red-500 text-6xl"></i>
+                    <p class="text-red-500">This product has already been returned.</p>
+                    </div>
                 <?php endif; ?>
             </div>
+
+            <script>
+                document.querySelector('#returnproduct').addEventListener('submit', function(event) {
+                    var amount = document.getElementById('payment_returned').value;
+                    var maxAmount = <?php echo getBalanceCashAccount('Cash on hand') ?>;
+
+                    if (amount > maxAmount) {
+                        alert('Cash on hand must not exceed ' + maxAmount);
+                        event.preventDefault(); // Prevent form from submitting
+                    }
+                });
+            </script>
 
             <script>
                 function calculatePaymentReturned() {

@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 </head>
 
-<body>
+<body class="flex">
     <!-- Start: Sidebar -->
     <?php include "components/sidebar.php" ?>
     <!-- End: Sidebar -->
     <!-- Start: Dashboard -->
-    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 min-h-screen transition-all main font-sans">
+    <main class="flex-1 transition-all main">
 
 
         <!-- Start: Header -->
@@ -23,7 +23,7 @@
 
             <!-- Start: Active Menu -->
 
-            <button type="button" class="text-lg sidebar-toggle">
+            <button type="button" class="text-lg sidebar-toggle" id = 'toggleSidebar'>
                 <i class="ri-menu-line"></i>
             </button>
 
@@ -154,8 +154,10 @@
                 $stmt = $pdo->prepare("SELECT COUNT(*) FROM audit_log as al 
                        INNER JOIN account_info as ai ON ai.id = al.account_id
                        INNER JOIN employees as e ON e.id = ai.employees_id
-                       WHERE ai.username LIKE :searchQuery OR CONCAT(e.first_name, ' ', e.last_name) LIKE :searchQuery OR al.action LIKE :searchQuery OR CAST(al.id AS CHAR) LIKE :searchQuery OR CAST(al.datetime AS CHAR) LIKE :searchQuery");
+                       WHERE e.department = :department AND (ai.username LIKE :searchQuery OR CONCAT(e.first_name, ' ', e.last_name) LIKE :searchQuery OR al.action LIKE :searchQuery OR CAST(al.id AS CHAR) LIKE :searchQuery OR CAST(al.datetime AS CHAR) LIKE :searchQuery)");
                 $stmt->bindParam(':searchQuery', $searchQuery);
+                $stmt->bindParam(':department', $department, PDO::PARAM_STR);
+
                 $stmt->execute();
                 $totalPages = $stmt->fetchColumn();
                 
