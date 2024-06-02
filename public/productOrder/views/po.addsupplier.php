@@ -378,7 +378,7 @@
             </div>
 
             <div class="flex flex-row justify-end gap-3 my-3">
-              <a href='/master/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</a>
+              <a route='/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</a>
               <button id="saveButton" type="submit"
                 class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save</button>
             </div>

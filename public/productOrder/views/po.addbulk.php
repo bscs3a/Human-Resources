@@ -663,7 +663,7 @@
         <div class="flex flex-row justify-between items-center m-3">
           <a class="flex text-xl font-bold">Add Items</a>
           <div class="flex flex-row gap-3">
-            <a href='/master/po/viewsupplierproduct/Supplier=<?php echo isset($_GET['Supplier_ID']) ? $_GET['Supplier_ID'] : ''; ?>'
+            <a route='/po/viewsupplierproduct/Supplier=<?php echo isset($_GET['Supplier_ID']) ? $_GET['Supplier_ID'] : ''; ?>'
               class="flex py-2 px-6 border border-gray-600 font-bold rounded-md">Back</a>
             <button type="submit" class="flex py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save
             </button>

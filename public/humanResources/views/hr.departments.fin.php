@@ -64,7 +64,7 @@
    </button>
    <ul class="flex items-center text-sm ml-4">  
   <li class="mr-2">
-    <a href="/hr/dashboard" class="text-[#151313] hover:text-gray-600 font-medium">Human Resources</a>
+    <a route="/hr/dashboard" class="text-[#151313] hover:text-gray-600 font-medium">Human Resources</a>
   </li>
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Departments</a>

@@ -188,7 +188,7 @@ function displayPendingOrders()
 
             // for VIEW order
             echo '<td class="px-4 py-4">';
-            echo '<a href="/master/po/viewdetails/Batch=' . $row['Batch_ID'] . '">View</a>';
+            echo '<a route="/po/viewdetails/Batch=' . $row['Batch_ID'] . '">View</a>';
             echo '</td>';
             echo '</tr>';
             echo '</tbody>';
