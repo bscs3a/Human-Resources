@@ -20,7 +20,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="flex flex-col flex-1 overflow-y-auto">
+    <div class="flex flex-col h-full flex-1 overflow-y-auto">
       <!-- header -->
       <div class="flex items-center justify-between h-16 shadow-md px-4">
         <div class="flex items-center gap-4">
@@ -44,7 +44,7 @@
       </script>
 
       <!-- Main Content -->
-      <div class="h-screen px-10">
+      <div class="h-screen px-10 my-5">
         <div class="flex flex-row gap-10 drop-shadow-md my-8">
 
           <!-- //PHP FUNCTION TO SHOW THE TOTAL OF DELIVERED ITEMS -->
@@ -162,9 +162,9 @@
         </div>
 
         <!-- NEW Table -->
-        <div class="overflow-x-auto overflow-auto rounded-lg border border-gray-400">
+        <div class="overflow-x-auto h-96 overflow-auto rounded-lg border border-gray-400 hide-scrollbar">
           <table class="min-w-full text-left mx-auto bg-white">
-            <thead class="bg-gray-200 border-b border-gray-400 text-sm">
+            <thead class="sticky top-0 bg-gray-200 border-b border-gray-400 text-sm">
               <tr>
                 <th class="px-4 py-2 font-semibold">Order #</th>
                 <th class="px-4 py-2 font-semibold">Supplier Name</th>

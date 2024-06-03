@@ -62,34 +62,43 @@
             <tbody>
 
             <?php
-try {
-    require_once 'dbconn.php';
 
-    // Query to retrieve all products
-    $query = "SELECT * FROM products";
-    $statement = $conn->prepare($query);
-    $statement->execute();
+function getProductDetailsFromRequests($conn) {
+    try {
+        $db = Database::getInstance();
+        $conn = $db->connect();
+        // SQL query to join products and requests tables
+        $query = "SELECT p.ProductID, p.ProductName, p.Supplier, p.Category, p.Price, r.Quantity, p.Supplier_ID
+                  FROM products p
+                  JOIN requests r ON p.ProductID = r.Product_ID";
+        $statement = $conn->prepare($query);
+        $statement->execute();
 
-    // Displaying the fetched products
-    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-        echo "<tr>";
-        echo "<td>" . $row['ProductID'] . "</td>";
-        echo "<td>" . $row['ProductName'] . "</td>";
-        echo "<td>" . $row['Supplier'] . "</td>";
-        echo "<td>" . $row['Category'] . "</td>";
-        echo "<td>" . $row['Price'] . "</td>";
-        echo '<td>';
-        echo '<form action="/request/insert" method="POST">';
-        echo '<input type="hidden" name="productID" value="' . $row['ProductID'] . '">';
-        echo '<input type="number" name="quantity" value="1" min="1" class="px-2 py-1 border border-gray-400 rounded-md">';
-        echo '<input type="submit" value="Request" class="px-4 py-2 border border-blue-600 text-blue-600 rounded-md font-semibold tracking-wide cursor-pointer ml-2">';
-        echo '</form>';
-        echo '</td>';
-        echo "</tr>";
+        // Fetch and display the results
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+          echo "<tr class='border-b'>";
+          echo "<td class='px-4 py-2'>" . $row['ProductID'] . "</td>";
+          echo "<td class='px-4 py-2'>" . $row['ProductName'] . "</td>";
+          echo "<td class='px-4 py-2'>" . $row['Supplier'] . "</td>";
+          echo "<td class='px-4 py-2'>" . $row['Category'] . "</td>";
+          echo "<td class='px-4 py-2'>" . $row['Price'] . "</td>";
+          echo "<td class='px-4 py-2'>" . $row['Quantity'] . "</td>";
+          echo '<td class="px-4 py-2">';
+          echo '<a href="/po/viewsupplierproduct/Supplier=' . $row['Supplier_ID'] . '" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Go</a>';
+          echo '</td>';
+          echo "</tr>";
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
     }
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
 }
+
+// Assuming $conn is your PDO connection
+$db = Database::getInstance();
+$conn = $db->connect();
+// Call the function to display the product details based on requests
+getProductDetailsFromRequests($conn);
+
 ?>
 
 

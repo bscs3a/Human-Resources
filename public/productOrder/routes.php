@@ -8,6 +8,7 @@ $po = [
     '/po/login' => $basePath . "login.php",
     // '/po/dashboard' => $basePath . "dashboard.php",
     '/po/requestOrder' => $basePath . "requestOrder.php",
+    '/po/viewRequest' => $basePath . "viewRequest.php",
     '/po/suppliers' => $basePath . "suppliers.php",
     '/po/addsupplier' => $basePath . "addsupplier.php",
     '/po/viewsupplier' => $basePath . "viewsupplier.php",
@@ -29,13 +30,13 @@ $po = [
     // '/po/audit_logs' => $basePath . "audit_logs.php",
 
     //auditlogs
-    '/po/audit_logs/page={pageNumber}' => function($pageNumber) use ($basePath){
+    '/po/audit_logs/page={pageNumber}' => function ($pageNumber) use ($basePath) {
         $_GET['page'] = $pageNumber;
         include $basePath . "audit_logs.php";
     },
 
     //funds
-    '/po/pondo/page={pageNumber}' => function($pageNumber) use ($basePath){
+    '/po/pondo/page={pageNumber}' => function ($pageNumber) use ($basePath) {
         $_GET['page'] = $pageNumber;
         include $basePath . "pondo.php";
     },
@@ -439,16 +440,39 @@ Router::post('/placeorder/supplier/', function () {
         $supplierStatus = $statusStmt->fetchColumn();
 
         if ($supplierStatus === 'Inactive') {
-            echo "<script>alert('This supplier is inactive and you cannot place orders with them.');</script>";
-            echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var message = 'This supplier is inactive and you cannot place orders with them.';
+                        var alertBox = document.createElement('div');
+                        alertBox.textContent = message;
+                        alertBox.style.backgroundColor = '#f8d7da'; // Red background color
+                        alertBox.style.color = '#721c24'; // Dark text color
+                        alertBox.style.padding = '30px'; // Padding
+                        alertBox.style.borderRadius = '12px'; // Rounded corners
+                        alertBox.style.position = 'fixed'; // Fixed position
+                        alertBox.style.top = '50%'; // Center vertically
+                        alertBox.style.left = '50%'; // Center horizontally
+                        alertBox.style.transform = 'translate(-50%, -50%)'; // Centering trick
+                        alertBox.style.zIndex = '9999'; // Ensure it's on top
+                        alertBox.style.border = '3px solid #f5c6cb'; // Border color
+                        alertBox.style.fontSize = '36px'; // Larger font size
+                        alertBox.style.fontWeight = 'bold'; // Bolder text
+                        document.body.appendChild(alertBox);
+                        setTimeout(function() {
+                            alertBox.parentNode.removeChild(alertBox);
+                            window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';
+                        }, 2000); // Close the alert after 2 seconds
+                    });
+                  </script>";
             return;
         }
 
-      
+
+
         // Prepare SQL statement for inserting orders into order_details table
         $orderStmt = $conn->prepare("INSERT INTO order_details (Supplier_ID, Product_ID, Product_Quantity, Date_Ordered, Batch_ID) VALUES (:supplierID, :productID, :quantity, NOW(), :batchID)");
 
-     
+
 
         // Get Batch_ID
         $batchID = getNextBatchID($conn); // Function to get the next available batch ID
@@ -476,8 +500,30 @@ Router::post('/placeorder/supplier/', function () {
                 // If product is not available, set flag to false and halt order processing
                 if ($availability === 'Not Available') {
                     $allProductsAvailable = false;
-                    echo "<script>alert('Product with ID $productID is not available and cannot be ordered.');</script>";
-                    echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
+                    echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var message = 'Product with ID $productID is not available and cannot be ordered.';
+                        var alertBox = document.createElement('div');
+                        alertBox.textContent = message;
+                        alertBox.style.backgroundColor = '#f8d7da'; // Red background color
+                        alertBox.style.color = '#721c24'; // Dark text color
+                        alertBox.style.padding = '30px'; // Padding
+                        alertBox.style.borderRadius = '12px'; // Rounded corners
+                        alertBox.style.position = 'fixed'; // Fixed position
+                        alertBox.style.top = '50%'; // Center vertically
+                        alertBox.style.left = '50%'; // Center horizontally
+                        alertBox.style.transform = 'translate(-50%, -50%)'; // Centering trick
+                        alertBox.style.zIndex = '9999'; // Ensure it's on top
+                        alertBox.style.border = '3px solid #f5c6cb'; // Border color
+                        alertBox.style.fontSize = '36px'; // Larger font size
+                        alertBox.style.fontWeight = 'bold'; // Bolder text
+                        document.body.appendChild(alertBox);
+                        setTimeout(function() {
+                            alertBox.parentNode.removeChild(alertBox);
+                            window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';
+                        }, 2000); // Close the alert after 2 seconds
+                    });
+                </script>";
                     break; // Stop processing further products
                 }
 
@@ -505,14 +551,14 @@ Router::post('/placeorder/supplier/', function () {
 
 
                 // Audit log for adding bulk items on a supplier
-                $user_id = $_SESSION['user']['username']; // Assuming you have a user session
+                // $user_id = $_SESSION['user']['username']; // Assuming you have a user session
 
-                // Fetch Supplier_Name based on Supplier_ID
-                $supplierNameQuery = "SELECT Supplier_Name FROM suppliers WHERE Supplier_ID = :supplierID";
-                $supplierNameStmt = $conn->prepare($supplierNameQuery);
-                $supplierNameStmt->bindParam(':supplierID', $supplierID);
-                $supplierNameStmt->execute();
-                $supplierName = $supplierNameStmt->fetchColumn();
+                // // Fetch Supplier_Name based on Supplier_ID
+                // $supplierNameQuery = "SELECT Supplier_Name FROM suppliers WHERE Supplier_ID = :supplierID";
+                // $supplierNameStmt = $conn->prepare($supplierNameQuery);
+                // $supplierNameStmt->bindParam(':supplierID', $supplierID);
+                // $supplierNameStmt->execute();
+                // $supplierName = $supplierNameStmt->fetchColumn();
 
 
 
@@ -538,24 +584,24 @@ Router::post('/placeorder/supplier/', function () {
         // Add the shipping fee to the total amount
         $totalAmount += $shippingFee;
 
-      
+
         $remaingvalue = getRemainingProductOrderPondo($paymentmethod);
 
         if ($totalAmount > $remaingvalue) {
             echo "<script>alert('You dont have enough Funds to proceed with the order');</script>";
             echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
-            return;
+     
         }
 
         // If any product is not available, halt the order processing
         if (!$allProductsAvailable) {
-            echo "Order cannot be processed because one or more products are not available.<br>";
+            // echo "Order cannot be processed because one or more products are not available.<br>";
         } else {
             // If total quantity is greater than 0, proceed with batch order insertion
             if ($totalQuantity > 0) {
-                  // Prepare SQL statement for inserting batch into batch_orders table
+                // Prepare SQL statement for inserting batch into batch_orders table
 
-                $fundsID = recordBuyingInventory($totalAmount,$paymentmethod);
+                $fundsID = recordBuyingInventory($totalAmount, $paymentmethod);
                 $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Items_Subtotal, Total_Amount, Order_Status, Pay_Using, Funds_Transact_ID) VALUES (:supplierID, :itemsSubtotal, :totalAmount, 'to receive', :paymentmethod, :fundsID)");
                 // Bind parameters for batch order insertion
                 $batchOrderStmt->bindParam(':supplierID', $supplierID);
@@ -577,8 +623,30 @@ Router::post('/placeorder/supplier/', function () {
             } else {
                 // Rollback the transaction if no products were ordered
                 $conn->rollBack();
-                echo "<script>alert('No products were ordered.');</script>";
-                echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
+                echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var message = 'No products were ordered.';
+                    var alertBox = document.createElement('div');
+                    alertBox.textContent = message;
+                    alertBox.style.backgroundColor = '#f8d7da'; // Red background color
+                    alertBox.style.color = '#721c24'; // Dark text color
+                    alertBox.style.padding = '30px'; // Padding
+                    alertBox.style.borderRadius = '12px'; // Rounded corners
+                    alertBox.style.position = 'fixed'; // Fixed position
+                    alertBox.style.top = '50%'; // Center vertically
+                    alertBox.style.left = '50%'; // Center horizontally
+                    alertBox.style.transform = 'translate(-50%, -50%)'; // Centering trick
+                    alertBox.style.zIndex = '9999'; // Ensure it's on top
+                    alertBox.style.border = '3px solid #f5c6cb'; // Border color
+                    alertBox.style.fontSize = '36px'; // Larger font size
+                    alertBox.style.fontWeight = 'bold'; // Bolder text
+                    document.body.appendChild(alertBox);
+                    setTimeout(function() {
+                        alertBox.parentNode.removeChild(alertBox);
+                        window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';
+                    }, 2000); // Close the alert after 2 seconds
+                });
+            </script>";
             }
         }
     } catch (PDOException $e) {
@@ -597,7 +665,7 @@ Router::post('/placeorder/supplier/', function () {
 //function to delete view details
 Router::post('/delete/viewdetails', function () {
     // Check if the delete request was submitted
-    if (isset ($_POST['product_id']) && isset ($_POST['batch_id'])) {
+    if (isset($_POST['product_id']) && isset($_POST['batch_id'])) {
         $productID = $_POST['product_id'];
         $batchID = $_POST['batch_id'];
 
@@ -653,7 +721,7 @@ Router::post('/delete/viewdetails', function () {
             // Redirect back to the view details page
             $rootFolder = dirname($_SERVER['PHP_SELF']);
             header("Location: $rootFolder/po/viewdetails/Batch=$batchID");
-            exit ();
+            exit();
         } catch (PDOException $e) {
             // Rollback the transaction on error
             $conn->rollBack();
@@ -780,7 +848,7 @@ Router::post('/delete/requestOrder', function () {
         $conn = $db->connect();
 
         // Check if the requestID is provided in the POST data
-        if (isset ($_POST['requestID'])) {
+        if (isset($_POST['requestID'])) {
             $requestID = $_POST['requestID'];
 
             $stmt = $conn->prepare("DELETE FROM requests WHERE Request_ID = :requestID");
@@ -795,7 +863,7 @@ Router::post('/delete/requestOrder', function () {
                 // Redirect back to the request order page after successful deletion
                 $rootFolder = dirname($_SERVER['PHP_SELF']);
                 header("Location: $rootFolder/po/requestOrder");
-                exit (); // Ensure script execution stops after redirection
+                exit(); // Ensure script execution stops after redirection
             } else {
                 // No rows were affected, handle this case accordingly
                 echo "No rows were deleted.";
@@ -930,7 +998,7 @@ Router::post('/edit/editsupplier', function () {
             $availability = $_POST[$availabilityKey];
             $unitofmeasurement = $_POST[$unitofmeasurement];
             $taxrate = $_POST[$taxrate];
-            
+
 
             $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Supplier_Price =:retailprice, Description = :description, ProductWeight = :productWeight, Availability = :availability, UnitOfMeasurement = :unitofmeasurement, TaxRate = :taxrate WHERE ProductID = :productID");
             $stmt_product->bindParam(':productName', $productName);
@@ -1026,15 +1094,12 @@ Router::post('/delete/supplier', function () {
 
 
 
-// //function to show all the product details
+// Function to get product details
 // function getProductDetails($productID, $conn)
 // {
 //     try {
 //         // Prepare the SQL statement to fetch product details including the image path
-//         $query = "SELECT p.ProductImage, p.ProductName, p.Supplier, p.Category, p.Price, r.Product_Quantity, r.Product_Total_Price
-//                   FROM products p
-//                   INNER JOIN requests r ON p.ProductID = r.Product_ID
-//                   WHERE p.ProductID = :product_id";
+//         $query = "SELECT * FROM products WHERE Product_ID = :product_id";
 //         $statement = $conn->prepare($query);
 //         $statement->bindParam(':product_id', $productID);
 //         $statement->execute();
@@ -1515,3 +1580,38 @@ Router::post('/delete/product', function () {
 //     // Include the requestHistory.php file to display the search results
 //     include 'views/po.requestHistory.php';
 // });
+
+Router::post('/request/insert', function () {
+
+    // Get the database connection instance
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    // Get the submitted data
+    $productID = $_POST['productID'];
+    $quantity = $_POST['quantity'];
+
+    // Define the root folder for redirection
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    if (empty($quantity) || empty($productID)) {
+        // Redirect to the form page if the quantity or product ID is empty
+        header("Location: $rootFolder/po/requestOrder");
+        return;
+    }
+
+    try {
+        // Insert the request into the requests table
+        $query = "INSERT INTO requests (product_ID, quantity) VALUES (:productID, :quantity)";
+        $statement = $conn->prepare($query);
+        $statement->bindParam(':productID', $productID);
+        $statement->bindParam(':quantity', $quantity);
+        $statement->execute();
+
+        // Redirect after successful insertion
+        header("Location: $rootFolder/po/requestOrder");
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+});
+

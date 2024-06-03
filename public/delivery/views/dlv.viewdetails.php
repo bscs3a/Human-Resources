@@ -109,85 +109,85 @@ if ($conn === null) {
                 <div>
 
                 <table class="w-full" style="background-color: white;">
-                        <tbody class="text-sm">
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Current Status</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['DeliveryStatus']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Sale ID</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['SaleID']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Order ID</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['DeliveryOrderID']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Customer ID</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['CustomerID']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Customer Name</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Name']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Customer Address</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Province'] . ' ' . $order['Municipality'] . ' ' . $order['StreetBarangayAddress']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Customer Contact Number</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Phone']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Order Date</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['DeliveryDate']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Order Received</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['ReceivedDate']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Product ID</td>
-                                <td class="border px-4 py-2" style="width: 70%;">#<?php echo $order['ProductID']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Product Name</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['ProductName']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Quantity</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Quantity']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Payment Mode</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['PaymentMode']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Unit Price</td>
-                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['UnitPrice']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Subtotal</td>
-                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['Subtotal']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Shipping fee</td>
-                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['ShippingFee']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Tax</td>
-                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['Tax']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Total Product Price</td>
-                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['SaleDetailsTotalAmount']; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Total Order Price</td>
-                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['SalesTotalAmount']; ?></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <tbody class="text-sm">
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Current Status</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['DeliveryStatus']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Sale ID</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['SaleID']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Order ID</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['DeliveryOrderID']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Customer ID</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['CustomerID']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Customer Name</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Name']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Customer Address</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Province'] . ' ' . $order['Municipality'] . ' ' . $order['StreetBarangayAddress']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Customer Contact Number</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Phone']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Order Date</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['DeliveryDate']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Order Received</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['ReceivedDate']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Product ID</td>
+                            <td class="border px-4 py-2" style="width: 70%;">#<?php echo $order['ProductID']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Product Name</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['ProductName']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Quantity</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Quantity']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Payment Mode</td>
+                            <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['PaymentMode']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Unit Price</td>
+                            <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['UnitPrice']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Subtotal</td>
+                            <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['Subtotal']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Shipping fee</td>
+                            <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['ShippingFee']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Tax</td>
+                            <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['Tax']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Total Product Price</td>
+                            <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['SaleDetailsTotalAmount']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="border font-bold px-4 py-2" style="width: 30%;">Total Order Price</td>
+                            <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['SalesTotalAmount']; ?></td>
+                        </tr>
+                    </tbody>
+                </table>
                 </div>
                 <!--- This for dropdown selection -->
                 <div class="flex justify-center items-center ">

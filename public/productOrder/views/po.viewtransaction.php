@@ -300,7 +300,7 @@
               </div>
             </div>
             <!-- Display the Back button -->
-            <div class="flex justify-end gap-2">
+            <div class="flex justify-end mb-3 gap-2">
               <a route='/po/transactionHistory' class="py-2 px-6 border border-gray-600 font-bold rounded-md">
                 Back
                 </a>

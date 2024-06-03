@@ -12,6 +12,9 @@ if ($conn === null) {
 $stmt = $conn->prepare("UPDATE Trucks SET TruckStatus = 'Available' WHERE TruckStatus != 'In Transit'");
 $stmt->execute();
 
+// Set the default timezone to Manila
+date_default_timezone_set('Asia/Manila');
+
 // Get the current date
 $currentDate = date('Y-m-d');
 
