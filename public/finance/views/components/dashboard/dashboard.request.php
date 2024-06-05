@@ -154,7 +154,7 @@
         <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
         <div class="p-5">
             <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-            <form action="/test" method="POST">
+            <form action="/test" method="POST" id="ledger-insert-form">
                 <div class="mb-4 relative">
                     <label for="date" class="block text-xs font-medium text-gray-900"> Date </label>
                     <input type="text" id="date" name="date" required readonly
@@ -208,7 +208,8 @@
 
                         if ($stmt->rowCount() > 0) {
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<option value=\"{$row['name']}\">{$row['name']}</option>";
+                                $value = abs(getAccountBalanceV2($row['name']));
+                                echo "<option value=\"{$row['name']}\">{$row['name']} - {$value}</option>";
                             }
                         } else {
                             echo "0 results";

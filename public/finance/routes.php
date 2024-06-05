@@ -451,3 +451,12 @@ Router::post("/auditlogSearch", function(){
 
     header("Location: " . $_SERVER['HTTP_REFERER']);
 });
+
+Router::post("/fin/getBalanceAccount", function (){
+    $data = json_decode(file_get_contents('php://input'), true);
+    $account = $data['account'];
+    $result = getAccountBalanceV2($account);
+
+    header('Content-Type: application/json');
+    echo json_encode($result);
+});

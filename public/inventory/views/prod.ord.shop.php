@@ -165,7 +165,8 @@
         <button onclick="location.href='/Master/inv/product_checkout'" class="items-end rounded-lg w- px-2 py-1 border border-black bg-white text-black duration-300">
         Check Out </button>
     </div>
-
+    <script src="./../src/route.js"></script>
+        <script src="./../src/form.js"></script>
 </body>
 </html>
 

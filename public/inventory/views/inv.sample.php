@@ -15,6 +15,8 @@
     <button onclick="location.href='/Master/inv/product_order'"
       class="px-6 py-3 text-white bg-blue-500 rounded hover:bg-blue-700">Product Order</button>
   </div>
+  <script src="./../src/route.js"></script>
+        <script src="./../src/form.js"></script>
 </body>
 
 </html>

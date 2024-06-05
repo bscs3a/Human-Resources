@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Request Order</title>
+  <title>Requested Orders</title>
 
   <link href="./../src/tailwind.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
@@ -27,7 +27,7 @@
           <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
             <i class="ri-menu-line"></i>
           </button>
-          <label class="text-black font-medium">Request Order</label>
+          <label class="text-black font-medium">Requested Orders</label>
         </div>
 
         <!-- dropdown -->

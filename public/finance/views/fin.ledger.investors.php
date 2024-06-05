@@ -129,7 +129,7 @@
                         <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                         <div class="p-5">
                             <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-                            <form action="/addInvestor" method="POST">
+                            <form action="/addInvestor" method="POST" class = "validateName">
                                 <div class="mb-4 relative">
                                     <label for="acctype" class="block text-xs font-medium text-gray-900">
                                         Account Type

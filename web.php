@@ -59,6 +59,7 @@ foreach ($routes as $route => $action) {
         include $action;
         // exit();
     }
+    // this is not showing error because it seems, by coincidences, the routes(static) of all systems are unique
 }
 
 $currentUri = $_SERVER['REQUEST_URI'];

@@ -621,4 +621,18 @@ function getTotalOfGroupV3($groupType, $fromYear, $fromMonth, $toYear, $toMonth)
     return abs($netAmount);
 }
 
+function getTransactionTypes($xactCode){
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    $sql = "SELECT l.ledgerno, l.name FROM ledger as l 
+        JOIN accounttype as at ON l.AccountType = at.accountType 
+        WHERE at.XactTypeCode = :xactCode";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':xactCode', $xactCode);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
 ?>
