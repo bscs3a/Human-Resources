@@ -60,6 +60,18 @@
           <i class="ri-arrow-right-s-line"></i>
         </span>
       </a>   
+
+      <a route='/po/viewRequest' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
+        <span class="flex items-center">
+          <source >
+          <i class="ri-pencil-line" style="font-size: 1.2em;"></i>
+          <span class="mx-4 text-sm font-medium">Requested Orders</span>
+        </span>
+
+        <span>
+          <i class="ri-arrow-right-s-line"></i>
+        </span>
+      </a>   
  
       </a>
     </nav>

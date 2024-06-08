@@ -49,12 +49,12 @@
           <table class="min-w-full text-left mx-auto bg-white">
             <thead class="bg-gray-200 border-b border-gray-400 text-sm">
               <tr>
+                <th class="px-4 py-2 font-semibold">Order ID</th>
                 <th class="px-4 py-2 font-semibold">Product ID</th>
                 <th class="px-4 py-2 font-semibold">Product Name</th>
-                <th class="px-4 py-2 font-semibold">Supplier</th>
-                <th class="px-4 py-2 font-semibold">Category</th>
-                <th class="px-4 py-2 font-semibold">Price</th>
                 <th class="px-4 py-2 font-semibold">Quantity</th>
+                <th class="px-4 py-2 font-semibold">Status</th>
+                <th class="px-4 py-2 font-semibold">Date Requested</th>
               
                 <th class="px-4 py-2 font-semibold"></th>
               </tr>
@@ -63,30 +63,30 @@
 
             <?php
 
-function getProductDetailsFromRequests($conn) {
+function getAllInventoryOrders($conn) {
     try {
-        $db = Database::getInstance();
-        $conn = $db->connect();
-        // SQL query to join products and requests tables
-        $query = "SELECT p.ProductID, p.ProductName, p.Supplier, p.Category, p.Price, r.Quantity, p.Supplier_ID
-                  FROM products p
-                  JOIN requests r ON p.ProductID = r.Product_ID";
+        // SQL query to retrieve all records from inventoryorders table
+        $query = "SELECT io.order_id, io.product_id, io.product_name, io.quantity, io.status, io.date_ordered, s.Supplier_ID
+                  FROM inventoryorders io
+                  JOIN products p ON io.product_id = p.ProductID
+                  JOIN suppliers s ON p.Supplier_ID = s.Supplier_ID";
         $statement = $conn->prepare($query);
         $statement->execute();
 
         // Fetch and display the results
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-          echo "<tr class='border-b'>";
-          echo "<td class='px-4 py-2'>" . $row['ProductID'] . "</td>";
-          echo "<td class='px-4 py-2'>" . $row['ProductName'] . "</td>";
-          echo "<td class='px-4 py-2'>" . $row['Supplier'] . "</td>";
-          echo "<td class='px-4 py-2'>" . $row['Category'] . "</td>";
-          echo "<td class='px-4 py-2'>" . $row['Price'] . "</td>";
-          echo "<td class='px-4 py-2'>" . $row['Quantity'] . "</td>";
-          echo '<td class="px-4 py-2">';
-          echo '<a href="/po/viewsupplierproduct/Supplier=' . $row['Supplier_ID'] . '" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Go</a>';
-          echo '</td>';
-          echo "</tr>";
+            echo "<tr class='border-b'>";
+
+            echo "<td class='px-4 py-2'>" . $row['order_id'] . "</td>";
+            echo "<td class='px-4 py-2'>" . $row['product_id'] . "</td>";
+            echo "<td class='px-4 py-2'>" . $row['product_name'] . "</td>";
+            echo "<td class='px-4 py-2'>" . $row['quantity'] . "</td>";
+            echo "<td class='px-4 py-2'>" . $row['status'] . "</td>";
+            echo "<td class='px-4 py-2'>" . $row['date_ordered'] . "</td>";
+            echo '<td class="px-4 py-2">';
+            echo '<a route="/po/viewsupplierproduct/Supplier=' . $row['Supplier_ID'] . '" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Go</a>';
+            echo "</td>";
+            echo "</tr>";
         }
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
@@ -96,8 +96,8 @@ function getProductDetailsFromRequests($conn) {
 // Assuming $conn is your PDO connection
 $db = Database::getInstance();
 $conn = $db->connect();
-// Call the function to display the product details based on requests
-getProductDetailsFromRequests($conn);
+// Call the function to display all inventory orders
+getAllInventoryOrders($conn);
 
 ?>
 
