@@ -1,8 +1,10 @@
 <!-- sidebar -->
-<div class="flex flex-col w-64 bg-gray-800">
-  <div class="flex items-center justify-end h-16 bg-violet-950 p-6">
-    <span class="text-white font-bold uppercase text-4xl">BSCS 3A</span>
-  </div>
+<div class="flex flex-col w-64 bg-violet-950">
+    <div route='/' class="flex items-center p-4 border-b border-b-white">
+        <div class="w-12 h-12 rounded bg-cover bg-[url('../public/finance/img/logo_reports.png')]">
+        </div>
+        <span class="cursor-pointer text-4xl font-russo text-white ml-3">BSCS 3A</span>
+    </div>
   <div class="flex flex-col flex-1 overflow-y-auto">
     <nav class="flex-1 px-2 py-4 bg-violet-950">
       <a route='/po/audit_logs/page=1' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">

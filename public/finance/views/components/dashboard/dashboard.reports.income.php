@@ -28,7 +28,8 @@ $prevNetIncome = implode(',', $prevMonthlyData);
 if($prev_month == 0){
     $prev_month = 12;
 }
-$netSales = calculateNetSalesOrLoss($curr_year, $curr_month);
+$incomeCoe = getGroupCode('Income');
+$netSales = getTotalOfGroup($income);
 $prevNetSales = calculateNetSalesOrLoss($curr_year, $prev_month);
 
 ?>
@@ -49,7 +50,7 @@ $prevNetSales = calculateNetSalesOrLoss($curr_year, $prev_month);
     </div>
     
 
-    <p class="text-gray-600 my-3 text-lg ">Current Net Sales: <?= number_format($netSales,2)?></p>
+    <p class="text-gray-600 my-3 text-lg ">Current Gross Sales: <?= number_format($netSales,2)?></p>
     <p class="text-gray-600 my-3 text-lg ">Previous Net Sales: <?= number_format($prevNetSales,2)?></p>
     <canvas id="incomeBarChart"></canvas>
 

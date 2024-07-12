@@ -118,7 +118,7 @@ require_once "components/dashboard/dashboard.performFunctions.php";
                                             <p class="text-4xl sm:text-md font-semibold text-[#F8B721]">
                                                 <?php
                                                 $income = getGroupCode('Income');
-                                                $incomeAmount = getTotalOfGroupV2($income);
+                                                $incomeAmount = getTotalOfGroup($income);
                                                 echo '₱'.number_format($incomeAmount, 2);
                                                 ?>
                                             </p>
@@ -140,7 +140,7 @@ require_once "components/dashboard/dashboard.performFunctions.php";
                                             <div class="text-4xl font-semibold text-[#F8B721]">
                                                 <?php
                                                 $expense = getGroupCode('Expenses');
-                                                $expenseAmount = getTotalOfGroupV2($expense);
+                                                $expenseAmount = getTotalOfGroup($expense);
                                                 echo '₱' . number_format($expenseAmount, 2);
                                                 ?>
                                             </div>

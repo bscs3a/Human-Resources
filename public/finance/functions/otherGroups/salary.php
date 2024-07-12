@@ -31,9 +31,9 @@ function inputSalary($monthlySalary, $withHoldingTax, $isPending, $paymentMethod
     }
     else{
         insertLedgerXact($SALARY, $SALARY_PAYABLE, $totalSalary);
-        if($withHoldingTax > 0){
-            insertLedgerXact($SALARY, $WITHHOLDING_TAX_PAYABLE, $withHoldingTax);
-        }
+    }
+    if($withHoldingTax > 0){
+        insertLedgerXact($SALARY, $WITHHOLDING_TAX_PAYABLE, $withHoldingTax);
     }
     return;
 }
@@ -58,7 +58,7 @@ function addSalaryPondoHR($account, $amount, $paymentMethod){
 
 function paySalaryPayable($monthlySalary, $withHoldingTax, $paymentMethod){
     $SALARY_PAYABLE = getLedgerCode("Salary Payable");
-    $WITHHOLDING_TAX_PAYABLE = getLedgerCode("Withholding Tax Payable");
+    // $WITHHOLDING_TAX_PAYABLE = getLedgerCode("Withholding Tax Payable");
 
     $totalSalary = $monthlySalary - $withHoldingTax;
 
@@ -75,7 +75,7 @@ function paySalaryPayable($monthlySalary, $withHoldingTax, $paymentMethod){
     }
     addTransactionPondo($SALARY_PAYABLE, $paymentMethod, $totalSalary);
     if($withHoldingTax > 0){
-        addTransactionPondo($WITHHOLDING_TAX_PAYABLE, $paymentMethod, $withHoldingTax);
+        // addTransactionPondo($WITHHOLDING_TAX_PAYABLE, $paymentMethod, $withHoldingTax);
     }
 }
 ?>
